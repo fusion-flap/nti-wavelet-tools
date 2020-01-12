@@ -1,0 +1,101 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{url}
+\usepackage{multirow}
+%\usepackage[table,xcdraw]{xcolor}
+
+\hoffset=-1cm
+\voffset=-2cm
+\oddsidemargin=0cm
+\evensidemargin=0cm
+\marginparwidth=0cm
+\marginparsep=0cm
+\textwidth=18cm
+\textheight=24cm
+
+\graphicspath{{figs/}}
+
+\begin{document}
+
+\begin{center}
+\vspace{3 cm}
+\Large
+{\bf Modenumber signs from magnetic measurement}\\ 
+~\\*[0.5cm] \normalsize 
+Pölöskei Péter, Dr. Pokol Gergő, Horváth László, Dr. Papp Gergely
+\\
+
+\vspace{2 cm}
+Last modification: \today
+\end{center}
+\vspace{4 cm}
+
+\pagestyle{empty}
+\newpage
+
+\section{Experimental setup on ASDEX, magnetic probe positions}
+\begin{figure}[htb!]
+  \centerline{\resizebox{140mm}{!}{\includegraphics{probe_positions.pdf}}}
+  \caption{\label{fig:probe_pos}Magnetic probe (\textbf{a)} toroidal ballooning array and \textbf{b)} poloidal Mirnov array) positions on ASDEX Upgrade.}
+\end{figure}
+
+Both in toroidal- and poloidal crossections the coordinates of the probes follow counter clockwise (CCW) setting, which is marked with blue line on figure \ref{fig:probe_pos}. Therefore the position is increasing that way (mod $2\pi$).
+\section{Signal processing methodology of NTI Wavelet Tools}
+In contiuous time-frequency transformations we suppose that the investigated physical processes, phenomena can be decomposed to a sum of $\Psi$ harmonic waves described with the following equation:
+\begin{equation} \label{eq:harmonic}
+	\Psi(\rho,\theta^*,\phi,t) = A(\rho,\theta^*) \cdot e^{i(m\theta^*+n\phi-\omega t)} \ ,
+\end{equation}
+where $A(\rho,\theta^*)$ is the amplitude of the wave, or radial eigenfunction. It only depends on the $\rho$ minor radius, and the $\theta^*$ coordinate which is related with the $\theta$ poloidal direction. The phase of the wave is linear both in $\theta^*$ and $\phi$, and the proportionality factors are the $m$ poloidal and $n$ toroidal mode numbers, which describe the spatial structure of the plasma wave.
+
+Supposing a pure sinusoidal wave with (n,m) mode numbers phase difference between different positions can be extracted from crosstransforms as follows:
+\begin{equation}
+\Delta\varphi_{kl}^{meas}(t,\omega) = arg\big( T f_k^*(t,\omega)T f_l(t,\omega)  \big).
+\end{equation}
+
+To investigate wave propagation directions, let there be two different probes with $\phi_1 = 0$ and $\phi_2=\dfrac{\pi}{4}$ (same poloidal position), and a wave propagating in CCW direction with $|n|=1$. Therefore the wavefunction at two different position:
+\begin{eqnarray}
+\Psi_1(\rho_0,\theta_0^*,0,t) \propto & \exp[i(-\omega t)] \\
+\Psi_2(\rho_0,\theta_0^*,\dfrac{\pi}{4},t) \propto & \exp[i(-\omega t+\dfrac{\pi}{4})]
+\end{eqnarray}
+which toroidal position difference is $\Delta\phi = \dfrac{\pi}{4}$, and the phase difference is $-\dfrac{\pi}{4}$ (checked with test signals, see on figure \ref{fig:toroidal_modenumber}).
+\begin{figure}[htb!]
+  \centerline{\resizebox{170mm}{!}{\includegraphics{toroidal_modenumber.pdf}}}
+  \caption{\label{fig:toroidal_modenumber}Best fitting toroidal modenumbers, for artificial signal with 50 kHz constant frequency.}
+\end{figure}
+%polidális teszt
+
+\section{Directions of physical processes}
+%áram irányok
+
+
+
+
+\begin{table}[htb!]
+\centering
+\label{my-label}
+\begin{tabular}{lllll|c|c||c|c|}
+\cline{6-9}
+                                                     &                                                        &                                          &                                                         &                                 & \multicolumn{4}{c|}{\textbf{Modenumber sign from NTIWT}}                                                                                                          \\ \cline{6-9} 
+                                                     &                                                        &                                          &                                                         &                                 & \multicolumn{2}{c||}{+}                                                          & \multicolumn{2}{c|}{-}                                                          \\ \cline{6-9} 
+                                                     &                                                        &                                          &                                                         &                                 & \multicolumn{4}{c|}{\textbf{Diamagnetic direction}}                                                                                                               \\ \cline{6-9} 
+                                                     &                                                        &                                          &                                                         &                                 & \multicolumn{1}{l|}{\textbf{poloidal}} & \multicolumn{1}{l||}{\textbf{toroidal}} & \multicolumn{1}{l|}{\textbf{poloidal}} & \multicolumn{1}{l|}{\textbf{toroidal}} \\ \hline \hline
+\multicolumn{1}{|l|}{}                               & \multicolumn{1}{c|}{}                                  & \multicolumn{1}{c|}{}                    & \multicolumn{1}{c|}{}                                   & \multicolumn{1}{c|}{+}          & electron                               & electron                               & ion                                    & ion                                    \\ \cline{5-9} 
+\multicolumn{1}{|l|}{}                               & \multicolumn{1}{c|}{}                                  & \multicolumn{1}{c|}{\multirow{-2}{*}{+}} & \multicolumn{1}{c|}{}                                   & \multicolumn{1}{c|}{-}          & electron                               & ion                                    & ion                                    & electron                               \\ \cline{3-3} \cline{5-9} 
+\multicolumn{1}{|l|}{}                               & \multicolumn{1}{c|}{}                                  & \multicolumn{1}{c|}{}                    & \multicolumn{1}{c|}{}                                   & \multicolumn{1}{c|}{+}          & \color{green}ion            & \color{green}electron       & \color{green}electron       & \color{green}ion            \\ \cline{5-9} 
+\multicolumn{1}{|l|}{\multirow{-4}{*}{\textbf{AUG}}} & \multicolumn{1}{c|}{\multirow{-4}{*}{\textbf{B tor.}}} & \multicolumn{1}{c|}{\multirow{-2}{*}{-}} & \multicolumn{1}{c|}{\multirow{-4}{*}{\textbf{I plas.}}} & \multicolumn{1}{c|}{-} & ion                                    & ion                                    & electron                               & electron                               \\ \hline
+\end{tabular}
+\caption{This table contains the main directions of the named experiments (both machine coordinate system and \textbf{TYPICAL} relevant physical quantities, marked with \textcolor{green}{green}) in order to determine that a modenumber calculated with NTI Wavelet Tools means what actual direction. + sign means counter clockwise (CCW), - sign means clockwise (CW).}
+\end{table}
+%
+
+
+\end{document}

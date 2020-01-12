@@ -1,0 +1,88 @@
+#10261
+------
+stac		1
+instac		0
+lin		1
+nonlin		0
+burst		0
+E 	 	0	1/ms2
+w0 		45	kHz
+w1		155 	kHz
+snr_stat	3
+snr_nonstat	0
+==================
+#10262
+------
+stac		1
+instac		0
+lin		0
+nonlin		1
+burst		0
+E 	= 	-2e10	1/ms2
+w0 	=	45	kHz
+w1	=	155 	kHz 
+snr_stat	10
+snr_nonstat	0
+==================
+#10263
+------
+stac		1
+instac		0
+lin		1
+nonlin		0
+burst		4
+E 	= 	0	1/ms2
+w0 	=	45	kHz
+w1	=	155 	kHz
+snr_stat	3
+snr_nonstat	0.5
+==================
+#10264				x wrong sav file!!!!!
+------
+stac		1
+instac		0
+lin		0
+nonlin		1
+burst		4
+E 	= 	-2e10	1/ms2
+w0 	=	45	kHz
+w1	=	155 	kHz
+snr_stat	10
+snr_nonstat	0.5
+==================
+#10265
+------
+stac		0
+instac		1
+lin		1
+nonlin		0
+burst		0
+E 	= 	0	1/ms2
+w0 	=	45	kHz	
+w1	=	155 	kHz 
+snr_stat	3
+==================
+#10266			nlength = 512
+------
+stac		0
+instac		1
+lin		0
+nonlin		1
+burst		0
+E 	= 	-1e10	1/ms2
+w0 	=	45	kHz
+w1	=	155 	kHz 
+snr_stat	10
+==================
+#11021
+#10265
+------
+stac		0
+instac		1
+lin		1
+nonlin		0
+burst		0
+E 	= 	0	1/ms2
+w0 	=	45	kHz	
+w1	=	155 	kHz 
+snr_stat	3
