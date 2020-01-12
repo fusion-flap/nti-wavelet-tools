@@ -45,7 +45,7 @@ nti_wavelet_gui_pairselect_base_widg=widget_base(title='Select Channel Pairs',ev
 						 col=2, /TLB_KILL_REQUEST_EVENTS)
 
   ;Create base of buttons:
-  nti_wavelet_gui_pairselect_buttons_widg = widget_base(nti_wavelet_gui_pairselect_base_widg,col=1)
+  nti_wavelet_gui_pairselect_buttons_widg = widget_base(nti_wavelet_gui_pairselect_base_widg,col=1,/scroll)
       ;Create buttons:
       nti_wavelet_gui_pairselect_reset_widg=widget_button(nti_wavelet_gui_pairselect_buttons_widg,value='RESET',/align_center,xsize=80)
       nti_wavelet_gui_pairselect_all_widg=widget_button(nti_wavelet_gui_pairselect_buttons_widg,value='ALL',/align_center,xsize=80)
