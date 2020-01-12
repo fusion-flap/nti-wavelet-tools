@@ -1,0 +1,178 @@
+\documentclass[12pt]{article}
+
+% To be compiled with PDFLaTeX
+
+\usepackage{delarray}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{ae} %full vectorgraphic output.
+\usepackage{bm}
+\usepackage{color}
+\usepackage{wrapfig}
+\usepackage{listings} %source code insertion
+\usepackage{mathptmx}
+\sloppy
+
+\usepackage{ifpdf}
+\ifpdf
+	\usepackage[pdftex]{graphicx}
+	\usepackage[pdftex]{hyperref}
+	\hypersetup{colorlinks=true,
+		pdfstartview=FitV,
+		linkcolor=blue,
+		citecolor=blue,
+		urlcolor=blue,
+		pdfauthor={Gergo Pokol, pokol@reak.bme.hu},
+		pdfsubject={NTI Wavelet Tools Documentation},
+		pdftitle={NTI Wavelet Tools Users' Guide}
+	}
+	\DeclareGraphicsExtensions{.pdf}
+\else
+	\usepackage[dvips]{graphicx}
+	\usepackage{epsfig}
+	\DeclareGraphicsExtensions{.ps}
+	\usepackage{url}
+\fi
+
+\graphicspath{{figs/}}
+
+
+%remove links from the citations
+%\renewcommand{\url}[1]{}
+
+%\usepackage[numbers,sort&compress]{natbib} % Write [11-15] instead of [11, 12, 13, 14, 15], even with hyperref!
+\usepackage{hypernat}
+\usepackage[all]{hypcap}
+\usepackage[small, bf]{caption}	% Customised captions
+\usepackage[utf8]{inputenc}
+
+\newcommand{\red}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\pink}[1]{\textbf{\textcolor{magenta}{#1}}}
+\newcommand{\blue}[1]{\textbf{\textcolor{blue}{#1}}}
+\newcommand{\green}[1]{\textbf{\textcolor{green}{#1}}}
+
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+\ \\
+\vspace{2.5 in}
+\begin{Huge}\textbf{NTI Wavelet Tools}\end{Huge}\\
+\vspace{0.1 in}
+% Subtitle \begin{Large} \end{Large}\\
+
+\vspace{0.1 in}
+% Version ???
+
+\vspace{1.5 in}
+\begin{Huge}\textbf{Users' Manual}\end{Huge}\\
+
+
+\vspace{2.3 in}
+
+(Last modified: \today)
+\end{center}
+\end{titlepage}
+
+\input{NTI_Wavelet_Tools_developers.tex}
+\newpage
+
+\tableofcontents
+\pagebreak
+
+\section{Introduction}
+
+NTI Wavelet Tools is a data processing toolbox that is developed and maintained by the Institute of Nuclear Techniques (NTI), Budapest University of Technology and Economics.
+
+The toolbox features a GUI with a collection of tools based on continuous time-frequency transforms - ideal for processing transient signals - and incorporates various other data processing methods that can be run from command line.
+
+The data processing techniques integrated in NTI Wavelet Tools have been described in various papers and reports...
+
+The GUI guides the user through the different steps of data processing step-by-step. Each step is supported by a help text accessed by pressing the "?" button. This text gives the definition of the parameters to be set in the corresponding step, and it might also contain some tips on how to do it.
+
+\section{Status}
+
+Current development language is IDL (Interactive Data Language), but it is planned to gradually convert to Python.
+
+Released versions are available at ASDEX Upgrade (AUG releases) and at Wigner RCP (FLIPP releases). These releases are maintained to have always the most recent released version, and they can import data from MTR (by Marc MAraschek) at ASDEX Upgrade and FLIPP (by Sandor Zoletnik) at Wigner RCP.
+
+Up-to-date information on the development is to be reached at \url{https://deep.reak.bme.hu/projects/wavelet}.
+
+\section{Running NTI Wavelet Tools}\label{sec:running}
+
+NTI Wavelet Tools can be either run as an independent IDL program, or the ASDEX release can also be started from the MTR menu. When running as standalone, it can read data from a given format .sav file. Different scenarios are described below. 
+
+\subsection{Standalone}
+
+NTI Wavelet Tools can be started as a regular IDL program.
+
+Steps:
+\begin{enumerate}
+	\item Start IDL.
+	\item Set up the current directory to the directory of NTI Wavelet Tools with the \verb|cd 'PATH'| command.
+	\item Start NTI Wavelet Tools GUI with the \verb|nti_wavelet_gui| command.
+	\item Load data from a .sav (IDL binary format) file with the structure specified below. 
+	\item Process the data.
+	\item Processed data can be saved in a .sav file, and graphical outputs can also be generated. (Default output folder is a subfolder of the NTI Wavelet Tools folder.)
+\end{enumerate}
+
+\subsubsection{Input data format}
+
+In order to use NTI Wavelet Tools to analyse external data an IDL .sav file is needed to be created which can be loaded into the GUI of the toolbox. The file must contain the following variables (the dimensions are critical):
+
+\begin{table}[!hb]
+\begin{center}
+  \footnotesize
+ \begin{tabular}{|l|l|c|c|}
+ \hline
+  Name of the variable	& Description				& Type			& Dimensions	\\
+  \hline\hline
+  expname		& Name of the experiment		& string		& 1		\\\hline
+  shotnumber		& Shotnumber				& long integer		& 1		\\\hline
+  channels		& Name of the signals 			& string array		& [n]		\\\hline
+  coord\_history	& Short description of coordinates	& string		& 1		\\\hline
+  data\_history		& Short description of data		& string		& 1		\\\hline
+  data			& Array containing all signals		& floating point array	& [t, n]	\\\hline
+  time			& Vector containing the time axis	& floating point vector	& [t]		\\\hline
+  theta			& Theta (poloidal) coordinates		& floating point vector	& [n]		\\\hline
+  phi			& Phi (toroidal) coordinates		& floating point vector	& [n]		\\\hline
+ \end{tabular}
+ \caption{\label{tab:variables} The specific variable names of the NTI Wavelet Tools raw data files. The dimensions are denoted by \textit{t} and \textit{n} where \textit{t} is the length of the time axis and \textit{n} is the number of the signals. }
+\end{center}
+\end{table}
+
+An example data file is the test.sav in the program directory. Data manipulations should be traced by adding a string to the data\_history or coordinates\_history variable.
+
+
+
+\subsection{ASDEX release - call from MTR}
+
+ASDEX release of NTI Wavelet Tools can be run from the Menu of the MTR data processing program.
+
+Steps:
+\begin{enumerate}
+	\item Log into AUG AFS.
+	\item Log into an sxaug20-24 machine (for example: ssh \verb|sxaug22|)
+	\item Star MTR using the \verb|mtr_dev| command.
+	\item Load and pre-process data in MTR.
+	\item Start NTI Wavelet Tools GUI by choosing the \verb|Wavelet/NTI Wavelet|  menu item.
+	\item Process the data.
+	\item Processed data can be saved in a .sav file, and graphical outputs can also be generated. (Default output folder is a subfolder of the NTI Wavelet Tools folder.)
+\end{enumerate}
+
+\subsection{FLIPP release}
+
+FLIPP release of NTI Wavelet Tools can read using the \verb|nti_wavelet_flipp| command in the IDL command line. After reading the data by FLIPP routines, it calls NTI Wavelet GUI with these data.
+
+\section{Final notes}
+
+Further help and feedback is accessible at the bug reporting interface and forum of the NTI Wavelet Tools project that is to be reached form the Help menu of the NTI Wavelet Tools GUI.
+
+% \bibliographystyle{unsrt}
+% \begin{small}
+% \bibliography{...}
+% \end{small}
+
+\end{document}

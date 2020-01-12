@@ -1,0 +1,839 @@
+\documentclass[a4paper,12pt]{report}
+
+%Headers
+%================================================
+\usepackage[latin2]{inputenc} % Magyar ékezetes betûk beütése
+%\usepackage[utf8]{inputenc}
+\usepackage[magyar]{babel} %magyar ékezetes betûk kiírása
+\usepackage{amsmath} %matek
+\usepackage{amssymb} %matek
+\usepackage{t1enc} %magyar elválasztás
+\usepackage{ae} %full-vektorgrafikus mentés
+\usepackage{subfigure}
+
+\usepackage{color}                                            %%
+\usepackage{array}                                            %%
+\usepackage{longtable}                                        %%
+ \usepackage{calc}                                             %%
+ \usepackage{multirow}                                         %%
+ \usepackage{hhline}                                           %%
+ \usepackage{ifthen} 
+%\usepackage{fullpage}
+\usepackage{amssymb}
+%\usepackage{wrapfig}
+\usepackage{bm}
+\usepackage{wasysym}
+
+\usepackage{ifpdf}
+\ifpdf
+	\usepackage[pdftex]{graphicx}
+	\usepackage[pdftex]{hyperref} 
+	\definecolor{fura}{rgb}{0,0,1}
+	\hypersetup{colorlinks=true,
+		pdfstartview=FitV,
+		linkcolor=blue,
+		citecolor=red,
+		urlcolor=blue,
+		pdfauthor={PAPP Gergely, papp@reak.bme.hu},
+		pdfsubject={AUG DATA dokumentacio},
+		pdftitle={AUG DATA dokumentacio}
+	}
+	\DeclareGraphicsExtensions{.pdf}
+\else
+	\usepackage{graphicx}
+	\usepackage{epsfig}
+	\DeclareGraphicsExtensions{.eps}
+	\newcommand{\url}[1]{#1}
+\fi
+
+
+\def\inputGnumericTable{}
+\graphicspath{{pix/}}
+
+
+\newcommand{\bo}[1]{\mathbf{#1}}
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\fullint}{\int\limits_{-\infty}^{\infty}}
+\newcommand{\avrg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\zar}[1]{\left( #1 \right)}
+\newcommand*{\DOT}{.}
+\newtheorem{fel}{Feladat}
+%opening
+
+\author{Papp Gergely\\\href{mailto:papp@reak.bme.hu}{papp@reak.bme.hu}\vspace{10cm}\\ BME NTI}
+\title{\textbf{NTI\_Wavelet\_Tools/AUG\_DATA programcsomag dokumentáció}}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{Bevezetés}
+
+\underline{A következõ pontok kerülnek majd kifejtésre itt:}\\
+A programrendszer célja\\
+Telepítés (Teljes mappastruktúra és/vagy telepítõscript)\\
+Adatfeldolgozó környezet\\
+Jelölésrendszer\\
+Jelmagyarázat\\
+Rövidítések jegyzéke\\
+IPP informatikau dokumentáció: \url{http://www.rzg.mpg.de}\\
+AUG belsõ oldalak: \url{https://www.aug.ipp.mpg.de/wwwaug/}
+
+\section{A programrendszer elérhetõsége}
+A programrendszer az NTI\_Wavelet\_Tools részét képezi.
+\subsection{Közvetlenül a szerzõktõl}
+NWT: \href{mailto:pokol@reak.bme.hu}{pokol@reak.bme.hu}\\
+AUG: \href{mailto:papp@reak.bme.hu}{papp@reak.bme.hu}, \href{mailto:magyarkuti@reak.bme.hu}{magyarkuti@reak.bme.hu}
+\subsection{SVN}
+A rendszer SVN repository-ját a \texttt{deep.reak.bme.hu} számítógép tárolja:\\
+\verb{svn+ssh://deep.reak.bme.hu//svn/NTI_Wavelet_Tools{\\
+Belépés csak \texttt{SSH}-n keresztül lehetséges, ezért hozzáférést a szerzõktõl kérhetünk.
+\subsection{Az IPP AFS-en}
+/afs/ipp-garching.mpg.de/home/p/pog/idl/NTI\_Wavelet\_Tools
+
+
+\section{Adatlekérõ környezet}\label{sec:adatle}
+
+\subsection{Távoli futtatás}
+Az adatlekérést a Max Planck Institut für Plasmaphysik (röv: IPP) rendszerébe belépve kell megtenni. Az adatlekérõ programok csak az IPP garchingi campusának valamelyik gépén futtatva fognak mûködni. A belépéshez szükséges jogosultság megszerzésének módja nem része ezen dokumentációnak, általában az adott téma vezetõjétõl lehet kérni. Ha rendelkezünk account-al, akkor belépni távolról \texttt{SSH} (Secure SHell) kapcsolaton keresztül tudunk. Windowsra az erre általánosan használt program a \texttt{Putty} (\url{http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html}, itt a \texttt{putty.exe} fájlt töltsük le). SSH kapcsolatot unixon a konzolból kiadott \texttt{ssh usernev@gepnev} parancs segítségével hozhatunk létre.
+
+A belépéshez szükséges egy kapugép, amire csatlakozhatunk. Ez egy olyan számítógép, amely az IPP campuson kívülrõl is elérhetõ SSH kapcsolaton. Ilyen kapugép pl a \texttt{gate1.aug.ipp.mpg.de}. A belépéshez még szükséges a már említett felhasználónév-jelszó páros. A \texttt{Putty} használata esetén a program megnyitása után gépeljük/másoljuk be a kapugép nevét az ablakba, majd nyomjunk \texttt{enter}-t. Ekkor létrejön a kapcsolat a távoli géppel, amely azonosítást kér. Egy felugró ablak kérdezi meg felhasználónevünket és jelszavunkat. Adjuk meg, és már bent is kell legyünk a rendszerben, amire egy gépspecifikus üdvözlõszöveg emlékeztet minket.
+
+Az IPP-ben fõleg SUN gépek üzemelnek Solaris 9 vagy 10 operációs rendszerrel. A Solaris unix alapú rendszer, ezért az alap fájlmûveleti parancsok ugyanazok mint bármelyik unixon, pl. linuxon. Ezeket interneten gyorsan megtalálhatjuk a google-be ''linux alapparancsok'' kifejezésre keresve.  Két példa: \url{http://www.doksi.atw.hu/} és \url{http://www.hogyan.org/linux-alapparancsok}. Ezek segítségével már képesek leszünk alap parancsokat kiadni és munkánkat elkezdeni. Egy tipp: a linuxokon általában a \texttt{bash} parancsértelmezõ a default, még a SUN gépeken nem. A linux alapokat tartalmazó leírások feltételezik a \texttt{bash} használatát, ezért induláskor praktikus lehet nekünk is ezt használni a SUN-okon default \texttt{ksh} vagy \texttt{tcsh} helyett. A bash parancsértelmezõre jellemzõ, hogy egy \$ jel áll a parancssor elején. Amennyiben a SUN gépeken is ezt a parancsértelmezõt kívánjuk használni, csak adjuk ki a \texttt{bash} parancsot. Egy példa a belépésre unix rendszerrõl:
+\begin{verbatim}
+gm:~ geri$ ssh pog@gate1.aug.ipp.mpg.de
+Last login: Tue Jul 21 10:49:18 2009 from labor1.reak.bme
+Sun Microsystems Inc.   SunOS 5.10      Generic January 2005
+AFS-Client 9.Feb.2009  -  SunStudio12
+Sun Microsystems Inc.   SunOS 5.10      Generic January 2005
+AFS-Client 9.Feb.2009  -  SunStudio12
+tcsh: using dumb terminal settings.
+pog@seaug2 1) bash
+bash-3.00$
+\end{verbatim}
+Láthatjuk az \texttt{ssh} parancs kiadását az adott gépre. Ennél a felállásnál a rendszer nem kért jelszót, mert SSH kulcsos azonosítást használtam. (Az ssh kulcsos azonosításnál nem kell jelszót megadni, de \textbf{használata csak haladó felhasználóknak javasolt!} Bõvebben lásd \url{http://sial.org/howto/openssh/publickey-auth/}). Ezután üdvözlõszöveget látunk, majd egy sor figyelmeztet, hogy \texttt{tcsh} parancsértelmezõt használunk. Erre a sor végi \texttt{')'} is emlékeztet. Ezután a \texttt{bash} paranccsal hívtam életre a \texttt{bash} parancsértelmezõt, amire a sorvégi \$ jel emlékeztet.
+
+
+\subsection{A fájlrendszer elérése -- klog}\label{subs:klog}
+Amennyiben kívülrõl belépünk egy kapugépre, akkor parancsokat már adhatunk ki, de a központi fájlrendszert még nem érjük el. Ez a kapcsolat biztonsági okokból nem jön létre automatikusan ha az IPP campuson kívülrõl lépünk be. Ez azért van így, mert lehetséges ssh-val a jelszó megadása nélkül is belépni, ami biztonsági problémákat okozhat ha pl. egy így beállított gép rossz kezekbe kerül. Ezért távolról belépve még külön szükséges hogy az IPP-ben alkalmazott Andrew elosztott fájlrendszer (\texttt{afs}) hozzáférésünket is létrehozzuk, addig nem tudjuk írni a fájlokat és sok fájlt olvasni sem tudunk. A fájlrendszer eléréséhez szükségünk van egy úgynevezett \texttt{afs token}-re. Ennek megszerzéséhez ki kell adni a terminalban a \texttt{klog} parancsot, majd megadni az account jelszavunkat. Ekkor az adott kapugép csatlakozik az elosztott fájlrendszert kiszolgáló szerverekhez, és ezután már elérjük adatainkat. Fontos tudni, hogy az \texttt{afs} rendszeren bármelyik géprõl is dolgozunk, a saját fájljainkat mindenhonnan ugyanúgy érjük el. Ez az elosztott fájlrendszer egyik elõnye.
+
+\subsection{Fájlmozgatás  - AFS kliensszoftver, SCP}
+A fájlok fel- illetve lemásolása történhez valamilyen scp (Secure CoPy) program segítségével. Az scp ssh kapcsolaton keresztül másol fájlokat. Unixon erre alkalmas az \texttt{scp} parancs, windowson praktikus pl. a \texttt{winscp} használata. A \texttt{winscp}-t a \url{http://winscp.net/} oldalról tölthetjük le, telepítési és használati útmutatókat is találunk ezen a honlapon hozzá. A \texttt{winscp}-vel annyi probléma lehet, hogy a \texttt{klog} parancs kiadására nem vagyunk képesek vele, ezért elõfordulhat hogy problémát észlelünk fájlok fel- vagy lemásolása közben.
+
+Második megoldás, hogy telepítünk egy afs kliensszoftvert a gépünkre (\url{http://www.openafs.org}), amivel hálózati meghajtóként tudjuk csatlakoztatni az ottani fájlrendszert. Ez akkor hasznos, hogyha gyakran másolunk adatokat fel-- és le. A kliensszftver telepítése után a cella szervernek az \texttt{ipp-garching.mpg.de} szervert állítsuk be. A hálózati meghajtó beállításához kell az elérési út. Az \texttt{afs} úgy mûködik, hogy a kliensünkkel a világ bármelyik \texttt{afs} rendszerére csatlakozhatunk, amennyiben oda van érvényes \texttt{token}-ünk. Ezt a tokent szereztük meg a \texttt{klog} paranccsal a távoli gépre belépve (\ref{subs:klog}). A kliensnél \texttt{token}-t a ''Get token'', vagy hasonló paranccsal szerezhetünk. Ezután a fájljainkat a \texttt{/afs/ipp-garching.mpg.de/home/p/pog} útvonalon érjük el, ezt kell megadni a hálózati meghajtó beállításakor az \texttt{afs} kliensszoftvernek, mint elérési út. Itt a példában a \texttt{pog} accountot használtuk. Más account használata esetén a \texttt{/p/} helyére az adott account elsõ betûjét, a \texttt{pog} helyére az adott account nevét tegyük. Pl. ha az account neve \texttt{asd} lenne, úgy az elérési utat \texttt{/afs/ipp-garching.mpg.de/home/a/asd}-re kellene változtatnunk. 
+
+Ha unix alapú rendszeren dolgozunk, úgy a kliens telepítésekor létrejön egy \texttt{/afs} mappa így a fenti elérési út egybõl érvényes lesz a gyökérbõl.
+
+Harmadik megoldás, hogy az IPP rendszerérõl közvetlenül küldjük az adatot az \texttt{scp} parancs segítségével egy olyan gépre, ami ezt fogadni tudja (pl egy unix szerver). Például az \texttt{gp\_sxr\_savedata} programban (lásd \ref{sec:savedata}) ez az opció be van építve. Ekkor a következõ parancs kerül kiadásra a távoli oldalon:\\
+ \verb\ scp eleresi_ut/fajl.neve user@gep:/teljes_eleresi_ut\ \\
+ Lássunk erre egy példát:
+\begin{verbatim}
+pog@seaug2 6) scp ~/mappa/valami.txt user@gep.reak.bme.hu:/tmp/
+Password: 
+valami.txt       100%    0     0.0KB/s   00:00 
+\end{verbatim}
+
+Akkor a következõ történik. Az \texttt{scp} parancs mondja meg hogy itt most titkosított fájlküldés történik. a \verb ~  jel jelöli, hogy a saját \texttt{home} könyvtárunkból szeretnénk az azon belüli \texttt{mappa} mappában elhelyezett \texttt{valami.txt} fájlt mozgatni. A célgép a \texttt{gep.reak.bme.hu}, a felhasználó akinek a nevében cselekszünk, a \texttt{user}. A gépnév végén egy kettõspont választja el a gépnevet a távoli gépen kívánt elérési úttól, ami most a \texttt{/tmp/} mappa, tehát a távoli gépen a \texttt{/tmp/valami.txt} helyre fog kerülni a fájl. Amennyiben lehagyjuk a kettõspont után a \texttt{/} jelet, úgy az elérési út nem a gyökérkönyvtártól, hanem a \texttt{user} felhasználó \texttt{home} könyvtárától lesz értendõ. A parancs kiadása után a rendszer elkéri jelszavunkat (ha nincs kulcsos azonosítónk) majd egy progress bar jelzi a folyamat állapotát:  a \%-os feldolgozottságot, a küldött adat mennyiségét, a mindenkori sávszélességet, és az eltelt idõt. 
+
+Az egyszerûség kedvéért az adatleolvasó-- és mentõ programokban ez az opció be van építve, nem szükséges külön másolgatnunk kézzel. A default elérési út egy olyan gép olyan mappája, amelyre általában van kulcsos azonosítás a gate1 adott user accountjából, így nem szükséges jelszó megadása, az adatlekérõk automatikusan mûködnek. Biztonsági okokból ezt az elérési utat és accountot ebbe a dokumentációba nem írhatom bele, de a programok futás közben kiírják ezt az utat, illetve a forráskódból is visszakereshetõ.
+
+\subsection{A szükséges mappastruktúra}
+\textbf{Figyelem 1: ez a szekció folyamatos bõvítés alatt áll.}\\
+\textbf{Figyelem 2: Tervben van véve egy telepítõscript elkészítése, amely létrehozza a szükséges mappastruktúrát.}\\
+
+\textbf{MATLAB:}\\
+Matlab használata esetén a programjainkat egy \texttt{routines} mappába tegyük, és a \texttt{routines} mappa mellé készítsünk el egy \texttt{raw\_data} mappát, ahova a lementett adatokat tesszük, illetve ahol az adatokat a többi program keresni fogja. Ezen mappák hiánya esetén a programok elkészítik maguknak a szükséges mappákat amennyiben nem léteznek, hogy a lefagyást és adatvesztést elkerüljék. Hogy biztosan egységes legyen a mappastruktúra, jobb kézzel elkészíteni a szükséges mappákat. A MATLAB-ot a \texttt{routines} mappából indítsuk el.\\
+
+A \texttt{pog} account-ban a \texttt{papp} könytárban ez a mappastruktúra létre van már hozva. A \verb ~/papp/  mappán belüli \texttt{routines} mappa ezen SXR programokból a fejlesztés ideje alatt tartalmazza a mindenkori legfrissebb verziót, a \texttt{raw\_data} mappa pedig a már korábban lementett több gigabyte-nyi adatot.\\
+
+
+\subsection{MATLAB és IDL indítása}
+Akár MATLAB akár IDL programban dolgozunk, szükséges ezek munkamappájának beállítása: a mappa, ahol a futtatni kívánt fájlokat keresik. Ennek legegyszerûbb módja, ha indítás elõtt benavigálunk a megfelelõ mappába, ahova MATLAB vagy IDL programjainkat tettük, és onnan indítjuk a MATLAB-ot vagy az IDL-t. Így az adott indítási mappa lesz a program alapértelmezett munkakönyvtára.
+
+Az IPP rendszerén a konzolból kiadott \texttt{matlab} illetve \texttt{idl} parancsokkal tudjuk szöveges módban indítani ezeket a programokat. Az IPP-ben  defaultnak beállított MATLAB és IDL programverziók kompatibilisek ezzel az SXR programcsomaggal. 
+
+A továbbiakban a példákban a MATLAB konzolt \verb >> , az IDL konzolt pedig \texttt{IDL>} fogja jelölni.
+
+\section{Jelölések}\label{sec:jelolesek}
+
+\subsection{Mappajelölések}\label{subsec:folder}
+
+A mappaszerkezetet az a jelölésrendszer jelöli a dokumentumban, ami a \ref{fig:mappak}. ábrán látható. Az ábrán \textcolor{red}{piros jelöli az aktuális mappát}, jelölése \texttt{'./'}. \textbf{Fekete jelöli a vele egy szinten lévõ testvérmappát}, jelölése \texttt{'../mappanev/'}. \textcolor{blue}{Kék jelöli az anya/szülõmappát}, jelölése \texttt{'./'} , és \textcolor{green}{zöld jelöli a gyerekmappát}, ami az aktuális mappából nyílik, ennek jelölése \texttt{'./mappanev/'}
+
+\begin{figure}[htb!]
+\centerline{\resizebox{80mm}{!}{\includegraphics{mappak}}}
+\caption{\label{fig:mappak}{Mappaszerkezet jelölése különbözõ szituációkban.}}
+\end{figure}
+
+\subsection{Folyamatábrák}
+A folyamatábrák jelölésrendszere a \ref{fig:legend}. ábrán látható. A folyamatábrákon mindig lefelé vagy jobbra haladunk.
+
+\begin{figure}[htb!]
+\centerline{\resizebox{75mm}{!}{\includegraphics{legend}}}
+\caption{\label{fig:legend}{A folyamatábrák jelölésrendszere}}
+\end{figure}
+
+\textbf{Start/stop:} A program indulása/leállása.\\
+\textbf{Display:} Információ kiírása a felhasználó felé.\\
+\textbf{Process:} Valamilyen mûvelet végrehajtása.\\
+\textbf{Predefined process:} valamilyen egyéb program hívása.\\
+\textbf{Decision:} Választás. Lefelé van a logikai igen, oldalra a logikai nem.\\
+\textbf{Manual operation:} Kézi beavatkozás szükséges (pl. fájlmozgatás).\\
+\textbf{Input/Output:} Változók beolvasása vagy visszaadása.\\
+\textbf{Manual Input:} Felhasználó általi adatmegadás szükséges.\\
+\textbf{Disk:} Adatírás merevlemezre.\\
+\textbf{Data:} Adatolvasás merevlemezrõl.
+
+
+\chapter{Adatlekérés - MATLAB}
+
+Az adatlekérõ programok csak az IPP rendszerében futtatva mûködnek! Ezért futtatásukhoz be kell lépni valamilyen IPP hálózatba kapcsolt gépre, a programokat fel kell másolni oda pl. egy becsatolt afs meghajtón keresztül. A MATLAB programokat egy \texttt{routines} nevû mappába tegyük, és ezen mappával egy szinten hozzunk létre egy \texttt{raw\_data} mappát amibe majd a \texttt{.mat} adatok kerülnek. Ha ez a mappa nincs meg, a program elkészíti nekünk. Rendelkeznünk kell érvényes token-el is, amit a \texttt{klog} parancs kiadása és az afs jelszavunk (login jelszó) megadása után kapunk meg. Az AUG-nál az adateléréshez általánosan a következõ adatokra van szükség: 
+\begin{itemize}
+\item Lövésszám (továbbiakban \textbf{shot}) pl. \texttt{20975}, stb.
+\item Az adott diagnosztikai csatorna (egy Mirnov szonda, egy SXR csatorna, stb) neve (továbbiakban \textbf{channel}) pl. \texttt{'J\_053'}, stb. A lágy röntgen diagnosztika leírásánál találjuk az elérhetõ csatornaneveket:\\ \url{https://www.aug.ipp.mpg.de/~vgi/SXR.html}
+\item Azon adatfeldolgozó számítógép neve amire az adott \texttt{channel} csatlakoztatva van (továbbiakban \textbf{diag}) pl \texttt{'SXA'}, \texttt{'MHA'}, stb.
+\item Az adatlekérés kezdeti ideje (továbbiakban \textbf{t\_begin}) az adott lövésen belül, lebegõpontos számmal másodpercben megadva pl \texttt{5.5432}, stb.
+\item Az adatlekérés végének ideje (továbbiakban \textbf{t\_end}) az adott lövésen belül, lebegõpontos számmal másodpercben megadva pl \texttt{5.672}, stb.
+\end{itemize}
+
+\section{gp\_sxr\_savedata.m (SXR mentés)}\label{sec:savedata}
+\subsection{Rendeltetés}
+\textbf{Beolvassa, fájlba menti és opcionálisan egy távoli gépre másolja a megadott \texttt{shot} számú lövésbõl a \texttt{channel}-ben megadott SXR csatorna vagy kamera adatát a [\texttt{t\_start, t\_end}] idõintervallumban.} Amennyiben az \texttt{scp} kapcsoló értéke 1, úgy távoli gépre másolja ssh kapcsolaton az adatfájlt a megadott \texttt{remote} elérési útra. Ha \texttt{remote} nincs megadva, a program a default helyre másol.
+A program futtatása MATLAB-ból történik, lásd \ref{sec:adatle}.
+
+\subsection{Használat}
+\begin{verbatim}
+gp_sxr_savedata(shot,channel,t_start,t_end,scp,[remote])
+\end{verbatim}
+\textbf{Bemenetek:}
+\begin{itemize}
+\item \texttt{shot}: a lövésszám egész számként, pl. \texttt{20975}
+\item \texttt{channel}: az adott csatorna kódja sztringként, pl. \texttt{'J\_053'}. Nem javasolt, de lehetséges egyben egész csatornacsoportok letöltése is. Az ilyenkor szükséges bemenet illetve annak eredménye megtalálható a program kódjában.
+\item \texttt{t\_start}: A kérdéses idõintervallum eleje lebegõpontos számként másodpercben megadva, pl. \texttt{0.142}
+\item \texttt{t\_end}: A kérdéses idõintervallum eleje lebegõpontos számként másodpercben megadva, pl. \texttt{5.476}
+\item \texttt{scp}: Ha értéke \texttt{1}, akkor automatikus másolás történik a \texttt{remote} változóban meghatározott értékre. Ha nincs megadva, az aktiválja a bemeneti felületet! Default értéke \texttt{0}.
+\item \texttt{[remote]}: A távoli másoláskor a felhasználónév, távoli gép és távoli célmappa megadása, unix konvencióval. Értéke egy darab sztring.Például: \texttt{'user@gep:/mappa1/mappa2/'} Értékét csak akkor kell megadni, ha felül szeretnénk írni a default értéket. Hiánya nem aktiválja a bemeneti felületet.
+\end{itemize}
+Ha az elsõ 5 bemenet valamelyike hiányzik, a program aktiválja a bemeneti felületet. Ezesetben bekéri az összes adatot. \texttt{scp} default értéke \texttt{0}, elég \texttt{enter}-t ütni rá. \texttt{remote} bekérdezése csak akkor történik meg ha \texttt{scp=1}. \texttt{remote} kiírt default értékének elfogadásához szintén elegendõ \texttt{enter}-t ütni.\\
+
+\textbf{Kimenet:}\\
+A program fájlt készít kimenetként. A fájl helye a programhoz viszonyítva a \texttt{../raw\_data/} mappa (\ref{subsec:folder} fejezet). Ezt a mappát létre kell hoznunk, hiányában a program létrehozza magának. A fájlnév a következõ:\\ \texttt{shot\_channel\_tstart\_tend.mat}. Például: \texttt{20975\_J\_053\_4.12\_4.15.mat}
+A fájlnév elnevezése csak az egyediséget szolgálja, a késõbbiek során a fájlnévben tárolt információ nem kerül felhasználásra, mindig a \texttt{.mat} fájlból olvasódnak ki az adatok. Tehát a fájlnév szabadon megváltoztatható, ez a programok mûködését semmilyen módon nem befolyásolja.
+
+\subsubsection{Kimeneti adatformátum:}
+A \texttt{.mat} fájlba egy \texttt{sxr\_g} struktúra kerül mentésre. Ezt egy példán keresztül érthetjük meg a legjobban.
+\begin{verbatim}
+sxr_g = 
+        t: [1x20001 double]
+       tN: 'Time'
+      tpD: 's'
+        y: [1x20001 double]
+       yN: 'J_053'
+      ypD: 'V           '
+     diag: 'SXB'
+     shot: 20975
+    start: 0
+      end: 0.0100
+\end{verbatim}
+Az \texttt{sxr\_g.t} illetve \texttt{sxr\_g.y} mezõk tartalmazzák az idõ- illetve adatvektort \texttt{1 X hossz} formátumban, duplapontosságú lebegõpontos számként. A \texttt{tN} és \texttt{yN} illetve \texttt{tpD} és \texttt{ypD} mezõk a \texttt{t} és \texttt{y} mezõk nevei illetve dimenziói. A \texttt{sxr\_g.diag} mezõ tartalmazza a diagnosztikai számítógép nevét, továbbá visszakapjuk a \texttt{shot} lövésszámot és a választott idõintervallum \texttt{t\_start} és \texttt{t\_end} határait. Ez a struktúra elõnyös, mert tetszõleges számú mezõt adhatunk hozzá és még mindig csak egy változóval kell törõdnünk.\\
+Néhány példa az ezzel történõ bánásra:\\
+\begin{enumerate}
+\item Átadjuk az idõvektort a struktúrából egy \texttt{t} vektroba:
+\begin{verbatim}
+>> t=sxr_g.t;
+>> whos t
+  Name      Size         Bytes  Class
+
+  t         1x2001       16008  double array
+
+Grand total is 2001 elements using 16008 bytes
+\end{verbatim}
+\item Kiiratjuk a csatorna nevét:
+\begin{verbatim}
+>> disp(sxr_g.yN)
+J_053
+\end{verbatim}
+\item Ha csatornacsoportot mentettünk le, akkor \texttt{sxr\_g(1,N)} formátumú lesz, ahol \texttt{N} a csatornák száma a csoportban. Ekkor következõképpen néz ki az adat:
+\begin{verbatim}
+>> gp_sxr_savedata(20975,'J',0,0.001,0)
+(...)
+Succesfully saved ../raw_data/20975_J_0_0.001.mat
+>> load('../raw_data/20975_J_0_0.001.mat')
+>> whos sxr_g
+  Name        Size         Bytes  Class
+
+  sxr_g       1x15        495470  struct array
+
+Grand total is 60600 elements using 495470 bytes
+>> disp(sxr_g(1,5).yN)
+J_050
+\end{verbatim}
+\end{enumerate}
+
+
+\textbf{Példák}
+\begin{enumerate}
+\item Programhívás direkt adatokkal:
+\begin{verbatim}
+>> gp_sxr_savedata(20975,'J_053',0,0.001,1, \\
+         'user2@gep.reak.bme.hu:asdex/raw_data/')
+Loading SXR signal(s)...
+Requesting shot 20975 of AUGD:SXB 20975
+SF2ML  : load shot 20975 from 0.000000 [s] to 0.001000 [s]
+1 tracks with 2001 values/track (indicees : 1 - 2001)
+SF2ML : voila, data ready.
+==================================
+Saving data... (Please be patient)
+Succesfully saved ../raw_data/20975_J_053_0_0.001.mat
+Secure copying file to user2@gep.reak.bme.hu:asdex/raw_data/
+(Your ssh password may be needed)
+Password:
+20975_J_053_0_0.001.mat     100%   32KB  32.4KB/s   00:00 
+\end{verbatim}
+\item Programhívás adatok nélkül:
+\begin{verbatim}
+>> gp_sxr_savedata
+ Please load the information about the requested shot
+Shot number:  20975
+Camera name: J_053
+Begin of the time interval:  0
+End   of the time interval:  0.001
+Copy to remote machine automatically? ([0]/1)  1
+Remote machine [default is user@gep.reak.bme.hu:asdex/raw_data/]: 
+Loading SXR signal(s)...
+Requesting shot 20975 of AUGD:SXB 20975
+SF2ML  : load shot 20975 from 0.000000 [s] to 0.001000 [s]
+1 tracks with 2001 values/track (indicees : 1 - 2001)
+SF2ML : voila, data ready.
+==================================
+Saving data... (Please be patient)
+Succesfully saved ../raw_data/20975_J_053_0_0.001.mat
+Secure copying file to user@gep.reak.bme.hu:asdex/raw_data/
+(Your ssh password may be needed)
+20975_J_053_0_0.001.mat     100%   32KB  32.4KB/s   00:00   
+\end{verbatim}
+\item Programhívás hiányos adatokkal: Ugyanúgy, mint \ref{subsec:haszn-diag}.
+\item Programhívás hibás adatokkal: Ugyanúgy mint \ref{subsec:haszn-diag}.
+\end{enumerate}
+
+\subsection{Mûködés}
+A program mûködését a \ref{fig:gp_sxr_savedata}. ábra alapján érthetjük meg. A program indulása után beveszi az adatokat (már amennyit kap). \\
+
+A \texttt{SET VARIABLES} rész:\\
+Beállításra kerülnek a default értékek, pl \texttt{remote}-é. Ha a remote értéke nincsen megadva akkor deklaráljuk. Ezután hozzáadásra kerül a standard IPP könyvtár az \texttt{addipplib} segítségével, ez kell majd a késõbbiek során az \texttt{SF2ML} hívásához. Amennyiben nincs meg az 5 kötelezõ input adat, úgy aktiválódik a bemeneti interfész (késõbb). Ha megvan az 5 kötelezõ adat de \texttt{remote} értéke hiányzúk, úgy az felveszi default értékét.\\
+
+AZ \texttt{INPUT INTERFACE} rész:\\
+Amennyiben van, csak nem elégséges input, egy figyelmeztetést kapunk. Ezek után a program szól hogy aktiválta a bemenetet. Ezt követõen kerül beolvasásra az 5 kötelezõ argumentum, egyenként, kérdéses formában. A korábban leírtak szerint kell bevinni õket. Amennyiben \texttt{scp}-re csak egy \texttt{enter}-t ütünk úgy õ üres lesz, ezért átadjuk neki a default 0 értéket. Amennyiben \texttt{scp} értékadása után értéke \texttt{1}, úgy a program rákérdez a \texttt{remote} értékére. Itt bevihetõ új, üresen hagyva felveszi default értékét.\\
+
+A \texttt{LOAD} rész:\\
+Egy figyelmeztetés után a program ellenõrzi, hogy egy csatornát vagy egy csatornacsoportot kívánunk-e beolvasni. Ha csatornacsoportot, akkor a \texttt{gp\_sxr\_diag} függvény segítségével beállítja \texttt{diag} értékét, majd meghívja az \texttt{SF2ML} függvényt amivel az adatot letölti az AUG rendszerébõl (LOAD) és az \texttt{sxr\_g} struktúrába rakja le. 
+
+A \texttt{switch camera} rész:\\
+Nem javasolt, de lehetséges egyszerre több csatorna jelét lementeni, ezesetben \texttt{sxr\_g} egy vektor lesz, 1xcsatornak dimenzióval, az egyes mezõk ugyanezek mint fentebb. A csatornacsoportok az egyes kamerák egyforma mintavételezésû részeit választják ki. Használata nem javasolt, mert egyetlen csatorna hibája a teljes adatelérést meghiúsítja, továbbá végeredményeként nagyon nagy fájlok keletkeznek. Programozástechnikailag egy \texttt{switch} figyeli a bemeneti \texttt{channel} értékét és amennyiben ez egy elõre megadott értéket vesz fel (pl. \texttt{'G'}) akkor az a rész aktiválódik. Itt egy \texttt{for} ciklus megfelelõen indexelve megy végig az \texttt{SF2ML} rutin többszöri hívásán. A \texttt{diag} értékek kézzel vannak beírva az egyes csoportokhoz.\\
+A \texttt{SAVING} rész:\\
+Itt egy figyelmeztetõ üzenet és a \texttt{filename} fájlnév összerakása után (formája \texttt{shot\_channel\_tstart\_tend.mat}, például: \texttt{20975\_J\_053\_4.12\_4.15.mat}) történik meg a fájlírás. A fájl a programhoz viszonyított \texttt{../raw\_data/} mappába (lásd \ref{subsec:folder}. fejezet) kerül kiírásra, tartalma az \texttt{sxr\_g} struktúra. A mappát jobb a biztos alapon hozzuk létre, de hiánya esetén a program elkészíti magának. A sikeres fájlírás eltarthat egy ideig, végét üzenet jelzi. 
+
+\begin{figure}[htb!]
+\centerline{\resizebox{145mm}{!}{\includegraphics{gp_sxr_savedata}}}
+\caption{\label{fig:gp_sxr_savedata}{A \texttt{gp\_sxr\_diag.m} program blokkvázlata.}}
+\end{figure}
+\clearpage
+
+
+
+A \texttt{COPY} rész:\\
+Amennyiben \texttt{scp=1}, úgy automatikusan megtörténik az adatnak az IPP rendszerébõl távoli számítógépre történõ másolása. Erre egy üzenet figyelmeztet. A program a unix rendszer \texttt{scp} parancsát hívja meg és a korábban letett fájlt a \texttt{remote} változóban meghatározott helyre másolja. Amennyiben ssh kulcsos azonosítás van az IPP-s afs accountunk és a \texttt{remote}-ban megnevezett távoli hely között, úgy a másolás automatikus. Amennyiben nem, szükséges megadni a \texttt{remote} helyen érvényes jelszavunkat. \texttt{remote} értékét praktikus olyan helyre beállítani, ahova van ssh kulcsos hozzáférésünk.\\
+
+Részletesebb magyarázatok találhatók a program forráskódjában. A program rövid segítsége elérhetõ a MATLAB konzolból is a \texttt{help gp\_sxr\_savedata} parancs kiadásával.
+
+
+
+
+
+
+
+
+\section{gp\_sxr\_diag.m (Diagnosztika megkeresése)}
+\subsection{Rendeltetés}
+\textbf{A \texttt{shot} és \texttt{channel} adatokhoz automatikusan hozzárendeli a \texttt{diag} értéket.}
+
+Ez a függvény a \ref{sec:savedata}-ban leírt \texttt{gp\_sxr\_savedata} program belsõ függvénye, önmagában nem szoktuk használni. Adatlekérés programozásakor lehet hasznos.
+
+Az, hogy egy adott csatorna melyik diagnosztikai számítógépre van dugva az SXR esetén nem triviális, az adatrögzítést több mint egy tucat számítógép vezérli. A csatornakiosztás az idõk során változott/változhat. A diagnosztika honlapjáról\footnote{\url{https://www.aug.ipp.mpg.de/\~vgi/SXR.html}, login szükséges!} a csatornakiosztás táblázatos formában elérhetõ, de ezt használni nehézkes és nem biztos hogy aktuális.
+
+\subsection{Használat}\label{subsec:haszn-diag}
+\begin{verbatim}
+diag=gp_sxr_diag(shot,channel)
+\end{verbatim}
+\textbf{Bemenetek:}
+\begin{itemize}
+\item \texttt{shot}: a lövésszám egész számként, pl. \texttt{20975}
+\item \texttt{channel}: az adott csatorna kódja sztringként, pl. \texttt{'J\_053'}
+\end{itemize}
+Ha bármelyik bemenet hiányzik, a program aktiválja az adatbeviteli felületet, tehát a program input paraméterek nélkül is hívható, lásd késõbb.
+
+\textbf{Kimenet:}
+\begin{itemize}
+\item \texttt{diag}: a kérdéses diagnosztikai számítógép neve, egy három karakter hosszú sztring, pl \texttt{'SXB'}
+\end{itemize}
+\textbf{Példák:}
+\begin{enumerate}
+\item Közvetlen futtatás a változók megadásával
+\begin{verbatim}
+>> diag=gp_sxr_diag(20975,'J_053');disp(diag);
+SXB
+\end{verbatim}
+\item Futtatás interaktívan. A \texttt{20975} és \texttt{J\_053} adatokat futás közben kellett begépelni, \texttt{enter}-t ütve minden sor végén. A csatorna nevét \texttt{'} jelek nélkül kell gépelni.
+\begin{verbatim}
+>> diag=gp_sxr_diag; disp(diag)
+ Please load the information about the requested DIAG
+Shot number:  20975
+Camera name: J_053
+SXB
+\end{verbatim}
+\item Futtatás hiányos adatokkal. Ha nincs elég bemenet, a program aktiválja a beviteli felületet.
+\begin{verbatim}
+>> diag=gp_sxr_diag(20975); disp(diag)
+Not enough input arguements (<2), activating input interface...
+ Please load the information about the requested DIAG
+Shot number:  20975
+Camera name: J_053
+SXB
+\end{verbatim}
+\item Hibás bemenetek kezelése. A \texttt{shot} értéke csak szám lehet, ellenkezõ esetben hibaüzenetet kapunk. Paraméterként megadott adat esetén a futás leáll. A beviteli felület használatakor újrakéri az adatot. Ha a \texttt{channel} értékének nem a megfelelõ módon, vagy invalid értéket adunk meg, akkor hibaüzenetet kapunk. Ekkor a program kimenete \texttt{ERR} lesz.
+
+\begin{verbatim}
+>> diag=gp_sxr_diag; disp(diag)
+ Please load the information about the requested DIAG
+Shot number:  asdf
+??? Undefined function or variable 'asdf'.
+
+Shot number:  20975
+Camera name: asdf
+Error in WhichSX while getting diagnostic name \\
+for -asdf- in shot -20975-!
+Channel was possibly not connected.
+ERR
+\end{verbatim}
+\end{enumerate}
+
+\subsection{Mûködés}
+Az automatizált \textbf{diag(shot,channel)} összerendelést az IPP számítógépes rendszerén belül elérhetõ \texttt{WhichSX} program szolgáltatja. Ez egy shell script, melynek szintaxisa \texttt{WhichSX shot channel}. Ez kerül hívásra a MATLAB alól. A mûködéséhez kell, hogy legyen érvényes token-ünk az afs rendszerre, ezt a \texttt{klog} segítségével tehetjük meg. Lássunk egy példát hívásra:
+\begin{verbatim}
+pog@seaug2 1) klog
+Password:
+pog@seaug2 2) WhichSX 20975 J_053
+
+Now starting read_diags...
+----------------------------
+diags: SXA  SXB  SXC  SXD  SXF  SXG  SXH  SXI  SXJ  SXK  SXL  SXM  SXN  
+
+Now starting find_common_nr...
+----------------------------
+commonshotnr: 20807
+WARNING: highest address is: 128 not equal to number of channels!
+
+******************************************
+signal: J_053   address: 27     Diag: SXB
+******************************************
+\end{verbatim}
+Az itt szereplõ Diag értéke az amire szükségünk van. Ezt a sort \texttt{grep} parancs segítségével választjuk le a kimenetrõl:
+\begin{verbatim}
+pog@seaug2 4) WhichSX 20975 J_053 | grep Diag
+signal: J_053   address: 27     Diag: SXB 
+\end{verbatim}
+Még le kell vágni a sor végérõl a megfelelõ három karaktert. A sor vége egy üres karakter, ezért az üres karakterektõl meg kell szabadulni a \texttt{tr -d  " "} parancs segítségével:
+\begin{verbatim}
+pog@seaug2 12) WhichSX 20975 J_053 | grep Diag | tr -d " "
+signal:J_053    address:27      Diag:SXB
+\end{verbatim}
+A levágást a \texttt{cut} paranccsal csinálom meg. A \texttt{:} karaktert elválasztónak használva a 4. mezõt választom ki:
+\begin{verbatim}
+pog@seaug2 11) WhichSX 20975 J_053 | grep Diag | tr -d " " | cut -d: -f4
+SXB
+\end{verbatim}
+Ezt  a shell parancsot kell meghívni a MATLAB-ból. Amennyiben a csatorna nincs bekötve, a WhichSX program kimenete \texttt{channel not connected}, ami a fenti formájú hívás esetén üres kimenetet ad vissza. A MATLAB-ban shell parancsokat a \texttt{unix} utasítással hívom meg és veszem vissza a script kimenetét. A MATLAB egy üres karakterként hozzûfûzi a kimenethez a sortörést amit a parancsértelmezõ tesz a parancs végén. Így a korábban végérõl levágott szünet jel visszakerül, mikor a MATLAB átveszi a kimenetet. Ezért az \texttt{echo -n} paranccsal adom vissza az elõzõ script végeredményét, ez elnyomja a sortörés karaktert. A végsõ parancs így néz ki:
+\begin{verbatim}
+pog@seaug2 12) echo -n `WhichSX 20975 J_053 | \\
+			   grep Diag | tr -d " " | cut -d: -f4`
+SXBpog@seaug2 13)
+\end{verbatim}
+A sort a láthatóság miatt tört, a parancssorba az itt sortörést jelölõ \verb \\  nélkül, egyben kellene begépelni. Az így kapott kimenet összecsúszik a parancsértelmezõ nevével, de a MATLAB így fogja jól átvenni.
+
+A \texttt{gp\_sxr\_diag} program mûködését mutatja a \ref{fig:gp_sxr_diag}. ábra. Program indulásakor megadható a két bemenet, de nem kötelezõ. Amennyiben nincs elégséges bemenet, úgy aktiválódik a beviteli felület, és manuálisan kell megadni a \texttt{shot} és \texttt{channel} értékeket. Egy üzenet figyelmeztet ha van ugyan bemenet, de nem elégséges. Ezután kerül meghívásra a \texttt{WhichSX}.
+Amennyiben a \texttt{WhichSX} hívásakor hiba történt vagy a kimenet üres, akkor a program hibaüzenetet ad és \texttt{diag} az \texttt{ERR} (sztring) értéket veszi fel. Ezután visszaadásra kerül a \texttt{diag} értéke.
+
+Részletes magyarázat található a program forráskódjában. A program rövid segítsége elérhetõ a konzolból is a \texttt{help gp\_sxr\_diag} parancs kiadásával.
+
+\begin{figure}[htb!]
+\centerline{\resizebox{140mm}{!}{\includegraphics{gp_sxr_diag}}}
+\caption{\label{fig:gp_sxr_diag}{A \texttt{gp\_sxr\_diag.m} program blokkvázlata.}}
+\end{figure}
+\clearpage
+
+
+
+
+
+
+
+\section{gp\_ece\_savedata.m (ECE mentés)}\label{sec:ecesavedata}
+\subsection{Rendeltetés}
+\textbf{Beolvassa, fájlba menti és opcionálisan egy távoli gépre másolja a megadott \texttt{shot} számú lövésbõl az összes ECE csatorna adatát a [\texttt{t\_start, t\_end}] idõintervallumban.} Amennyiben az \texttt{scp} kapcsoló értéke 1, úgy távoli gépre másolja ssh kapcsolaton az adatfájlt a megadott \texttt{remote} elérési útra. Ha \texttt{remote} nincs megadva, a program a default helyre másol.
+A program futtatása MATLAB-ból történik, lásd \ref{sec:adatle}.
+
+\subsection{Ismert hibák}
+Nem teljesen tisztázott, de vélhetõleg az \texttt{SF2ML}-es adatlehívó hibájából az ECE adat idõnként értelmezhetetlen: egyes csatornák azonosan 0 adatot tartalmaznak, még más csatornák $10^{23}$ nagysûgrendû értékeket, de elektronvoltban. ECE lehívásra a tapasztalatok szerint az IDL beolvasó megbízhatóbb.
+
+\subsection{Használat}
+\begin{verbatim}
+gp_ece_savedata(shot,t_start,t_end,scp,[remote])
+\end{verbatim}
+\textbf{Bemenetek:}
+\begin{itemize}
+\item \texttt{shot}: a lövésszám egész számként, pl. \texttt{20975}
+\item \texttt{t\_start}: A kérdéses idõintervallum eleje lebegõpontos számként másodpercben megadva, pl. \texttt{0.142}
+\item \texttt{t\_end}: A kérdéses idõintervallum eleje lebegõpontos számként másodpercben megadva, pl. \texttt{5.476}
+\item \texttt{scp}: Ha értéke \texttt{1}, akkor automatikus másolás történik a \texttt{remote} változóban meghatározott értékre. Ha nincs megadva, az aktiválja a bemeneti felületet! Default értéke \texttt{0}.
+\item \texttt{[remote]}: A távoli másoláskor a felhasználónév, távoli gép és távoli célmappa megadása, unix konvencióval. Értéke egy darab sztring.Például: \texttt{'user@gep:/mappa1/mappa2/'} Értékét csak akkor kell megadni, ha felül szeretnénk írni a default értéket. Hiánya nem aktiválja a bemeneti felületet.
+\end{itemize}
+Ha az elsõ 4 bemenet valamelyike hiányzik, a program aktiválja a bemeneti felületet. Ezesetben bekéri az összes adatot. \texttt{scp} default értéke \texttt{0}, elég \texttt{enter}-t ütni rá. \texttt{remote} bekérdezése csak akkor történik meg ha \texttt{scp=1}. \texttt{remote} kiírt default értékének elfogadásához szintén elegendõ \texttt{enter}-t ütni.\\
+
+\textbf{Kimenet:}\\
+A program fájlt készít kimenetként. A fájl helye a programhoz viszonyítva a \texttt{../raw\_data/} mappa (\ref{subsec:folder} fejezet). Ezt a mappát létre kell hoznunk, hiányában a program létrehozza magának. A fájlnév a következõ:\\ \texttt{shot\_ECE\_tstart\_tend.mat}. Például: \texttt{20975\_ECE\_0\_8.mat}
+A fájlnév elnevezése csak az egyediséget szolgálja, a késõbbiek során a fájlnévben tárolt információ nem kerül felhasználásra, mindig a \texttt{.mat} fájlból olvasódnak ki az adatok. Tehát a fájlnév szabadon megváltoztatható, ez a programok mûködését semmilyen módon nem befolyásolja.
+
+\subsubsection{Kimeneti adatformátum:}
+A \texttt{.mat} fájlba három struktúra kerül mentésre. Ezt egy példán keresztül érthetjük meg a legjobban.
+
+\begin{verbatim}
+>> load('../raw_data/20975_ECE_0_8.mat')
+>> whos
+  Name       Size                Bytes  Class     Attributes
+
+  ece        1x1             111937460  struct              
+  ece_R      1x1                 74812  struct              
+  ece_z      1x1                 74812  struct
+\end{verbatim}
+Betöltjük az adatfájlt, majd kiiratjuk a változókat, akkor látjuk hogy három új változónk van, mindhárom struktúra. Nézzük ezeket egyenként:
+\begin{verbatim}
+>> ece
+ece = 
+        t: [1x229372 double]
+       tN: 'time-A'
+      tpD: 's'
+        y: [60x229372 double]
+       yN: [60x10 char]
+      ypD: [60x12 char]
+     diag: 'CEC'
+     shot: 20975
+    start: 0
+      end: 8
+\end{verbatim}
+
+Az \texttt{ece.t} illetve \texttt{ece.y} mezõk tartalmazzák az idõ- illetve adatvektorokat \texttt{1 * hossz} illetve \texttt{csatorna * hossz} formátumban, duplapontosságú lebegõpontos számként. A példában 60 csatornánk van, ezért az \texttt{ece.y} egy \texttt{60 * hossz} méretû mátrix, minden sor egy-egy csatorna adatát tartalmazza.
+
+A \texttt{tN} és \texttt{yN}; illetve \texttt{tpD} és \texttt{ypD} mezõk a \texttt{t} és \texttt{y} mezõk nevei; illetve dimenziói. Az egyes csatornák nevei és dimenziói külön kerülnek elmetésre, így pl. \texttt{ece.yN} a példában egy \texttt{60 X 10}-es sztring mátrix.
+
+Az \texttt{ece.diag} mezõ tartalmazza a diagnosztikai számítógép nevét (itt \texttt{'CEC'}), továbbá visszakapjuk a \texttt{shot} lövésszámot és a választott idõintervallum \texttt{start} és \texttt{end} határait. Ez a struktúra elõnyös, mert tetszõleges számú mezõt adhatunk hozzá és még mindig csak egy változóval kell törõdnünk.\\
+Néhány példa az ezzel történõ bánásra:\\
+\begin{enumerate}
+\item Átadjuk az idõvektort a struktúrából egy \texttt{t} vektroba:
+\begin{verbatim}
+>> t=ece.t; whos t;
+  Name      Size             Bytes  Class     Attributes
+
+  t         1x229372       1834976  double
+\end{verbatim}
+\item Kiiratjuk a 25-ös csatorna nevét:
+\begin{verbatim}
+>> disp(ece.yN(25,:))
+Trad-A(25)
+\end{verbatim}
+\item Vektorba mentjük a 13-as csatorna jelét:
+\begin{verbatim}
+>> data=ece.y(13,:); whos data
+  Name      Size             Bytes  Class     Attributes
+
+  data      1x229372       1834976  double              
+\end{verbatim}
+\end{enumerate}
+
+Most nézzük a két következõ struktúrát:
+\begin{verbatim}
+>> ece_R
+ece_R = 
+        t: [1x146 double]
+       tN: 'rztime'
+      tpD: 's'
+        y: [60x146 double]
+       yN: [60x7 char]
+      ypD: [60x12 char]
+     diag: 'CEC'
+     shot: 20975
+    start: 0
+      end: 8
+
+>> ece_z
+ece_z = 
+        t: [1x146 double]
+       tN: 'rztime'
+      tpD: 's'
+        y: [60x146 double]
+       yN: [60x7 char]
+      ypD: [60x12 char]
+     diag: 'CEC'
+     shot: 20975
+    start: 0
+      end: 8
+\end{verbatim}
+Az itteni két struktúra nagyban hasonlít az elõzõekre. Ez a két változó tárolja a csatornák pozícióját az idõ függvényében, de jelentõsen rosszabb idõfelbontással, mint magát az adatot. A \texttt{diag, shot, start, end} mezõk ugyanazok. A \texttt{ece\_z.t} és \texttt{ece\_R.t} ugyanúgy az idõvektor, \texttt{ece\_z.y} és \texttt{ece\_R.y} pedig maga pozíciómátrix. Minden egyes csatorna R és z koordinátáját adja meg. Mértékegysége \texttt{ece\_z.ypD} és \texttt{ece\_R.ypD}-ben van tárolva, itt méter. \texttt{ece\_z.yN} és \texttt{ece\_R.yN} az adatmátrix egyes soraihoz tartozó adat neve. A mezõk elérése teljesen hasonló mint a \texttt{ece} változó esetén.
+
+A csatornapozíciók automatikusa mentésre kerülnek, és használhatjuk is megjelenítésre. Viszont a csatornapozíciók megjelenítéséhez praktikusabb az IPP gépein elérhetõ \texttt{diaggeom} programot használni.\\
+
+
+
+\textbf{Példák}
+\begin{enumerate}
+\item Programhívás direkt adatokkal:
+\begin{verbatim}
+>> gp_ece_savedata(20975,0,8,1, \\ 
+	'geri@deep.reak.bme.hu:asdex/raw_data/')
+Loading ECE signals...
+Requesting shot 20975(3) of AUGD:CEC 20975(3)
+SF2ML  : load shot 20975 from 0.000000 [s] to 7.339872 [s]
+60 tracks with 229372 values/track (indicees : 2 - 229373)
+  
+SF2ML warning in ddcsgrp at signal group Trad-A : \\
+	see details in /tmp/fort.pid (pid=process id)
+SF2ML : voila, data ready.
+Requesting shot 20975(3) of AUGD:CEC 20975(3)
+SF2ML  : load shot 20975 from 0.100000 [s] to 7.350000 [s]
+60 tracks with 146 values/track (indicees : 1 - 146)
+  
+SF2ML warning in ddcsgrp at signal group z-A : \\
+	see details in /tmp/fort.pid (pid=process id)
+SF2ML : voila, data ready.
+Requesting shot 20975(3) of AUGD:CEC 20975(3)
+SF2ML  : load shot 20975 from 0.100000 [s] to 7.350000 [s]
+60 tracks with 146 values/track (indicees : 1 - 146)
+  
+SF2ML warning in ddcsgrp at signal group R-A : \\
+	see details in /tmp/fort.pid (pid=process id)
+SF2ML : voila, data ready.
+==================================
+Saving data... (Please be patient)
+Succesfully saved ../raw_data/20975_ECE_0_8.mat
+Secure copying file to user2@deep.reak.bme.hu:asdex/raw_data/
+(Your ssh password may be needed)
+Password: 
+20975_ECE_0_8.mat          100%  107MB   8.9MB/s   00:12    
+10.33user 2.32sys 1:01.98 20.4%
+\end{verbatim}
+Meghívjuk a programot. Ezek után kapunk egy \texttt{'Loading...'} figyelmeztetést. Az ezt követõ információkat az \texttt{SF2ML} adja vissza, jelen esetben visszajelzések és egy apró figyelmeztetés. A három adathívás végét a \texttt{====} vonal jelzi. Ekkor történik meg az adatmentés, majd a másolás távoli gépre (kellett SSH jelszó is).
+
+\item Programhívás adatok nélkül:
+\begin{verbatim}
+>> gp_ece_savedata
+ Please load the information about the requested shot
+Shot number:  20975
+Begin of the time interval:  0
+End   of the time interval:  8
+Copy to remote machine automatically? ([0]/1)  1
+Remote machine \\
+[default is user@deep.reak.bme.hu:asdex/raw_data/, \\ 
+to accept, hit return]: 
+
+Loading ECE signals...
+Requesting shot 20975(3) of AUGD:CEC 20975(3)
+SF2ML  : load shot 20975 from 0.000000 [s] to 7.339872 [s]
+60 tracks with 229372 values/track (indicees : 2 - 229373)
+  
+SF2ML warning in ddcsgrp at signal group Trad-A : \\
+	see details in /tmp/fort.pid (pid=process id)
+SF2ML : voila, data ready.
+Requesting shot 20975(3) of AUGD:CEC 20975(3)
+SF2ML  : load shot 20975 from 0.100000 [s] to 7.350000 [s]
+60 tracks with 146 values/track (indicees : 1 - 146)
+  
+SF2ML warning in ddcsgrp at signal group z-A : \\
+	see details in /tmp/fort.pid (pid=process id)
+SF2ML : voila, data ready.
+Requesting shot 20975(3) of AUGD:CEC 20975(3)
+SF2ML  : load shot 20975 from 0.100000 [s] to 7.350000 [s]
+60 tracks with 146 values/track (indicees : 1 - 146)
+  
+SF2ML warning in ddcsgrp at signal group R-A : \\
+	see details in /tmp/fort.pid (pid=process id)
+SF2ML : voila, data ready.
+==================================
+Saving data... (Please be patient)
+Succesfully saved ../raw_data/20975_ECE_0_8.mat
+Secure copying file to user@deep.reak.bme.hu:asdex/raw_data/
+(Your ssh password may be needed)
+20975_ECE_0_8.mat            100%  107MB   8.9MB/s   00:12
+10.44user 2.32sys 0:12.48 102.2%
+>> 
+\end{verbatim}
+Itt ugyanaz történik mint elõzõ esetben, csak aktiválódott a beviteli felület, és a default távoli gépre nem kellett jelszó.
+
+\item Programhívás hiányos adatokkal: Ugyanúgy, mint \ref{subsec:haszn-diag}.
+\item Programhívás hibás adatokkal: Ugyanúgy mint \ref{subsec:haszn-diag}.
+\end{enumerate}
+
+\subsection{Mûködés}
+A program mûködését a \ref{fig:gp_ece_savedata}. ábra alapján érthetjük meg. A program indulása után beveszi az adatokat (már amennyit kap). \\
+
+A \texttt{SET VARIABLES} rész:\\
+Beállításra kerülnek a default értékek, pl \texttt{remote}-é. Ha a remote értéke nincsen megadva akkor deklaráljuk. Ezután hozzáadásra kerül a standard IPP könyvtár az \texttt{addipplib} segítségével, ez kell majd a késõbbiek során az \texttt{SF2ML} hívásához. Amennyiben nincs meg a 4 kötelezõ input adat, úgy aktiválódik a bemeneti interfész (késõbb). Ha megvan a 4 kötelezõ adat de \texttt{remote} értéke hiányzik, úgy az felveszi default értékét.\\
+
+AZ \texttt{INPUT INTERFACE} rész:\\
+Amennyiben van, csak nem elégséges input, egy figyelmeztetést kapunk. Ezek után a program szól hogy aktiválta a bemenetet. Ezt követõen kerül beolvasásra a 4 kötelezõ argumentum, egyenként, kérdéses formában. A korábban leírtak szerint kell bevinni õket. Amennyiben \texttt{scp}-re csak egy \texttt{enter}-t ütünk úgy õ üres lesz, ezért átadjuk neki a default 0 értéket. Amennyiben \texttt{scp} értékadása után értéke \texttt{1}, úgy a program rákérdez a \texttt{remote} értékére. Itt bevihetõ új, üresen hagyva felveszi default értékét.\\
+
+A \texttt{LOAD} rész:\\
+A program figyelmeztet hogy kezdõdik az adatbehívás, majd az \texttt{SF2ML} rutint használva lehív három adatstruktúrát. Az \texttt{ece} maga az adat, az \texttt{ece\_R} és \texttt{ece\_z} az egyes csatornák pozíciója az idõ függvényében.\\
+
+A \texttt{SAVING} rész:\\
+Itt egy figyelmeztetõ üzenet és a \texttt{filename} fájlnév összerakása után (formája \texttt{shot\_ECE\_tstart\_tend.mat}, például: \texttt{20975\_ECE\_0\_8.mat}) történik meg a fájlírás. A fájl a programhoz viszonyított \texttt{../raw\_data/} mappába (lásd \ref{subsec:folder}. fejezet) kerül kiírásra, tartalma három struktúra. A mappát jobb a biztos alapon hozzuk létre, de hiánya esetén a program elkészíti magának. A sikeres fájlírás eltarthat egy ideig, végét üzenet jelzi. 
+
+\begin{figure}[htb!]
+\centerline{\resizebox{145mm}{!}{\includegraphics{gp_ece_savedata}}}
+\caption{\label{fig:gp_ece_savedata}{A \texttt{gp\_ece\_diag.m} program blokkvázlata.}}
+\end{figure}
+\clearpage
+
+
+
+A \texttt{COPY} rész:\\
+Amennyiben \texttt{scp=1}, úgy automatikusan megtörténik az adatnak az IPP rendszerébõl távoli számítógépre történõ másolása. Erre egy üzenet figyelmeztet. A program a unix rendszer \texttt{scp} parancsát hívja meg és a korábban letett fájlt a \texttt{remote} változóban meghatározott helyre másolja. Amennyiben ssh kulcsos azonosítás van az IPP-s afs accountunk és a \texttt{remote}-ban megnevezett távoli hely között, úgy a másolás automatikus. Amennyiben nem, szükséges megadni a \texttt{remote} helyen érvényes jelszavunkat. \texttt{remote} értékét praktikus olyan helyre beállítani, ahova van ssh kulcsos hozzáférésünk.\\
+
+Részletesebb magyarázatok találhatók a program forráskódjában. A program rövid segítsége elérhetõ a MATLAB konzolból is a \texttt{help gp\_ece\_savedata} parancs kiadásával.
+
+\chapter{Adatlekérés - IDL}
+
+A sztenderd \verb{get_rawsignal.pro{ alá vannak integrálva az egyes IDL olvasó modulok, esetenként saját vagy külsõ függvényeket használva.
+
+Az adatlekérés ebben az esetben is csak az IPP hálózatán belülrõl futtatva érhetõ el. Az IDL programokat az '/afs/ippgarching.mpg.de/home/p/pog/idl/' mappában tároljuk. A programok kimenete valamint a lekért adatok az ezen belüli 'data/output/' mappába töltõdnek.
+
+A sztenderd \verb{get_rawsignal.pro{ alá vannak integrálva az egyes IDL olvasó modulok, esetenként saját vagy külsõ függvényeket használva. Ha a program megtalálja a beolvasni kívánt adatot a 'data' mappában, akkor betölti onnan, ha nem találja, akkor letölti az adatot ide, majd betölti.
+
+\section{SXR}
+\subsection{Használat}
+Az adatlekérés a már említett \verb{get_rawsignal.pro{ rutin segítségével történik.
+
+\textbf{Paraméterek:}
+\begin{itemize}
+ \item shot: lövésszám
+ \item signal name: az sxr adatok esetében: 'AUG\_SXR/' + a csatorna neve. Például 'AUG\_SXR/J\_053'
+ \item timeax: ebbe a vektorba adja vissza az idõtengelyt
+ \item data: ebbe a vektorba adja vissza az adatokat
+ \item trange (opcionális): az idõintervallum, amin belül az adatokat betölti. FONTOS: a trange kapcsolónak csak a timeax illetve data vektorokban vissza adott adatokra van hatása, akár használjuk, akár nem, mindig letölti a teljes lövés alatt rögzített SXR adatot.
+ \item movedata (opcionális): a movedata=1 opció segítségével automatikusan áthelyezhetjük a letöltött adatokat a Deep szerverre, a '/home/data/asdex/raw\_data/' mappa alá. Alapértelmezett beállítás esetén nem helyezi át az adatot, hanem a '~/idl/data/' mappába tölti le.
+\end{itemize}
+
+\textbf{Példa adatletöltésre:}
+\begin{verbatim}
+IDL> get_rawsignal, 20975, 'AUG_SXR/J_053', timeax, data, $
+trange=[2,6], movedata=1
+\end{verbatim}
+
+A fenti példa esetén az adatot 2-6 másodpercig adja vissza a timeax illetve data vektorokban, a teljes letöltött adatot pedig áthelyezi a Deep szerverre.
+
+\subsection{Mûködés}
+A \verb{get_rawsignal.pro{ rutin az SXR adatok lekérésére egy másik rutint, az \verb{ma_sxr_savedata.pro{ -t használja.
+
+\textbf{ma\_sxr\_savedata.pro}
+A rutin hívása:
+\begin{verbatim}
+ma_sxr_savedata, shot, channel, [trange], $
+[save_path] [/scp], [remote], [/plot], $
+[/no_correction], [data], [time] 
+\end{verbatim}
+
+\textbf{Bemenetek:}
+\begin{itemize}
+\item shot: lövésszám
+\item channel: csatorna név (pl.: 'J\_053')
+\item trange (opcionális): idõ intervallum, alapértelmezett: teljes lövés
+\item save\_path (opcionális): letöltött adatok helye, alapértelmezett: '~/idl/data/'
+\item /scp (opcionális): adatok áthelyezése távoli számítógépre
+\item remote(opcionális): a távoli számítógép címe, alapértelmezett: deep.reak.bme.hu:/home/data/asdex/raw\_data/
+\item /plot (opcionális): ábrázolja a letöltött adatokat
+\item /no\_correction (opcionális): Hotlink error javítása nélkül tölti le az adatokat
+\item data (opcionális): visszaadja az adatokat
+\item time (opcionális): visszaadja az idõtengelyt
+\end{itemize}
+
+\textbf{A lementett fájlba a következõ adatok kerülnek:}
+\begin{itemize}
+\item data: SXR adat
+\item starttime: kezdõ idõpont
+\item endtime: végsõ idõpont
+\item sampletime: mintavételi idõ, két szomszédos adatpont közti idõtartam
+\item info: információ a lövésrõl (Az IPP-ben elérhetõ SXinfo nevû programból)
+\end{itemize}
+
+\subsection{Függvények}
+
+\subsubsection{Fûrészfog összeomlás keresõ rutin}
+A rutin neve: \verb{ma_findcrash.pro{,a célja, hogy megkeresse a fûrészfog összeomlások idejét az adott lövésben.
+
+\textbf{Mûködés:}
+A fûrészfog összeomlások spektrogramjait figyelve a legtöbb esetben találhatunk olyan frekvenciasávot, melyben csak az összeomlásokkor látható egy-egy szélessávú összetevõ, egyébként az összeomlások között, a frekvenciasáv üres. Ha ezen a frekvenciasávon kiszámítjuk a sávteljesítményt, azt találjuk, hogy a sávteljesítménynek éles maximumai vannak az egyes összeomlások idején.
+
+A fûrészfog összeomlás keresõ rutin így mûködik: kiszámítja a sávteljesítményt a megadott frekvenciasávon, majd megkeresi azoknak a maximumoknak a helyét, melyeknél a sávteljesítmény nagyobb, mint egy bizonyos korlát. A korlát értékét úgy számítja ki, hogy egy állítható faktorral megszorozza a jel átlagát.
+
+Ha a megadott SXR jel hosszabb, mint 0.5 másodperc, akkor a program szétbontja 0.5 másodperc hosszú szakaszokra a jelet és mindegyiken külön-külön elvégzi a keresést.
+
+\textbf{Programhívás:}
+\begin{verbatim}
+ma_findcrash, shot, channel [, datapath] [,trange] $
+[,frange] [,threshold] 
+\end{verbatim}
+
+\textbf{Bemenetek:}
+\begin{itemize}
+\item shot: lövésszám
+\item channel: csatorna név
+\item datapath: az SXR adat helye, alapértelmezett: './data/'
+\item trange: idõ intervallum, amin belül keresi az összeomlásokat, alapértelmezett: teljes lövés
+\item frange: frekvenciasáv, amin a sávteljesítményt számolja a program. FONTOS: ennek egy olyan frekvenciasávnak kell lennie, ami csak az összeomlásokkor tapasztalt szélessávú komponenseket tartalmazza, egyébként pedig üres. Alapértelmezett frekvenciasáv: 1-3 kHz.
+\item threshold: korlát = jel átlaga * threshold, alapértelmezett: threshold=10.
+\end{itemize}
+
+\textbf{Kimenetek:}
+\begin{itemize}
+\item Az SXR adat 0.5 másodperc hosszú spektrogramjai.
+\item Az adott frekvenciasávon számított sávteljesítmények.
+\item A futás végén a program a képernyõre kiírja a talált összeomlások idejét.
+\end{itemize}
+
+\textbf{FONTOS:} A kapott eredményt célszerû ellenõrizni oly módon, hogy a futás során legyártott spektrogramokat végignézzük, ellenõrizzük, hogy valóban üres-e a megadott frekvenciasáv illetve valóban fûrészfog összeomlás okozta-e a szélessávú összetevõt. Az utóbbi fõként a jel elejére illetve végére vonatkozik, ahol gyakran elõfordulnak szélessávú zajok. Abban, hogy mennyire üres az adott frekvenciasáv a sávteljesítmények segítségével is könnyen ellenõrizhetõ. Egy gyors ellenõrzési módszer: megszámolom a spektrogramon a fûrészfog összeomlásokat, ha ugyan ennyi összeomlást talált a program az adott intervallumban, akkor valószínûleg jól mûködött.
+
+\section{ECE}
+\subsection{Használat}
+Az ASDEX Upgrade ECE jeleinek beolvasója az SXR beolvasóhoz hasonlóan a \verb{get_rawsignal.pro{ -ba van integrálva. Az adatok elérése is hasonlóan mûködik, új adatokat az ASDEX AFS rendszerén belül futtatva tölthetünk le.
+
+\textbf{Bemenetek:}
+\begin{itemize}
+ \item shot: lövésszám
+ \item channel: csatorna, AUG ECE esetében ez 01-60 -ig terjed. Pl.: $'AUG_ECE/05'$
+ \item time: idõ vektor
+ \item data: adat vektor
+ \item movedata: az adatokat áthelyezi távoli számítógépre, a movedata=1 hívással a Deep-re helyezi. Alapértelmezetten nem helyezi át, hanem a \textit{'data'} mappába teszi.
+\end{itemize}
+
+\textbf{Példa:}
+\begin{verbatim}
+ get_rawsignal, 20975, 'AUG_ECE/25', time, data, movedata=1
+\end{verbatim}
+
+A program letöltéskor mind a 60 csatorna adatát lekéri, ezeket 1 fájlba írja be, majd ebbõl a fájlból olvassa be a kért csatornát. A fájlon belül egy ECE nevû struktúrában tárolja az adatokat, ebben a struktúrában szerepelnek olyan adatok is, amiket a \verb{get_rawsignal.pro{ nem olvas be.
+
+\subsection{Mûködés}
+\subsection{Függvények}
+\section{Mágneses adatok}
+\subsection{Használat}
+\subsection{Mûködés}
+\subsection{Függvények}
+
+\end{document}

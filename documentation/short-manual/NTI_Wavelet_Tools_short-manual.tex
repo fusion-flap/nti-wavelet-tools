@@ -1,0 +1,118 @@
+\documentclass[12pt]{article}
+
+% To be compiled with PDFLaTeX
+
+\usepackage{delarray}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{ae} %full vectorgraphic output.
+\usepackage{bm}
+\usepackage{color}
+\usepackage{wrapfig}
+\usepackage{listings} %source code insertion
+\usepackage{mathptmx}
+\sloppy
+
+\usepackage{ifpdf}
+\ifpdf
+	\usepackage[pdftex]{graphicx}
+	\usepackage[pdftex]{hyperref}
+	\hypersetup{colorlinks=true,
+		pdfstartview=FitV,
+		linkcolor=blue,
+		citecolor=blue,
+		urlcolor=blue,
+		pdfauthor={Gergo Pokol, pokol@reak.bme.hu},
+		pdfsubject={NTI Wavelet Tools Documentation},
+		pdftitle={NTI Wavelet Tools Users' Guide}
+	}
+	\DeclareGraphicsExtensions{.pdf}
+\else
+	\usepackage[dvips]{graphicx}
+	\usepackage{epsfig}
+	\DeclareGraphicsExtensions{.ps}
+	\usepackage{url}
+\fi
+
+\graphicspath{{figs/}}
+
+
+%remove links from the citations
+%\renewcommand{\url}[1]{}
+
+%\usepackage[numbers,sort&compress]{natbib} % Write [11-15] instead of [11, 12, 13, 14, 15], even with hyperref!
+\usepackage{hypernat}
+\usepackage[all]{hypcap}
+\usepackage[small, bf]{caption}	% Customised captions
+\usepackage[utf8]{inputenc}
+
+\newcommand{\red}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\pink}[1]{\textbf{\textcolor{magenta}{#1}}}
+\newcommand{\blue}[1]{\textbf{\textcolor{blue}{#1}}}
+\newcommand{\green}[1]{\textbf{\textcolor{green}{#1}}}
+
+\setlength{\textheight}{240mm}
+\setlength{\textwidth}{165mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\topmargin}{-10mm}
+
+\title{\vspace{-2.5 cm}\textbf{NTI Wavelet Tools - Short manual}}
+
+\author{
+\textbf{Primary contact: Dr. Gerg\H{o} Pokol - pokol@reak.bme.hu}\\
+{\small Developers: László Horváth, Péter Pölöskei, Gergely Papp, Gábor Pór}\\
+{\small Institute of Nuclear Techniques, Budapest University of Technology and Economics}\\
+\vspace{0.6 cm}
+{\small(Last modified: \today)}
+}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\vspace{-1.5 cm}
+
+The aim of this short manual is to quickly guide the user step by step on the basic applications of NTI Wavelet Tools data processing toolbox. This document is only presenting the main steps when the toolbox is called from MTR (by Marc
+Maraschek).
+
+\vspace{0.3 cm}
+
+\noindent\textbf{Load data (using MTR):}\vspace{-0.3 cm}
+\begin{itemize}
+\setlength{\itemsep}{-5pt}
+  \item Log into AUG AFS.
+  \item Log into an sxaug20-24 machine (for example: ssh \verb|sxaug22|).
+  \item Star MTR using the \verb|mtr_dev| command.
+  \item Load and pre-process data in MTR.
+  \item Start NTI Wavelet Tools GUI by choosing the \verb|Wavelet/NTI Wavelet| menu item.
+\end{itemize}
+
+\vspace{-0.3 cm}\noindent\textbf{Process data:}\vspace{-0.3 cm}
+\begin{itemize}
+\setlength{\itemsep}{-4pt}
+  \item Select channel pairs. \textit{(Since NTI Wavelet Tools is in principle developed to investigate coherences and modenumbers, the basic data unit is a channel pair)}.
+  \item Choose type of transform (Continuous Wavelet Transform (CWT) or Short Time Fourier Transform (STFT)) on the Transforms panel.
+  \item The parameters of the transforms can be set here. A help text accessed by pressing the "?" button. This text gives the definition of the parameters to be set in the corresponding step, and it might also contain some tips on how to do it.
+  \item On the bottom of the panel the sufficient memory needed for the calculation is predicted. The resolution of the transforms can be decreased by changing the \textit{Dscale} (CWT) or \textit{F.res} and \textit{Step} (STFT) parameters.
+  \item The parameters of the modenumer calculation can be set on the last panel. The cross-transform and coherence calculation will be selected automatically.
+  \item In order to calculate modenumbers without any smoothing, set the coherence average to 0.
+  \item \textbf{In order to use the cross-phase correction which takes into account the transfer function of the probes, check the \textit{Cross-phase correction} field on the Cross-transforms panel.}
+\end{itemize}
+
+\vspace{-0.3 cm}\noindent\textbf{Visualize results:}\vspace{-0.3 cm}
+\begin{itemize}
+\setlength{\itemsep}{-4pt}
+ \item On the Visualization panel one can plot the results. Default output folder is a subfolder of your current directory.
+ \item The modenumbers can be filtered in three different ways. Modenumbers are to be plotted only for the time-frequency points satisfying all filters:
+  \vspace{-0.3 cm}\begin{itemize}
+  \setlength{\itemsep}{-4pt}
+    \item Coh. Limit: Minimum wavelet coherence must be higher than the value set.
+    \item Power Limit: Average smoothed cross-energy density must be higher than the set percentage of the maximum.
+    \item Q Limit: The residual for the best fit must be lower than the set percentage of the maximum.
+  \end{itemize}
+\end{itemize}
+
+\end{document}

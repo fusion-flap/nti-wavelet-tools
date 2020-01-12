@@ -1,0 +1,555 @@
+\documentclass[a4paper,12pt,oneside]{article}
+
+\frenchspacing
+
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{t1enc}
+\usepackage{ae}
+\usepackage{subfigure}
+\usepackage[font=small,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage{color}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{calc}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{ifthen}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{ifpdf}
+\ifpdf
+	\usepackage[pdftex]{graphicx}
+	\usepackage[pdftex]{hyperref} 
+	\hypersetup{colorlinks=true,
+		pdfstartview=FitV,
+		linkcolor=blue,
+		citecolor=red,
+		urlcolor=blue,
+		pdfauthor={HORVATH Laszlo, horla@reak.bme.hu},
+		pdfsubject={},
+		pdftitle={Short Time Fourier Transform in NTI Wavelet Tools}}
+	\DeclareGraphicsExtensions{.pdf}
+\else
+	\usepackage{graphicx}
+	\usepackage{epsfig}
+	\DeclareGraphicsExtensions{.eps}
+	\newcommand{\url}[1]{#1}
+\fi
+
+\usepackage[sort&compress]{natbib}
+\usepackage{pdfpages}
+
+\def\inputGnumericTable{}
+\graphicspath{{figs/}}
+
+\pagestyle{plain}
+
+\definecolor{fgreen}{RGB}{0,161,75}
+\definecolor{szurke}{RGB}{100,100,100}
+\definecolor{myblue}{RGB}{0,174,239}
+
+\newcommand{\dt}{\mathrm{d}t}
+\newcommand{\df}{\mathrm{d}f}
+\newcommand{\du}{\mathrm{d}u}
+\newcommand{\dxi}{\mathrm{d}\xi}
+\newcommand{\dw}{\mathrm{d}\omega}
+\newcommand{\conj}{^{\textstyle^*}}
+\newcommand{\Abs}{\mathrm{A}}
+\newcommand{\Arg}{\Phi}
+\newcommand{\R}{\mathrm{R}}
+\newcommand{\I}{\mathrm{I}}
+
+
+\title{\textbf{Short Time Fourier Transform\\in NTI Wavelet Tools}}
+
+\author{
+Written by László Horváth$^1$ \vspace{0.3 cm}\\
+Supervisors:\\
+Dr. Gergő I. Pokol$^1$, Dr. Marco Sertoli$^2$, Gergely Papp$^1$ \vspace{0.3 cm}\\ 
+{\footnotesize $^1$Institute of Nuclear Techniques, Budapest University of Technology and Economics,}\vspace{-0.2 cm}\\
+{\footnotesize EURATOM Association, Pf 91, H-1521 Budapest, Hungary
+}\\
+{\footnotesize $^2$Max-Planck-Institut für Plasmaphysik,}\vspace{-0.2 cm}\\
+{\footnotesize EURATOM Association, D-85748 Garching, Germany}\\
+{\footnotesize E-mail: horla@reak.bme.hu}}
+
+\begin{document}
+
+%\maketitle
+%\clearpage
+
+\includepdf[pages={1-3}]{cover/2012_NTI_report_cover.pdf}
+
+\tableofcontents
+
+%\vspace{2 cm}
+%\noindent
+%\emph{All of the figures presented in this report were produced by the \emph{\textbf{NTI Wavelet Tools 1.2.0}} program, available at the IPP via MTR.}
+
+\thispagestyle{empty}
+\newpage
+
+\section{Introduction}
+
+This report summarizes issues related to the short time Fourier transform (STFT) implemented in the NTI Wavelet Tools. NTI Wavelet Tools\cite{nti12} is a data processing toolbox that is developed and maintained by the fusion group at the Institute of Nuclear Techniques (NTI), Budapest University of Technology and Economics. The current developing language is IDL\cite{idl12} (Interactive Data Language). The toolbox features a graphical user interface (GUI) with a collection of tools based on continuous time-frequency transforms - ideal for processing transient signals - and incorporates various other data processing methods that can be run from command line.
+
+\section{Linear time-frequency transformations}
+
+The forthcoming summary is based on the work of Mallat\cite{mallat08wavelet}. Linear time-frequency transformations can be calculated by correlating the signal with families of so-called time-frequency atoms:
+\begin{equation}\label{eq:transform}
+  T f(u,\xi) = \langle f, g_{u, \xi} \rangle = \int\limits_{-\infty}^{+\infty} f(t) g^*_{u, \xi}(t) \dt\ ,
+\end{equation}
+where $g_{u, \xi}$ is a time-frequency atom, a complex function. Variables $u$ and $\xi$ are the time and frequency indices of the atom identifying its position on the time-frequency plane and the $*$ represents the complex conjugation. The energy of a time-frequency atom is well localized in both time and frequency and it is normalized:
+\begin{equation}
+  \| g_{u, \xi}(t) \|^2 = \langle g_{u, \xi},g_{u, \xi} \rangle = \int\limits_{-\infty}^{+\infty} |g_{u, \xi}(t)|^2 \dt = 1 \ .
+\end{equation}
+
+The centre of the atom in time ($u$) and in frequency ($\xi$) can be defined as
+	\begin{equation*}
+	u = \int\limits_{-\infty}^{+\infty} t \cdot |g_{u, \xi}(t)|^2 \dt\ ,
+	\end{equation*}
+	\begin{equation*}
+	\xi = \frac{1}{2\pi} \int\limits_{-\infty}^{+\infty} \omega \cdot |G_{u, \xi}(\omega)|^2 \dw\ ,
+	\end{equation*}
+where $G$ denotes the Fourier-transform of $g$. The extent of the atom in time ($\sigma_t$) and in frequency ($\sigma_{\omega}$) can be defined in the following way:
+	\begin{equation*}
+	\sigma_t^2 = \int\limits_{-\infty}^{+\infty} (t-u)^2 \cdot |g_{u, \xi}(t)|^2 \dt\ ,
+	\end{equation*}
+	\begin{equation*}
+	\sigma_{\omega}^2 = \frac{1}{2\pi} \int\limits_{-\infty}^{+\infty} (\omega-\xi)^2 \cdot |G_{u, \xi}(\omega)|^2 \dw\ .
+	\end{equation*}
+
+The energy density can then be calculated by taking the absolute value squared \cite{mallat08wavelet}:
+\begin{equation}\label{eq:energy_density}
+  E f(u,\xi) = |T f(u,\xi)|^2\ .
+\end{equation}
+The energy density calculated from STFT is called spectrogram.
+
+\subsection{Short time Fourier transform}
+
+To investigate transient signals in NTI Wavelet Tools one choice is using short time Fourier transform\cite{mallat08wavelet} (STFT), which is a continuous time-frequency transform. The time-frequency atoms of STFT are generated by shifting an atom in time and frequency:
+\begin{equation}\label{eq:stft-atom}
+  g_{u,\xi}(t) = e^{i\xi t} g(t-u) \ .
+\end{equation}
+Therefore STFT takes the following form:
+\begin{equation}\label{eq:stft}
+  S f(u,\xi) = \langle f, g_{u, \xi} \rangle = \int\limits_{-\infty}^{+\infty} f(t) e^{-i \xi t} g(t-u) \dt \ ,
+\end{equation}
+where $g(t-u)$ is a real function. NTI Wavelet Tools uses Gabor-atoms, i.e. a Gaussian-window for $g(t)$ in \eqref{eq:stft-atom}.
+
+\section{Energy in signal processing}
+
+In signal processing the energy of an $f(t)$ time signal, where $t\in[0,T]$ can be defined in the following way:
+\begin{equation}\label{eq:energy}
+  E = \int\limits_0^T |f(t)|^2 \dt \ .
+\end{equation}
+
+\subsection{Energy and amplitude}
+
+The \eqref{eq:energy_density} energy density gives the energy carried by the wave, per unit time and frequency. It is also expected to get the amplitude of the signal components, therefore we have to calculate the energy of a harmonic wave, i.e. a cosine function. Let
+\begin{equation}\label{eq:cos}
+  f(t) = A \cdot \cos(\omega_0 t) \quad t \in[0, T] \ .
+\end{equation}
+Considering \eqref{eq:energy}, the energy of equation \eqref{eq:cos} by definition is
+\begin{eqnarray}\label{eq:cos_energy}
+  & E = \int\limits_0^T |f(t)|^2 \dt = \int\limits_0^T |A \cdot \cos(\omega_0 t)|^2 \dt = \nonumber\\
+  & = A^2 \int\limits_0^T \cos^2(\omega_0 t) \dt = A^2 \int\limits_0^T \dfrac{1 + \cos(2\omega_0 t)}{2} \dt
+\end{eqnarray}
+\begin{equation}\label{eq:cos_energy2}
+  E = A^2 \left[\dfrac{t}{2}\right]_0^T + A^2 \left[\dfrac{\sin(2\omega_0 t)}{4\omega_0}\right]_0^T\ , 
+\end{equation}
+\begin{equation}\label{eq:cos_energy3}
+  E \approx \dfrac{A^2 T}{2} \ ,
+\end{equation}
+in the case if $T = n\cdot \dfrac{\pi}{2\omega_0}$, where $n \in \mathbb{Z}$. If $T \neq n\cdot \frac{\pi}{2\omega_0}$ the ratio of the second and the first term in equation \eqref{eq:cos_energy2} tends to $0$, as $T$ tends to infinity, since the value of the second term is between $-\frac{A^2}{4 \omega_0}$ and $+\frac{A^2}{4 \omega_0}$.
+
+Equation \eqref{eq:cos_energy} means that, if one knows the energy carried by the wave, the amplitude can be evaluated by
+\begin{equation}\label{eq:amplitude}
+  A = \sqrt{\dfrac{2 E}{T}} \ .
+\end{equation}
+
+\subsection{Energy density on the time-frequency plane}
+
+The energy density calculated from STFT by equation \eqref{eq:energy_density} - called spectrogram - contains also the energy carried by the negative frequencies. NTI Wavelet Tools has been developed to investigate real signals, so the results belonging to the negative frequencies do not provide additional information about the signal since
+\begin{equation}\label{negative_freq}
+  S f(u,\xi) = S\conj f(u,-\xi) \ .
+\end{equation}
+However if one wants to compare the energy provided by the spectrogram and the energy of a cosine function, the negative frequencies must be taken into account. Because STFT does not divide the signal into cosine functions, but into $e^{-i \omega t}$ functions with different frequencies, a cosine function can be also written as:
+\begin{equation}\label{eq:cosine}
+  \cos(\omega t) = \dfrac{e^{i\omega t} + e^{-i\omega t}}{2} \ ,
+\end{equation}
+and the energy of a cosine function will be divided in both positive and negative frequencies. NTI Wavelet Tools plots only the positive frequencies of the energy density, but it is multiplied by 2 so to satisfy Parseval's theorem:
+\begin{equation}\label{eq:parseval}
+  \int\limits_{-\infty}^{+\infty}  |T f(u,\xi)|^2 \du \dxi = \int\limits_{-\infty}^{+\infty}  |f(t)|^2 \dt \ .
+\end{equation}
+In this way the energy of the signal on a $[u_1, u_2]$ time interval and a $[\xi_1, \xi_2]$ frequency interval can be evaluated by
+\begin{equation}\label{eq:energy_interval}
+  E_{u_1, u_2, \xi_1, \xi_2} = \int\limits_{\xi_1}^{\xi_2} \int\limits_{u_1}^{u_2} |T f(u,\xi)|^2 \du \dxi \ ,
+\end{equation}
+and the unit of the energy density will be\footnote{e.g.: if the physical unit of the measured signal was $[\mathrm{eV}]$, the unit of the energy density would be $[\mathrm{eV}^2 \cdot \mathrm{s}]$.}
+$$\dfrac{[\mathrm{Signal\ Energy}]}{\mathrm{s}\cdot\mathrm{Hz}} = [\mathrm{Signal\ Energy}] = [\mathrm{Signal}]^2\cdot \mathrm{s} \ ,$$ where the energy is defined as in \eqref{eq:energy}.
+
+To avoid the problems caused by the zero frequency, it is convenient to subtract the mean of the signal from it before starting the analysis\footnote{NTI Wavelet Tools starts processing with subtracting the mean value of the signal.}.
+
+\subsection{Wave amplitude determination from energy density}
+
+In some cases, it is expected to calculate the amplitude of the signal components from the spectrogram. Since the time-frequency resolution of the transform cannot be arbitrarily fine, the energy of a signal component will be spread on the time-frequency plane. If the investigated signal consists of harmonic components and the frequency resolution is sufficiently good to separate them, the signal energy can be evaluated by integrating the energy density on the required bandwidth and time interval using equation \eqref{eq:energy_interval}. Considering equation \eqref{eq:amplitude} the amplitude will be:
+\begin{equation}\label{eq:amplitude2}
+  A = \sqrt{\frac{2E}{T}} = \sqrt{\frac{2E_{u_1, u_2, \xi_1, \xi_2}}{u_2-u_1}} \ .
+\end{equation}
+
+\subsubsection{Bandwidth determination}
+
+The required frequency bandwidth can be determined from the properties of the used time-frequency atoms. The Gabor-atom takes the following form:
+\begin{equation}\label{eq:gt}
+  g(t) = \frac{1}{\sqrt{\sqrt{2\pi}\sigma_t}} \cdot \exp\left\{-\frac{(t-u)^2}{2\sigma_t^2}\right\} \ .
+\end{equation}
+In order to get the width of the atom on the frequency plane, one has to calculate the Fourier-transform of the term in equation \eqref{eq:gt}. Since the $u$ time shift affects only the phase of transformed atom, but not the width, it is convenient to carry out the transform in case of $u=0$:
+\begin{eqnarray}\label{eq:fgt}
+  & G(\omega) = \int\limits_{-\infty}^{+\infty} g(t) e^{-i\omega t} \dt = \nonumber\\
+  & = \int\limits_{-\infty}^{+\infty} \dfrac{1}{\sqrt{\sqrt{2\pi}\sigma_t}} \cdot \exp\left\{-\dfrac{t^2}{2\sigma_t^2}\right\} \left( \cos(\omega t) - i\sin(\omega t) \right) \dt  = \nonumber\\
+  & = \dfrac{1}{\sqrt{\sqrt{2\pi}\sigma_t}} \int\limits_{-\infty}^{+\infty} \exp\left\{-\dfrac{t^2}{2\sigma_t^2}\right\} \cos\left(2 \cdot \dfrac{\omega}{2} \cdot  t \right) \dt + \nonumber\\
+  & + \dfrac{-i}{\sqrt{\sqrt{2\pi}\sigma_t}} \int\limits_{-\infty}^{+\infty} \exp\left\{-\dfrac{t^2}{2\sigma_t^2}\right\} \sin(\omega \cdot  t) \dt \ .
+\end{eqnarray}
+The second integrand is odd, so integration over a symmetrical range is equal to 0. Since \cite{bronshtein07handbook}:
+\begin{equation}\label{eq:first_int}
+  \int\limits_{-\infty}^{+\infty} e^{-at^2} \cos(2xt) \dt = \sqrt{\dfrac{\pi}{a}} \cdot e^{\frac{x^2}{a}} \ ,
+\end{equation}
+equation \eqref{eq:fgt} can be re-written as:
+\begin{eqnarray}\label{eq:second_int}
+  & G(\omega) = \dfrac{1}{\sqrt{\sqrt{2\pi}\sigma_t}} \cdot \sqrt{2 \pi} \cdot \sigma_t \cdot \exp\left\{-\dfrac{\omega^2 \sigma_t^2}{2}\right\}  = \nonumber\\
+  & = \sqrt{\sqrt{2\pi}\sigma_t} \cdot \exp\left\{-\dfrac{\omega^2}{2 \cdot \left( \dfrac{1}{\sigma_t} \right)^2}\right\} \ .
+\end{eqnarray}
+The extent of the atom in frequency\footnote{$f = \frac{\omega}{2\pi}$} is therefore:
+\begin{equation}\label{eq:extent}
+  \sigma_{f} = \dfrac{\sigma_{\omega}}{2 \pi} = \dfrac{1}{2 \pi \sigma_{t}} \ .
+\end{equation}
+
+\subsubsection{Evaluating amplitude by integration}
+
+Integrating a Gaussian function over $6 \sigma$ interval would contain the $99.7 \%$ of its energy. However, the $\sigma_{f}$ calculated in \eqref{eq:extent} is the extent of the window in the STFT, but not in the energy density. In order to get the extent of the window in the STFT, one has to investigate the square of a Gaussian function:
+\begin{equation}\label{eq:extent_energy}
+  \Bigg( a \cdot \exp\left\{ \frac{x^2}{2\sigma_{\textrm{STFT}}^2} \right\} \Bigg)^2 = 
+  a^2 \cdot \exp\left\{ \frac{x^2}{2 \left( \dfrac{\sigma_{\textrm{STFT}}}{\sqrt{2}} \right)^2} \right\} =
+  a^2 \cdot \exp\left\{ \frac{x^2}{2 \sigma_{\textrm{ED}}^2} \right\} \ ,
+\end{equation}
+Equation \eqref{eq:extent_energy} shows, that the square of a Gaussian is also a Gaussian, but the sigma is different:
+\begin{equation}\label{eq:extent_energy_stft}
+  \sigma_{\textrm{ED}} = \dfrac{\sigma_{\textrm{STFT}}}{\sqrt{2}}  = \dfrac{\sigma_f}{\sqrt{2}} \ .
+\end{equation}
+So to integrate over $6 \cdot \sigma$ interval in the energy density to get the wave energy one has to use $\sigma_{\textrm{ED}}$ defined in \eqref{eq:extent_energy_stft}.
+
+\subsubsection{Evaluating amplitude from peak energy}
+
+The Gaussian window spreads the energy of the harmonic component on the time-frequency plane, but the total energy of the Gaussian window can be evaluated from its maximum value. So an other method is taking the maximum value of the energy density in the required bandwidth and calculate the wave energy analytically:
+\begin{equation}\label{eq:energy_analytical}
+  \int\limits_{-\infty}^{+\infty} \Bigg( a \cdot \exp\left\{ \frac{x^2}{2\sigma_f^2} \right\} \Bigg)^2 \dt = 
+  a^2 \cdot \sigma_f \cdot \sqrt{\pi} \ .
+\end{equation}
+Therefore if the peak of the energy density is $E_{\textrm{peak}}$($=a^2$), the time resolution of the spectrogram is $\dt$ and the investigated time interval is $T = u_2-u_1$, the amplitude of the wave can be evaluated considering \eqref{eq:amplitude2} by
+\begin{equation}\label{amp_from_energy}
+  A = \sqrt{ \frac{2 E_{\textrm{peak}} \sigma_f \sqrt{\pi} \dt}{T}}
+\end{equation}
+
+\section{Discretization}
+
+In the previous sections the short time Fourier transform was introduced as a continuous transform, but the NTI Wavelet Tools is created for investigating sampled, discrete signals. In order to apply a continuous transform on discrete time signals, the transform has to be discretized. This is achieved by replacing the integrals with sums and discretizing all variables in equation \eqref{eq:stft} with the smallest possible steps.
+
+The width ($2 \sigma_t$ in equation \eqref{eq:gt}) of the Gabor atom determines the time-frequency resolution of the transform. According to the specific application, the discretization can be done on a more sparse grid, which determined by a parameter called time step, but it has to be at most the quarter of the width of the atom to give a continuous transform \cite{pokol2007application}.
+
+Since the Gabor atom has an infinite support it has to be truncated \cite{pokol2007application}. To preserve the appealing properties of the continuous transform, only the part where its values are several orders of magnitude smaller than the maximum are neglected. The resulting length of the window determines the frequency step of the transform. In practice the transform is calculated in each time step by fast Fourier transform (FFT) using Gaussian window.
+
+\subsection{Phase correction}
+
+The definition of the discrete Fourier transform \cite{mallat08wavelet} is the following:
+\begin{equation}\label{eq:fft_idl}
+  F(u) = \frac{1}{N} \sum\limits_{x=0}^{N-1} f_x \exp(-j2\pi ux/N) \ ,
+\end{equation}
+where $f_x$ is the measured variables, $u \in [0, N-1]$ is the index of the frequency and $N$ is the number of measured variables. This is implemented in IDL\cite{idl12} FFT algorithm in the following way: for an odd window length, frequencies corresponding to the $u$ are
+\begin{equation}\label{eq:frequencies}
+  0, \frac{1}{Ndt}, \frac{2}{Ndt}, \dots, \frac{N/2-0.5}{Ndt}, -\frac{N/2-0.5}{Ndt}, \dots, \frac{-1}{Ndt} \ ,
+\end{equation}
+where $dt$ is the sampling time of the $f_x$ measured variables.
+
+The phase of the fast Fourier transform is given with respect to the beginning of the window. Since in the case of STFT it is convenient to get the phase at the centre of the window (where the Gaussian function has its maximum value) a phase correction is needed. The phase correction for each frequency is given by
+\begin{equation}\label{eq:phase_correction}
+  \Arg_{\textrm{correction}} = \omega t \ ,
+\end{equation}
+where $\omega$ is the angular frequency and $t$ is the time between the beginning and the centre of the window, which - for odd window length\footnote{In the current state the GUI of NTI Wavelet Tools supports the calculation only with odd window length.} - is the following:
+$$t = \frac{N-1}{2} dt \ .$$
+Considering equation \eqref{eq:frequencies} and \eqref{eq:phase_correction} the phase correction for positive frequencies are the following:
+\begin{equation}\label{eq:phase_correction_positive}
+  \Arg_{\textrm{correction}} = \omega t = 2\pi \frac{u}{N dt} \frac{N-1}{2} dt = u \pi \left(1 - \frac{1}{N} \right) \ .
+\end{equation}
+The phase correction is similar for the negative frequencies, but one has to take care with using the $u$ index, since in FFT function of IDL the negative frequencies are stored in the reverse order of positive frequencies, ranging from the highest to lowest negative frequencies.
+
+In order to illustrate the reason of phase correction figure \ref{fig:phase_correction} is shown. The black dots denote the time axis of the measured signal in case of $N = 9$.
+\begin{figure}[htb!]
+  \centerline{\resizebox{80mm}{!}{\includegraphics{phase_correction}}}
+  \caption{\label{fig:phase_correction} Illustrating the reason of phase correction. The phase shift between the beginning and the centre of the window is $\pi-\omega dt/2$ for the frequencies with odd index (solid curves) and $-\omega dt/2$ for the frequencies with even index (dotted curves).}
+\end{figure}
+The purple dashed line is the applied Gaussian window. Its centre is marked by the red dashed line. The green and blue curves are sine functions with the same frequencies as contained in the frequency axis (equation \eqref{eq:frequencies}). It is visible, that one period of the sine function with the lowest frequency is longer than the length of the applied window. This is a direct consequence of \eqref{eq:fft_idl}, since the denominator in the argument of the exponential is $N$, not $N-1$.
+
+It is visible in figure \ref{fig:phase_correction}, that there is a $dt/2$ difference between the centre of the Gaussian window and the zero intersection of the sine functions (black dashed line). So the phase shift between the beginning and the centre of the window is $\pi-\omega dt/2$ for the frequencies with odd index (solid curves) and $-\omega dt/2$ for the frequencies with even index (dotted curves).
+
+\section{Error Propagation}
+
+In this section the uncertainty of the STFT originated from the uncertainty of the measured signal is investigated. The forthcoming summary about Gauss error propagation is based on the work of Fornies-Marquina \cite{fornies1997error}. If $f(\xi_1, \xi_2, ... \xi_n)$ is a function of $\xi_i$ $(i = 1,2, ... n)$ random variables, one can determine the error on $f$ from the properties of $\xi_i$ and from the functional dependence. We restrict ourselves to functions whose expected value is given by
+\begin{equation}\label{eq:restriction1}
+  \bar{f} = f(\bar{\xi_1}, \bar{\xi_2}, \bar{\xi_3}, ... \bar{\xi_n}) \ .
+\end{equation}
+
+Let $n = 1$. The Taylor-series of $f(\xi)$ in a neighbourhood of expected value $y = M(\xi)$ is the following:
+\begin{equation}\label{eq:3}
+  f(\xi) = f(y) + f'(y)(\xi-y) + \frac{1}{2}f''(y)(\xi-y)^2 + ...
+\end{equation}
+Taking expected value of \eqref{eq:3}, since the terms with odd exponent is zero:
+\begin{equation}\label{eq:4}
+  M[f(\xi)] = f(y) + \frac{1}{2}f''(y)D^2(\xi) + ... \ ,
+\end{equation}
+where $D(\xi)$ is the standard deviation of $\xi$.
+Calculating $M\left[f(\xi)\right]$, one can get an estimation of $f(y)$. However, this estimation is only unbiased, if the second term in \eqref{eq:4} is negligible. In section \ref{sec:limits} the applicability limits of Gauss error propagation are investigated in details.
+
+When we have $i=1,2, ..., n$ and if the second term in \eqref{eq:4} is negligible, this means that $f(\xi_i)$ can be linearised:
+\begin{equation}\label{eq:linearised}
+   \Delta f = f(\xi_i) - f(y_i) \approx \sum\limits_{i=1}^n \frac{\partial f}{\partial \xi_i} (\xi_i - y_i) \ .
+\end{equation}
+If \eqref{eq:linearised} can be applicable on $f(\xi_i)$, the variance of $f$ at $\xi_i$ is
+\begin{equation}\label{eq:variance}
+  D^2 \left[ f(\xi_i) \right] = M \left[ (\Delta f)^2 \right] = \sum\limits_{i=1}^n \sum\limits_{j=1}^n \frac{\partial f}{\partial \xi_i} \frac{\partial f}{\partial \xi_j} cov(\xi_i, \xi_j) \ .
+\end{equation}
+If $\xi_i$ random variables are independent and \eqref{eq:linearised} can be applicable on $f(\xi_i)$, the variance of $f$ at $\xi_i$ is
+\begin{equation}\label{eq:variance_ind}
+  D^2 \left[ f(\xi_i) \right] = M \left[ (\Delta f)^2 \right] = \sum\limits_{i=1}^n \left( \frac{\partial f}{\partial \xi_i} \right)^2 D^2(\xi_i) \ .
+\end{equation}
+
+\subsection{Error propagation of Fourier-transform}\label{sec:ep_analytical}
+
+Since the discretized STFT is calculated by using FFT with Gaussian window shifted in time, first the error propagation is investigated on the discrete Fourier transform. If discrete Fourier transform is calculated with using $g_x$ window function, it can be defined in the following form:
+\begin{equation}\label{eq:fft}
+  F(u) = \frac{1}{N} \sum\limits_{x=0}^{N-1} f_x g_x \exp(-j2\pi ux/N) \ ,
+\end{equation}
+where $f_x$ is the measured variables with $\Delta f_x^2 = D^2[f_x]$ variance and $g_x$ is the applied window function which is not a random variable. First, one should calculate the real and imaginary part of the Fourier transform:
+\begin{equation}\label{eq:re}
+  \Re\{F(u)\} = \frac{1}{N} \sum\limits_{x=0}^{N-1} f_x g_x \cos(2\pi ux/N)
+\end{equation}
+\begin{equation}\label{eq:im}
+  \Im\{F(u)\} = \frac{1}{N} \sum\limits_{x=0}^{N-1} - f_x g_x \sin(2\pi ux/N)
+\end{equation}
+The variance of $\Re\{F(u)\}$, considering \eqref{eq:variance_ind}, is given by
+\begin{eqnarray}\label{eq:dref}
+  & \Delta \Re\{F(u)\}^2 = \nonumber\\
+  & = \sum\limits_{x=0}^{N-1} 
+  \left( \dfrac{\partial \Re\{ F(u) \}}{\partial f_x} \right)^2 \Delta f_x^2 = \dfrac{1}{N^2} \sum\limits_{x=0}^{N-1}  \cos(2\pi ux/N)^2 \ g_x^2 \ \Delta f_x^2 \ ,
+\end{eqnarray}
+and the variance of $\Im\{F(u)\}$ is the following:
+\begin{equation}\label{eq:dimf}
+  \Delta \Im\{F(u)\}^2 = \dfrac{1}{N^2} \sum\limits_{x=0}^{N-1}  \sin(2\pi ux/N)^2 \ g_x^2 \ \Delta f_x^2 \ .
+\end{equation}
+
+In most cases, it is convenient to calculate the absolute value and the argument of the Fourier transform:
+\begin{equation}\label{eq:abs1}
+  |F(u)| = \sqrt{\Re\{F(u)\}^2 + \Im\{F(u)\}^2} \ .
+\end{equation}
+\begin{equation}\label{eq:arg1}
+  \mathrm{Arg}\{F(u)\} = \Arg\{F(u)\} = \arctan\left(\dfrac{\Im\{F(u)\}}{\Re\{F(u)\}}\right) \ .
+\end{equation}
+Since $\Re\{F(u)\}$ and $\Im\{F(u)\}$ are not independent of each other, the variance of $|F(u)|$, considering \eqref{eq:variance} is given by:
+\begin{eqnarray}\label{eq:abs_err}
+  & \Delta |F(u)|^2 = \nonumber\\
+  & = \left( \dfrac{\partial |F(u)|}{\partial \Re\{F(u)\}} \right)^2 \Delta \Re\{F(u)\}^2
+  + \left( \dfrac{\partial |F(u)|}{\partial \Im\{F(u)\}} \right)^2 \Delta \Im\{F(u)\}^2 + \nonumber\\
+  & +\ 2 \dfrac{\partial |F(u)|}{\partial \Re\{F(u)\}} \dfrac{\partial |F(u)|}{\partial \Im\{F(u)\}}
+  \mathrm{cov} \Big( \Re\{F(u)\}, \Im\{F(u)\} \Big) = \nonumber\\
+  & = \dfrac{1}{|F(u)|^2} \Bigg( \Re\{F(u)\}^2 \Delta \Re\{F(u)\}^2 + \Im\{F(u)\}^2 \Delta \Im\{F(u)\}^2  + \nonumber\\
+  & + 2\ \Re\{F(u)\} \Im\{F(u)\} \mathrm{cov} \Big( \Re\{F(u)\}, \Im\{F(u)\} \Big)  \Bigg)\ ,
+\end{eqnarray}
+and the variance of the argument is the following:
+\begin{eqnarray}\label{eq:arg_err}
+  & \Delta \Arg\{F(u)\}^2 = \nonumber\\
+  & = \left( \dfrac{\partial \Arg\{F(u)\}}{\partial \Re\{F(u)\}} \right)^2 \Delta \Re\{F(u)\}^2
+  + \left( \dfrac{\partial \Arg\{F(u)\}}{\partial \Im\{F(u)\}} \right)^2 \Delta \Im\{F(u)\}^2 + \nonumber\\
+  & +\ 2 \dfrac{\partial \Arg\{F(u)\}}{\partial \Re\{F(u)\}} \dfrac{\partial \Arg\{F(u)\}}{\partial \Im\{F(u)\}}
+  \mathrm{cov} \Big( \Re\{F(u)\}, \Im\{F(u)\} \Big) = \nonumber\\
+  & = \dfrac{1}{|F(u)|^2} \Bigg( \Im\{F(u)\}^2 \Delta \Re\{F(u)\}^2 + \Re\{F(u)\}^2 \Delta \Im\{F(u)\}^2  + \nonumber\\
+  & - 2\ \Re\{F(u)\} \Im\{F(u)\} \mathrm{cov} \Big( \Re\{F(u)\}, \Im\{F(u)\} \Big)  \Bigg)\ ,
+\end{eqnarray}
+where
+\begin{eqnarray}\label{eq:cov1}
+  & \mathrm{cov} \Big( \Re\{F(u)\}, \Im\{F(u)\} \Big) = \nonumber\\
+  & = \sum\limits_{x=0}^{N-1} \Bigg[
+  \left( \dfrac{\partial \Re\{ F(u) \}}{\partial f_x} \right) \left( \dfrac{\partial \Im\{ F(u) \}}{\partial f_x} \right) \Delta f_x^2 + \nonumber\\
+  & + \underbrace{ \left( \dfrac{\partial Re\{ F(u) \}}{\partial g_x} \right) \left( \dfrac{\partial Im\{ F(u) \}}{\partial g_x} \right) \Delta g_x^2}_\text{$=0$} \Bigg] = \nonumber\\
+  & = \sum\limits_{x=0}^{N-1} \Delta f_x^2 \dfrac{1}{N} g_x \cos(2\pi ux/N)\ (-1) \dfrac{1}{N} g_x \sin(2\pi ux/N) = \nonumber\\
+  & = -\dfrac{1}{2} \dfrac{1}{N^2} \sum\limits_{x=0}^{N-1} g_x^2 \sin(2 \cdot 2\pi ux/N)\ \Delta f_x^2 \ .
+\end{eqnarray}
+
+Substituting equations \eqref{eq:dref} and \eqref{eq:dimf} into equations \eqref{eq:abs_err} and \eqref{eq:arg_err} the uncertainty of the result of Fourier-transform can be easily implemented, but to make sure of the accuracy of the results, one has to investigate the applicability limits of Gauss error propagation.
+
+\subsection{The applicability conditions of Gauss error propagation}\label{sec:limits}
+
+The Gauss error propagation can be used if the second term in equation \eqref{eq:4} is negligible, which means that the $f(\xi_1, \xi_2, ... \xi_n)$ function can be linearised in a small interval around $\xi_i = \xi_1, \xi_2, ... \xi_n$. The size of the interval is determined by the variance of $\xi_i$. Hereinafter the second term of equation \eqref{eq:4} is investigated. For simplicity, the following shorter notations will be introduced:
+$$\Re\{F(u)\} = \R$$
+$$\Im\{F(u)\} = \I$$
+$$|F(u)| = \sqrt{\R^2 + \I^2} = \Abs(\R, \I) = \Abs$$
+$$\mathrm{Arg}(u) = \arctan\left({\frac{\I}{\R}}\right) = \Arg(\R, \I) = \Arg$$
+
+First, the applicability conditions for the real and imaginary part of the Fourier transform will be investigated. The expected value of $f_x$ is denoted by
+$$ \mathrm{M}(f_x) = \bar{f_x} \ .$$
+If the
+$$ h_x = f_x g_x $$
+notation is introduced, the expected value of $h_x$ is given by
+$$ \bar{h_x} = \bar{f_x}g_x \ .$$
+and equation \eqref{eq:re} can be rewritten as
+\begin{equation}\label{eq:re2}
+  \R(h_x) = \frac{1}{N} \sum\limits_{x=0}^{N-1} h_x \cos(2\pi ux/N) \ .
+\end{equation}
+The Taylor series of $\R(h_x)$ around $\bar{h_x}$ is the following:
+\begin{eqnarray}
+  & \R(h_x) \approx \R(\bar{h_x}) + 
+  \sum\limits_{i=0}^{N-1} (h_i - \bar{h_i}) \cdot \dfrac{\partial \R}{\partial h_i}(\bar{h_x}) + \nonumber\\
+  & + \sum\limits_{i=0}^{N-1}\sum\limits_{j=0}^{N-1} \dfrac{(h_i - \bar{h_i})(h_j - \bar{h_j})}{2!} \cdot
+  \dfrac{\partial^2 \R}{\partial h_i \partial h_j}(\bar{h_x}) \ .
+\end{eqnarray}
+Since the derivation in the third term is zero, this function can be linearised, so the Gauss error propagation can be applied. The same deduction can be done for the imaginary part.
+
+Secondly the absolute value and the argument follow. The expected value of $\R$ and $\I$ will be denoted by
+$$ \mathrm{M}(\R) = \bar{\R} \quad \mathrm{and} \quad \mathrm{M}(\I) = \bar{\I} \ .$$
+The expected value of $\Abs(\R, \I)$ and $\Arg(\R, \I)$, considering equation \eqref{eq:restriction1}, are given by
+$$ \mathrm{M}(\Abs) = \bar{\Abs} = \sqrt{\bar{\R}^2 + \bar{\I}^2} \quad \mathrm{and}$$
+$$ \mathrm{M}(\Arg) = \bar{\Arg} = \arctan\left({\frac{\bar{\I}}{\bar{\R}}}\right) \ .$$
+The Taylor series of $\Abs(\R, \I)$ in the neighbourhood of $(\bar{\R}, \bar{\I})$:
+\begin{eqnarray}\label{eq:abs_taylor}
+  & \Abs(\R, \I) \approx \Abs(\bar{\R}, \bar{\I}) + 
+  (\R-\bar{\R}) \cdot \Abs^{(\R)}(\bar{\R}, \bar{\I}) + \nonumber\\
+  & + (\I-\bar{\I}) \cdot \Abs^{(\I)}(\bar{\R}, \bar{\I}) +
+  \dfrac{1}{2!} \Bigg[ (\R-\bar{\R})^2 \cdot \Abs^{(\R, \R)}(\bar{\R}, \bar{\I}) + \nonumber\\
+  & + 2 \ (\R-\bar{\R})(\I-\bar{\I}) \cdot \Abs^{(\R, \I)}(\bar{\R}, \bar{\I}) + 
+  (\I-\bar{\I})^2 \cdot \Abs^{(\I, \I)}(\bar{\R}, \bar{\I}) \Bigg] \ 
+\end{eqnarray}
+where $^{(\R)}$ denotes the derivation by $\R$ and $^{(\I)}$ denotes the derivation by $\I$. The expected value of terms with odd exponent is zero, so equation \eqref{eq:abs_taylor} can be re-written as
+\begin{eqnarray}\label{eq:exp_abs}
+  & M \left( \Abs(\R, \I) \right) \approx \Abs(\bar{\R}, \bar{\I}) + \dfrac{1}{2!} \Bigg[ D^2(\R) \cdot \Abs^{(\R, \R)}(\bar{\R}, \bar{\I}) + \nonumber\\
+  & + 2 \ \mathrm{cov}(\R, \I) \cdot \Abs^{(\R, \I)}(\bar{\R}, \bar{\I}) + D^2(\I) \cdot \Abs^{(\I, \I)}(\bar{\R}, \bar{\I}) \Bigg] \ .
+\end{eqnarray}
+The second derivatives take the following forms:
+\begin{eqnarray}\label{eq:rere}
+  & \Abs^{(\R, \R)}(\R, \I) = \dfrac{\partial^2 \Abs(\R, \I)}{\partial \R^2} = 
+  \dfrac{\partial^2 \sqrt{\R^2 + \I^2}}{\partial \R^2} =  \nonumber\\
+  & = \dfrac{\partial}{\partial \R} \left( \dfrac{\R}{\sqrt{\R^2 + \I^2}} \right) =
+  \dfrac{\I^2}{(\R^2 + \I^2)^{3/2}} = \dfrac{\I^2}{\Abs^3}
+\end{eqnarray}
+\begin{eqnarray}\label{eq:reim}
+  & \Abs^{(\R, \I)}(\R, \I) = \dfrac{\partial^2 \Abs(\R, \I)}{\partial \R \partial \I} = 
+  \dfrac{\partial^2 \sqrt{\R^2 + \I^2}}{\partial \R \partial \I} =  \nonumber\\
+  & = \dfrac{\partial}{\partial \I} \left( \dfrac{\R}{\sqrt{\R^2 + \I^2}} \right) =
+  \dfrac{- \R \I}{(\R^2 + \I^2)^{3/2}} = \dfrac{- \R \I}{\Abs^3}
+\end{eqnarray}
+\begin{eqnarray}\label{eq:imim}
+  & \Abs^{(\I, \I)}(\R, \I) = \dfrac{\partial^2 \Abs(\R, \I)}{\partial \I^2} = 
+  \dfrac{\partial^2 \sqrt{\R^2 + \I^2}}{\partial \I^2} =  \nonumber\\
+  & = \dfrac{\partial}{\partial \I} \left( \dfrac{\I}{\sqrt{\R^2 + \I^2}} \right) =
+  \dfrac{\R^2}{(\R^2 + \I^2)^{3/2}} = \dfrac{\R^2}{\Abs^3}
+\end{eqnarray}
+Substituting equation \eqref{eq:rere}, \eqref{eq:reim} and \eqref{eq:imim} to equation \eqref{eq:exp_abs}, the expected value of the Taylor-series of the absolute value function is given by
+\begin{eqnarray}\label{eq:final_exp_abs}
+  & M \left( \Abs(\R, \I) \right) \approx \Abs(\bar{\R}, \bar{\I}) + \dfrac{1}{2!} \Bigg[ D^2(\R) \cdot \dfrac{\bar{\I}^2}{\bar{\Abs}^3} + \nonumber\\
+  & - 2 \ \mathrm{cov}(\R, \I) \cdot \dfrac{\bar{\R}\bar{\I}}{\bar{\Abs}^3} + D^2(\I) \cdot \dfrac{\bar{\R}^2}{\bar{\Abs}^3} \Bigg] \ .
+\end{eqnarray}
+In case the second term of equation \eqref{eq:final_exp_abs} is negligible compared to the first term, the absolute value can be linearised, so the Gauss error propagation is applicable.
+
+The same calculation can be done with the argument of the Fourier-transform. The Taylor series of $\Arg(\R, \I)$ in the neighbourhood of $(\bar{\R}, \bar{\I})$ takes the following form:
+\begin{eqnarray}\label{eq:arg_taylor}
+  & \Arg(\R, \I) \approx \Arg(\bar{\R}, \bar{\I})
+  + (\R-\bar{\R}) \cdot \Arg^{(\R)}(\bar{\R}, \bar{\I}) + \nonumber\\
+  & + (\I-\bar{\I}) \cdot \Arg^{(\I)}(\bar{\R}, \bar{\I})
+  + \dfrac{1}{2!} \Bigg[ (\R-\bar{\R})^2 \cdot \Arg^{(\R, \R)}(\bar{\R}, \bar{\I}) + \nonumber\\
+  & + 2 \ (\R-\bar{\R})(\I-\bar{\I}) \cdot \Arg^{(\R, \I)}(\bar{\R}, \bar{\I}) +
+  (\I-\bar{\I})^2 \cdot \Arg^{(\I, \I)}(\bar{\R}, \bar{\I}) \Bigg]
+\end{eqnarray}
+The expected value of terms with odd exponent is zero, so equation \eqref{eq:arg_taylor} is given by
+\begin{eqnarray}\label{eq:exp_arg}
+  & M \left( \Arg(\R, \I) \right) \approx \Arg(\bar{\R}, \bar{\I}) + \dfrac{1}{2!} \Bigg[ D^2(\R) \cdot \Arg^{(\R, \R)}(\bar{\R}, \bar{\I}) + \nonumber\\
+  & + 2 \ \mathrm{cov}(\R, \I) \cdot \Arg^{(\R, \I)}(\bar{\R}, \bar{\I}) + D^2(\I) \cdot \Arg^{(\I, \I)}(\bar{\R}, \bar{\I}) \Bigg] \ .
+\end{eqnarray}
+The second derivatives take the following forms:
+\begin{eqnarray}\label{eq:arg_rere}
+  & \Arg^{(\R, \R)}(\R, \I) = \dfrac{\partial^2 \Arg(\R, \I)}{\partial \R^2} = 
+  \dfrac{\partial^2 \arctan\left({\frac{\I}{\R}}\right) }{\partial \R^2} =  \nonumber\\
+  & = \dfrac{\partial}{\partial \R} \left( \dfrac{-\I}{\R^2 + \I^2} \right) =
+  \dfrac{2\R\I}{(\R^2 + \I^2)^{2}} = \dfrac{2\R\I}{\Abs^4}
+\end{eqnarray}
+\begin{eqnarray}\label{eq:arg_reim}
+  & \Arg^{(\R, \I)}(\R, \I) = \dfrac{\partial^2 \Arg(\R, \I)}{\partial \R \partial \I} = 
+  \dfrac{\partial^2 \arctan\left({\frac{\I}{\R}}\right) }{\partial \R \partial \I} =  \nonumber\\
+  & = \dfrac{\partial}{\partial \I} \left( \dfrac{-\I}{\R^2 + \I^2} \right) =
+  \dfrac{\I^2-\R^2}{(\R^2 + \I^2)^{2}} = \dfrac{\I^2-\R^2}{\Abs^4}
+\end{eqnarray}
+\begin{eqnarray}\label{eq:arg_imim}
+  & \Arg^{(\I, \I)}(\R, \I) = \dfrac{\partial^2 \Arg(\R, \I)}{\partial \I^2} = 
+  \dfrac{\partial^2 \arctan\left({\frac{\I}{\R}}\right) }{\partial \I^2} =  \nonumber\\
+  & = \dfrac{\partial}{\partial \I} \left( \dfrac{\R}{\R^2 + \I^2} \right) =
+  \dfrac{-2\R\I}{(\R^2 + \I^2)^{2}} = \dfrac{-2\R\I}{\Abs^4}
+\end{eqnarray}
+Finally substituting equation \eqref{eq:arg_rere}, \eqref{eq:arg_reim} and \eqref{eq:arg_imim} to equation \eqref{eq:exp_arg} the expected value of the Taylor-series of the argument takes the following form:
+\begin{eqnarray}\label{eq:final_exp_arg}
+  & M \left( \Arg(\R, \I) \right) \approx \Arg(\bar{\R}, \bar{\I}) + \dfrac{1}{2!} \Bigg[ D^2(\R) \cdot \dfrac{2\bar{\R}\bar{\I}}{\bar{\Abs}^4} + \nonumber\\
+  & + 2 \ \mathrm{cov}(\R, \I) \cdot \dfrac{\bar{\I}^2 - \bar{\R}^2}{\bar{\Abs}^4} - D^2(\I) \cdot \dfrac{2\bar{\R}\bar{\I}}{\bar{\Abs}^4} \Bigg] \ .
+\end{eqnarray}
+
+Equation \eqref{eq:final_exp_abs} and \eqref{eq:final_exp_arg} suggest, that the Gauss error propagation formula can be used at frequencies, where the signal components have a relatively large amplitude, since in both cases the second term contains the absolute value  in the denominator with a high exponent. However the exact ratio of the terms to be calculated for the specific cases.
+
+\subsection{Illustrating the error propagation on the absolute value}
+
+\begin{figure}[htb!]
+  \centerline{\resizebox{115 mm}{!}{\includegraphics{abs_illustration}}}
+  \caption{\label{fig:abs_illustration}Illustration of the error propagation on the absolute value of the Fourier transform. The plots show the distribution of the absolute value calculated by Gauss error propagation (red dashed curves) and the real one (light blue curves) in different cases with different variance of the real part. The imaginary part is fixed.}
+\end{figure}
+Let us quantitatively characterize the error propagation on the absolute value. The graphs on figure \ref{fig:abs_illustration} show how the error propagates on the $\Abs(\R, \I)$ function. Since this function depends on two variables, we should investigate the problem on a three-dimensional space. For simplicity we fix the imaginary part. The uncertainty of the real part is a Gaussian distribution with $\sigma^2$ variance. On figure \ref{fig:abs_illustration}(a) the dark blue curve shows the shape of the distribution of the real part around the M$(\R)$ expected value. The green curve is the $\Abs(\R,\I)$ function and the light blue curve shows the shape of the distribution of the absolute value, which is the projection of the dark blue curve by the green curve. The black, dotted line is the first derivative of the $\Abs(\R, \I)$ function and the red dashed curve is the distribution arisen from the Gaussian error propagation. This red dashed curve is a Gaussian distribution, since this is the projection of the blue curve, by the black dotted line. So the real distribution of the absolute vale is not a Gaussian, but in this specific case, the two curves (red and light blue) fit well to each other.
+
+Figure \ref{fig:abs_illustration}(b) and \ref{fig:abs_illustration}(c) show cases, where the expected value of $\R$ and $\I$ are the same as on \ref{fig:abs_illustration}(a), but the variance of the Gaussian distribution is higher therefore the real distribution (the light blue curve) is highly distorted compared to a Gaussian. As the variance of the real distribution is increasing (respect to the expected value), the bias become larger. Figure \ref{fig:abs_illustration}(d), \ref{fig:abs_illustration}(e) and \ref{fig:abs_illustration}(f) show the case, when the imaginary part is close to zero.
+
+These figures suggest that, if the variance of the real part is not too high (as in figure \ref{fig:abs_illustration}(d) and \ref{fig:abs_illustration}(e)) the Gauss error propagation gives a good approximation, but the exact applicability conditions can be defined by equation \eqref{eq:final_exp_abs}. In order to apply applicability conditions in practice one has to determine the sufficient ratio of the first and second terms of equation \eqref{eq:final_exp_abs} as a minimum requirement of using Gauss error propagation. However, this requires optimization because higher ratios will give more accurate result, but a narrower applicability range. To post 5 for the ratio of the first and second terms of equation \eqref{eq:final_exp_abs} as a minimum requirement of using Gauss error propagation is a convenient choice. This is proved in the next section by Monte Carlo methods.
+
+\clearpage
+
+\subsection{Monte Carlo tests}
+The Monte Carlo test presented here was carried out on a real signal measured by the electron cyclotron emission diagnostics (ECE) of the ASDEX Upgrade tokamak in discharge \#25091. The raw signal and its energy density - calculated by STFT - are shown in figure \ref{fig:gauss_error_test_freq}(a) and \ref{fig:gauss_error_test_freq}(b) respectively. The $\Delta f(t)$ uncertainty of the $f(t)$ time signal is assumed to be Gaussian with $\sigma = 0.1 f(t)$ in each time point. First, the uncertainty of the energy density is calculated by the analytical formula introduced in section \ref{sec:ep_analytical}. The results are presented in figure \ref{fig:gauss_error_test_freq}(c), where the uncertainty in the time-frequency points out of the applicability conditions (the exact condition is discussed in the next paragraphs) is set to $0$, for better visibility.
+\begin{figure}[htb!]
+  \centerline{\resizebox{110mm}{!}{\includegraphics{gauss_error_test_freq}}}
+  \caption{\label{fig:gauss_error_test_freq} Results of the Monte Carlo tests carried out on a real signal (a) measured by the ECE diagnostics of ASDEX Upgrade tokamak. The energy density of the signal is shown in figure (b). The uncertainty of the STFT calculated by the analytical formula (c) and by Monte Carlo method (d).}
+\end{figure}
+
+The process of the Monte Carlo test is the following. In each $t_i$ time point the $f(t_i)$ measured value has been perturbed by a zero mean Gaussian random number with the variance of $\Delta f(t_i) = 0.1 f(t_i)$. The energy density of the perturbed signal has been calculated, and this cycle repeated 1000 times. The uncertainty -  which is shown in figure \ref{fig:gauss_error_test_freq}(d) - in each time-frequency point are given by taking the variance of the spectrograms calculated from the perturbed signals. Since figures \ref{fig:gauss_error_test_freq}(c) and \ref{fig:gauss_error_test_freq}(d) show the absolute uncertainty, the values are high at time-frequency points where the values of the energy density are also high.
+
+The agreement of the results (over the region where the applicability condition is satisfied) is clearly visible in figure \ref{fig:gauss_error_test_freq}(c) and \ref{fig:gauss_error_test_freq}(d), but to show it more obviously, the cross-section of the two-dimensional graphs at $t = 2.468$ s are presented in figures \ref{fig:gauss_error_test_tim}(a) and \ref{fig:gauss_error_test_tim}(b). The first one shows the cross section of the energy-density in $t = 2.468$, the second one shows the cross-section of the uncertainty. The black solid line is the result of the Monte Carlo test, the dashed curve is the result of the analytical formula. Here the results of the analytical formula are plotted on the total frequency range in order to compare with the test. The red part of the curve shows the region, where the ratio of the first and second terms of equation \eqref{eq:final_exp_abs} is higher than $5$ and the light blue part shows the region, where the ratio is under $5$. In our case to post $5$ as ratio is convenient, because at this ratio, as seen in figure \ref{fig:gauss_error_test_tim}(b), the uncertainty of the first three harmonics used for the reconstruction are in good agreement with the Monte Carlo test.
+
+One cross-section of the argument is shown in figure \ref{fig:gauss_error_test_tim}(c). The uncertainty of it is shown on \ref{fig:gauss_error_test_tim}(d). The results calculated by the analytical formula (red dashed line) and by Monte Carlo method (black solid line) are in good agreement at and only at frequencies where modes with high energy appear.
+
+\begin{figure}[htb!]
+  \centerline{\resizebox{95mm}{!}{\includegraphics{gauss_error_test_tim}}}
+  \caption{\label{fig:gauss_error_test_tim} Cross-sections of the energy-density (a) and its uncertainty (b) calculated by Monte Carlo method in black, by the analytical formula in red where the Gauss error propagation can be applied and in light blue where the Gauss error propagation cannot be applied. Cross-sections of the argument (c) and its uncertainty (d) where the results calculated by the analytical formula (red dashed line) and by Monte Carlo method (black solid line).}
+\end{figure}
+
+\section{Conclusion}
+
+The mathematical background of short time Fourier transform (STFT) is well-established in the book of Mallat \cite{mallat08wavelet}, but during the implementation of the method several problems appear, which are discussed in this report.
+
+We determined the physical unit of the energy density produced by STFT and gave two methods to calculate the amplitude of harmonic signal components from energy density.
+
+A phase correction for the result of the fast Fourier transform (FFT) was introduced which is needed in cases - such as STFT - where the phase of the components is required at the centre of the window.
+
+We investigated the uncertainty of the STFT with Gauss error propagation. Equations to calculate uncertainty were presented, which can be easily implemented. Furthermore, quantitative applicability conditions were given for the Gauss error propagation and the accuracy of the method was proved by Monte Carlo tests.
+
+
+
+\clearpage
+
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

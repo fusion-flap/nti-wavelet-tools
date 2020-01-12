@@ -14,21 +14,23 @@ this routine, refer to the IDL Online Help Navigator
 or type: <P>
 <PRE>     ? mk_html_help</PRE><P>
 at the IDL command line prompt.<P>
-<STRONG>Last modified: </STRONG>Wed Oct 23 11:23:45 2019.<P>
+<STRONG>Last modified: </STRONG>Wed Oct 23 11:23:30 2019.<P>
  
 <HR>
  
 <A NAME="ROUTINELIST">
 <H1>List of Routines</H1></A>
 <UL>
-<LI><A HREF="#AUG_THETA_STAR_ALL">AUG_THETA_STAR_ALL</A>
-<LI><A HREF="#AUG_THETA_STAR_CONV">AUG_THETA_STAR_CONV</A>
 <LI><A HREF="#FFT_ERROR_PROPAGATION">FFT_ERROR_PROPAGATION</A>
+<LI><A HREF="#MODENUM_APPROX">MODENUM_APPROX</A>
+<LI><A HREF="#MODENUM_SLICES">MODENUM_SLICES</A>
+<LI><A HREF="#NTI_SHOW_RAWSIGNAL">NTI_SHOW_RAWSIGNAL</A>
 <LI><A HREF="#NTI_WAVELET_BANDPOWER_CORRELATION">
 NTI_WAVELET_BANDPOWER_CORRELATION</A>
 <LI><A HREF="#NTI_WAVELET_BRIDGE">NTI_WAVELET_BRIDGE</A>
 <LI><A HREF="#NTI_WAVELET_CLEANUP">NTI_WAVELET_CLEANUP</A>
 <LI><A HREF="#NTI_WAVELET_COMMON">NTI_WAVELET_COMMON</A>
+<LI><A HREF="#NTI_WAVELET_CONTOUR">NTI_WAVELET_CONTOUR</A>
 <LI><A HREF="#NTI_WAVELET_CROSSPHASE_CORRECTION">
 NTI_WAVELET_CROSSPHASE_CORRECTION</A>
 <LI><A HREF="#NTI_WAVELET_DEFAULT">NTI_WAVELET_DEFAULT</A>
@@ -62,30 +64,76 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
 <LI><A HREF="#NTI_WAVELET_SIGNUM">NTI_WAVELET_SIGNUM</A>
 <LI><A HREF="#NTI_WAVELET_SINC">NTI_WAVELET_SINC</A>
 <LI><A HREF="#NTI_WAVELET_TIMESTAMP">NTI_WAVELET_TIMESTAMP</A>
+<LI><A HREF="#PG_ACORR">PG_ACORR</A>
+<LI><A HREF="#PG_ACORRERREMP2">PG_ACORRERREMP2</A>
 <LI><A HREF="#PG_ANAL2">PG_ANAL2</A>
+<LI><A HREF="#PG_ANAL3">PG_ANAL3</A>
+<LI><A HREF="#PG_AUG_RUN">PG_AUG_RUN</A>
+<LI><A HREF="#PG_AUG_RUN2">PG_AUG_RUN2</A>
+<LI><A HREF="#PG_BALLOONING">PG_BALLOONING</A>
+<LI><A HREF="#PG_BPS">PG_BPS</A>
+<LI><A HREF="#PG_BPS_ALL">PG_BPS_ALL</A>
 <LI><A HREF="#PG_CCORR">PG_CCORR</A>
+<LI><A HREF="#PG_CCORRERREMP2">PG_CCORRERREMP2</A>
+<LI><A HREF="#PG_CCORRPLOT_SAVED">PG_CCORRPLOT_SAVED</A>
+<LI><A HREF="#PG_CLOSEWIN">PG_CLOSEWIN</A>
 <LI><A HREF="#PG_COLORSCALE">PG_COLORSCALE</A>
+<LI><A HREF="#PG_CONVOL">PG_CONVOL</A>
+<LI><A HREF="#PG_CSCALOGRAM">PG_CSCALOGRAM</A>
+<LI><A HREF="#PG_CSCALOGRAM_PG">PG_CSCALOGRAM_PG</A>
+<LI><A HREF="#PG_CSCALOGRAM_PG_SIM">PG_CSCALOGRAM_PG_SIM</A>
+<LI><A HREF="#PG_CSCALOGRAM_SIM">PG_CSCALOGRAM_SIM</A>
+<LI><A HREF="#PG_CSCALOGRAM_SIM2">PG_CSCALOGRAM_SIM2</A>
+<LI><A HREF="#PG_CSPECTROGRAM">PG_CSPECTROGRAM</A>
+<LI><A HREF="#PG_CSPECTROGRAM_SIM">PG_CSPECTROGRAM_SIM</A>
 <LI><A HREF="#PG_CWT">PG_CWT</A>
+<LI><A HREF="#PG_DAT2SAV">PG_DAT2SAV</A>
+<LI><A HREF="#PG_DECOMP2">PG_DECOMP2</A>
 <LI><A HREF="#PG_DOWNSAMPLE">PG_DOWNSAMPLE</A>
+<LI><A HREF="#PG_EXP_SAVED">PG_EXP_SAVED</A>
+<LI><A HREF="#PG_EXP_SAVED2">PG_EXP_SAVED2</A>
 <LI><A HREF="#PG_FILENAME">PG_FILENAME</A>
 <LI><A HREF="#PG_FN_GAUSSIAN">PG_FN_GAUSSIAN</A>
 <LI><A HREF="#PG_FN_MORLET">PG_FN_MORLET</A>
 <LI><A HREF="#PG_FN_PAUL">PG_FN_PAUL</A>
 <LI><A HREF="#PG_GEN_WIN">PG_GEN_WIN</A>
 <LI><A HREF="#PG_INITGRAPH">PG_INITGRAPH</A>
+<LI><A HREF="#PG_LOADWAV">PG_LOADWAV</A>
 <LI><A HREF="#PG_LOG2">PG_LOG2</A>
+<LI><A HREF="#PG_MIRPHASE_SIM">PG_MIRPHASE_SIM</A>
+<LI><A HREF="#PG_MODEFILTER0">PG_MODEFILTER0</A>
+<LI><A HREF="#PG_MODEFILTER_FIT">PG_MODEFILTER_FIT</A>
+<LI><A HREF="#PG_MODEFILTER_FIT2">PG_MODEFILTER_FIT2</A>
 <LI><A HREF="#PG_MODEFILTER_FITREL">PG_MODEFILTER_FITREL</A>
 <LI><A HREF="#PG_MODEFILTER_MONOTON">PG_MODEFILTER_MONOTON</A>
+<LI><A HREF="#PG_MODEFILTER_VARFIT">PG_MODEFILTER_VARFIT</A>
+<LI><A HREF="#PG_MODENUMBER">PG_MODENUMBER</A>
+<LI><A HREF="#PG_MOVEDATA">PG_MOVEDATA</A>
 <LI><A HREF="#PG_NUM2STR">PG_NUM2STR</A>
 <LI><A HREF="#PG_OTV">PG_OTV</A>
+<LI><A HREF="#PG_PHASE">PG_PHASE</A>
 <LI><A HREF="#PG_PHASEDIAGRAM">PG_PHASEDIAGRAM</A>
+<LI><A HREF="#PG_PLOT">PG_PLOT</A>
+<LI><A HREF="#PG_PLOT2">PG_PLOT2</A>
+<LI><A HREF="#PG_PLOT3">PG_PLOT3</A>
 <LI><A HREF="#PG_PLOT4">PG_PLOT4</A>
+<LI><A HREF="#PG_PROBE_SETS">PG_PROBE_SETS</A>
+<LI><A HREF="#PG_RAWSIGNALS">PG_RAWSIGNALS</A>
 <LI><A HREF="#PG_REMOVESTR">PG_REMOVESTR</A>
 <LI><A HREF="#PG_RESAMPLE">PG_RESAMPLE</A>
 <LI><A HREF="#PG_RETRIGGER">PG_RETRIGGER</A>
+<LI><A HREF="#PG_SAVE">PG_SAVE</A>
+<LI><A HREF="#PG_SAVE_SIG">PG_SAVE_SIG</A>
+<LI><A HREF="#PG_SCALOGRAM">PG_SCALOGRAM</A>
 <LI><A HREF="#PG_SCALOGRAM_SIM2">PG_SCALOGRAM_SIM2</A>
+<LI><A HREF="#PG_SIM">PG_SIM</A>
+<LI><A HREF="#PG_SIMNOISE">PG_SIMNOISE</A>
+<LI><A HREF="#PG_SIM_RUN">PG_SIM_RUN</A>
+<LI><A HREF="#PG_SPECTROGRAM">PG_SPECTROGRAM</A>
 <LI><A HREF="#PG_SPECTROGRAM_SIM">PG_SPECTROGRAM_SIM</A>
 <LI><A HREF="#PG_STFT">PG_STFT</A>
+<LI><A HREF="#PG_WINSCAN">PG_WINSCAN</A>
+<LI><A HREF="#PG_WINSCAN2">PG_WINSCAN2</A>
 <LI><A HREF="#PI_LOADNCOL">PI_LOADNCOL</A>
 <LI><A HREF="#START_WEB_BROWSER">START_WEB_BROWSER</A>
 <LI><A HREF="#WV_FN_COIFLET">WV_FN_COIFLET</A>
@@ -97,82 +145,9 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
 <HR>
  
 <H1>Routine Descriptions</H1>
-<A NAME="AUG_THETA_STAR_ALL">
-<H2>AUG_THETA_STAR_ALL</H2></A>
-<A HREF="#AUG_THETA_STAR_CONV">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
-
- NAME: aug_theta_star_all
-
- Written by: Gergo Pokol (pokol@reak.bme.hu) 2016.03.11.
-
- PURPOSE: Load saved raw data file. Convert geometrical poloidal coordinates with respect to the magnetic axis (theta) to poloidal coordinates
-    in straight filed line geometry (theta^star) in the ASDEX-Upgrade tokamak on a given q surface. Save new raw data file.
-    Uses az external FORTRAN routine to be found at the AUG AFS!
-
- CALLING SEQUENCE:
-   aug_theta_star_all, filename, q, [dianam]
-
- INPUTS:
-   filename: file name of the rwa data file to be converted
-   q: q value of the magnetic surface to do the calculation
-   dianam (optional): equilibrium reconstruction to use: can be 'FPP' for Function parametrization or 'EQI' for cliste; default: 'EQI'
-
- OUTPUTS:
-   Raw data file written to the same folder as the original file
-
- EXAMPLE:
-   aug_theta_star_all,'AUGD_32388_Loaded-with-MTR.sav',2; 
-</PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\aug_theta_star_all.pro)</STRONG><P>
-<HR>
- 
-<A NAME="AUG_THETA_STAR_CONV">
-<H2>AUG_THETA_STAR_CONV</H2></A>
-<A HREF="#AUG_THETA_STAR_ALL">[Previous Routine]</A>
-<A HREF="#FFT_ERROR_PROPAGATION">[Next Routine]</A>
-<A HREF="#ROUTINELIST">[List of Routines]</A>
-<PRE>
-
- NAME: aug_theta_star_conv
-
- Written by: Gergo Pokol (pokol@reak.bme.hu) 2010.07.28.
-
- PURPOSE: Convert geometrical poloidal coordinates with respect to the magnetic axis (theta) to poloidal coordinates
-    in straight filed line geometry (theta^star) in the ASDEX-Upgrade tokamak on a given q surface.
-    Uses az external FORTRAN routine to be found at the AUG AFS!
-
- CALLING SEQUENCE:
-   theta_star=aug_theta_star_conv( shot, time, q, theta, [dianam])
-
- INPUTS:
-   shot: shot numbers
-   time: time-point to serch for in s
-   q: q value of the magnetic surface to do the calculation
-   theta: theta geometrical poloidal angles in degree
-   dianam (optional): equilibrium reconstruction to use: can be 'FPP' for Function parametrization or EQI for cliste; default: 'FPP'
-
- OUTPUTS:
-   theta_star: Straight filed line poloidal coordinates (Returns original angles, if conversion fails!)
-   time: time-point found
-
- EXAMPLE:
-   Compare theta_star values with geometrical theta values in AUG shot at time_orig for a given q:
-   time=time_orig
-   theta=findgen(20)/19.*2.*!PI
-   theta_star=aug_theta_star_conv(shot,time,q,theta)
-   print, time_orig-time
-   plot, theta, theta_star, /tight, xtitle='theta', ytitle='theta_star'
-
-</PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\aug_theta_star_conv.pro)</STRONG><P>
-<HR>
- 
 <A NAME="FFT_ERROR_PROPAGATION">
 <H2>FFT_ERROR_PROPAGATION</H2></A>
-<A HREF="#AUG_THETA_STAR_CONV">[Previous Routine]</A>
-<A HREF="#NTI_WAVELET_BANDPOWER_CORRELATION">[Next Routine]</A>
+<A HREF="#MODENUM_APPROX">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  NAME:
@@ -206,12 +181,122 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
 	
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\fft_error_propagation.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\fft_error_propagation.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="MODENUM_APPROX">
+<H2>MODENUM_APPROX</H2></A>
+<A HREF="#FFT_ERROR_PROPAGATION">[Previous Routine]</A>
+<A HREF="#MODENUM_SLICES">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+NAME: modenum_approx
+
+ Written by: Nora Lazanyi (laznor@reak.bme.hu) 2010.09.22.
+
+ Purpose: Plot approximated mode numbers on the time-frequency plane 
+          from AUG B31-01 and B31-03 coils using Snipe's method [Snipes_PPCF_43_L23_2001]
+
+ Calling sequence:
+    modenum_approx, shot, trange=trange, fmax=fmax, nscale=nscale, $
+    cwt=cwt, family=family, order=order, pitch_angle=pitch_angle,$
+    avr=avr, cohlim=cohlim, print=print, timeax=timeax,freqax=freqax, modenum=modenum
+
+ Inputs:
+   shot: Shot number
+   timeax: Time axis
+   freqax: Frequency axis
+   trange: Time range
+   fmax: The maxima of frequency
+   filterparam1: mode number steps, default=1
+   cwt: calculate with continuous wavelet transform
+   pitch_angle: =arctan(B_pol/B_tor) Can be calculated with aug_get_magnetic_field.pro 
+
+ Outputs:
+   timeax: Time axis
+   freqax: Frequency axis
+   modenum: The approximated mode numbers
+
+ Example:
+    modenum_approx, 22188, trange=[4.395,4.415],fmax=200., /cwt, order=12, pitch_angle=0.1898, /print
+    save, /all, filename='data/AUG_modenum_approx_22188_4.395_ord_12.sav'
+
+ Modification:
+  2010.10.11. Nora Lazanyi: Plot the coherence limited mode numbers 
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\modenum_approx.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="MODENUM_SLICES">
+<H2>MODENUM_SLICES</H2></A>
+<A HREF="#MODENUM_APPROX">[Previous Routine]</A>
+<A HREF="#NTI_SHOW_RAWSIGNAL">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+NAME: modenum_slices
+
+ Written by: Nora Lazanyi (laznor@reak.bme.hu) 2010.07.28.
+
+ Purpose: Plot mode numbers at a given time and frequency as a function of frequency or time
+
+ Calling sequence: 
+ modenum_slices, modenum, timeax, freqax, time=time, freq=freq, shot=shot, $
+  print=print, plottedtime=plottedtime, plottedfreq=plottedfreq
+
+  Hint: Before using modenum_slices one sould run a process for mode number determination $
+    for example pg:modenumber_full
+
+ Inputs:
+   modenum: Mode numbers
+   timeax: Time axis
+   freqax: Frequency axis
+   time: Time 
+   freq: Frequency
+   shot: Shot number
+   print (optional): creates .eps files from the graphs 
+
+ Outputs:
+  plottedtime: mode numbers as a function of time
+  plottedfreq: mode numbers as a function of frequency
+
+Example:
+  restore,'data/AUG_modenumbers_23418_33200_pairs_order_3_avr_3_mn_frac.sav'
+  modenum_slices, modenum, timeax, freqax, time=3.324, freq=1.8, shot=23418, /print
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\modenum_slices.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="NTI_SHOW_RAWSIGNAL">
+<H2>NTI_SHOW_RAWSIGNAL</H2></A>
+<A HREF="#MODENUM_SLICES">[Previous Routine]</A>
+<A HREF="#NTI_WAVELET_BANDPOWER_CORRELATION">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+NAME: nti_show_rawsignal
+
+***********************************************************************
+ show_rawsignal.pro                 S. Zoletnik    10.9.1997
+***********************************************************************
+ Program to plot a signal (Li-beam channel # <channel> or signal name)
+ Can also plot the sum of several channels if channels_in is an array.
+ INPUT:
+   shot: shot number
+   channels_in: channel name or channel name array
+   errorproc: name of error processing routine to call on error
+   /nolegend: do not plot time and name of program
+   data_source: the data source code, see get_rawsignal
+   /nocalibrate: do not attempt to calibrate signal
+   inttime: integration time (in microsecond) to apply prior to plotting
+   subchannel: select subchannel (see get_rawsignal)
+***********************************************************************
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_show_rawsignal.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_BANDPOWER_CORRELATION">
 <H2>NTI_WAVELET_BANDPOWER_CORRELATION</H2></A>
-<A HREF="#FFT_ERROR_PROPAGATION">[Previous Routine]</A>
+<A HREF="#NTI_SHOW_RAWSIGNAL">[Previous Routine]</A>
 <A HREF="#NTI_WAVELET_BRIDGE">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -245,7 +330,7 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
     restore,'test_processed.sav'
     IDL> nti_wavelet_bandpower_correlation, saved_datablock, bands=[20,30,40,50]
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_bandpower_correlation.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_bandpower_correlation.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_BRIDGE">
@@ -276,7 +361,7 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
  OUTPUT:
    input_structure (optional): input_structure of nti_wavelet_gui
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_bridge.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_bridge.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_CLEANUP">
@@ -299,13 +384,13 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
  /store (optional): Stores the variables instead of restoring
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_cleanup.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_cleanup.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_COMMON">
 <H2>NTI_WAVELET_COMMON</H2></A>
 <A HREF="#NTI_WAVELET_CLEANUP">[Previous Routine]</A>
-<A HREF="#NTI_WAVELET_CROSSPHASE_CORRECTION">[Next Routine]</A>
+<A HREF="#NTI_WAVELET_CONTOUR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  NAME:
@@ -315,12 +400,50 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
 	This is the common block of NTI Wavelet Tools Graphical User Interface routines.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_common.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_common.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="NTI_WAVELET_CONTOUR">
+<H2>NTI_WAVELET_CONTOUR</H2></A>
+<A HREF="#NTI_WAVELET_COMMON">[Previous Routine]</A>
+<A HREF="#NTI_WAVELET_CROSSPHASE_CORRECTION">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+
+ NAME:
+	NTI_WAVELET_CONTOUR
+
+ PURPOSE:
+	This procedure plot matrices with "CONTOUR" procedure. This can be used only for PostScript plots.
+
+ CALLING SEQUENCE:
+	NTI_WAVELET_CONTOUR, matrix [,xaxis] [,yaxis] [,zrange] [,data] [,xtitle] $
+	  [,ytitle] [,title] [,ct] [,opt] [,resolution] [,levels] [,c_colors] [,/intz] [,/poster]
+
+ INPUTS:
+	matrix: 2D matrix to be visualized
+	xaxis (optional): Complete x axis of the matrix; default: vector from integers
+	yaxis (optional): Complete y axis of the matrix; default: vector from integers
+	zrange (optional): Range of colorscale; default: matrix value range
+	data (optional): Extra data to be written on graph
+	xtitle (optional): Title of x axis
+	ytitle (optional): Title of y axis
+	title (optional): Title of the plot
+	ct (optional): Color table index (Built-in color tables)
+	opt (optional): Exponent for opimized scale visualization
+	resolution: The number of levels used by CONTOUR procedure
+	levels: The value of the levels used by CONTOUR procedure
+	c_colors: The color indices of the levels used by CONTOUR procedure
+	/intz (optional): Plot discrete colorscale at integer values (and skip color code 255)
+	/poster (optional): Print in poster form
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_contour.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_CROSSPHASE_CORRECTION">
 <H2>NTI_WAVELET_CROSSPHASE_CORRECTION</H2></A>
-<A HREF="#NTI_WAVELET_COMMON">[Previous Routine]</A>
+<A HREF="#NTI_WAVELET_CONTOUR">[Previous Routine]</A>
 <A HREF="#NTI_WAVELET_DEFAULT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -350,7 +473,7 @@ NTI_WAVELET_MODEFILTER_FITREL_MATRIX</A>
    crosstransforms: The modified crosstransforms (same as INPUT)
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_crossphase_correction.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_crossphase_correction.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_DEFAULT">
@@ -387,7 +510,7 @@ NAME: nti_wavelet_default
   print, x
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_default.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_default.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_DEFINED">
@@ -423,7 +546,7 @@ NAME: nti_wavelet_defined
   print, nti_wavelet_defined(x,/nullarray)
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_defined.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_defined.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GRIDDATA">
@@ -452,7 +575,7 @@ NAME: nti_wavelet_defined
 	resolution: The number of datapints in the new, regular y axis
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_griddata.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_griddata.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI">
@@ -477,7 +600,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_COMMON:	It contains widget ids and structures of datas.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_ADDMESSAGE">
@@ -509,7 +632,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_ADDMESSAGE, addtext = 'Write here your messages!'
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_addmessage.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_addmessage.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_CALCMEMORY">
@@ -535,7 +658,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_COMMON:	It contains widget ids and structures of datas.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_calcmemory.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_calcmemory.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_CREATE">
@@ -560,7 +683,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_COMMON:	It contains widget ids and structures of datas.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_create.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_create.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_EVENT">
@@ -586,7 +709,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_COMMON:	It contains widget ids and structures of datas.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_event.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_event.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_PAIRSELECT">
@@ -612,7 +735,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_COMMON:	It contains widget ids and structures of datas.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_pairselect.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_pairselect.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_PAIRSELECT_EVENT">
@@ -639,7 +762,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_COMMON:	It contains widget ids and structures of datas.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_pairselect_event.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_pairselect_event.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_READCONFIG">
@@ -674,7 +797,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_READCONFIG, /processing, /visualization
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_readconfig.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_readconfig.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_SAVEMAT">
@@ -715,7 +838,7 @@ NAME: nti_wavelet_defined
    coord_history:  Short description of coordinates. [string]
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_savemat.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_savemat.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_SENS">
@@ -759,7 +882,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_SENS, /processing, /visualization
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_sens.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_sens.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_SETDEFAULTS">
@@ -800,7 +923,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_SETDEFAULTS, /processing, /visualization
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_setdefaults.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_setdefaults.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_GUI_WRITECONFIG">
@@ -841,7 +964,7 @@ NAME: nti_wavelet_defined
 	NTI_WAVELET_GUI_WRITECONFIG, /processing, /visualization
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_gui_writeconfig.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_gui_writeconfig.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_MAIN">
@@ -954,7 +1077,7 @@ NAME: nti_wavelet_main
     bicoherences: the values of (STFT) bicoherence
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_main.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_main.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_MODEFILTER_FITREL_MATRIX">
@@ -988,7 +1111,7 @@ NAME: nti_wavelet_main
 		qs (optional): Q_m values
    chi2 (optional): chi2 values
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_modefilter_fitrel_matrix.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_modefilter_fitrel_matrix.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_PHASEDIAGRAM">
@@ -1024,7 +1147,7 @@ NAME: nti_wavelet_main
     restore,'test_processed.sav'
     nti_wavelet_phasediagram, saved_datablock, 3.3225, 6, filters=[1,8], filterparam2=[-6,6], /print
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_phasediagram.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_phasediagram.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_PLOT">
@@ -1135,7 +1258,7 @@ NAME: nti_wavelet_plot
     version: version number; default: 'Unidentified version'
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_plot.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_plot.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_PLOT_1D">
@@ -1202,7 +1325,7 @@ NAME: nti_wavelet_plot
                        (default: ./save_data)
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_plot_1d.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_plot_1d.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_PLOT_3D">
@@ -1245,7 +1368,7 @@ NAME: nti_wavelet_plot_3d
  OUTPUT: -
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_plot_3d.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_plot_3d.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_PLOT_STFT_BICOH">
@@ -1296,7 +1419,7 @@ NAME: nti_wavelet_plot_3d
    opt:            Color scale optimization factor for plots.
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_plot_stft_bicoh.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_plot_stft_bicoh.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_PRIME_FACTOR">
@@ -1322,7 +1445,7 @@ NAME: nti_wavelet_plot_3d
            3           3          17        1531
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_prime_factor.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_prime_factor.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_READ_WAV">
@@ -1348,7 +1471,7 @@ NAME: nti_wavelet_read_wav
     .sav file written to same folder as input with same name as input .wav
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_read_wav.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_read_wav.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_REMOVE_COLLECTORID">
@@ -1370,7 +1493,7 @@ NAME: nti_wavelet_read_wav
  OUTPUT:
    strArray: corrected array without string before the first '-'
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_remove_collectorid.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_remove_collectorid.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_RIDGE_FOLLOWER">
@@ -1432,7 +1555,7 @@ NAME: nti_wavelet_read_wav
      bandwidth = 5, ridge_index=ridge_index, ridge_unit=ridge_unit
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_ridge_follower.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_ridge_follower.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_SIGNUM">
@@ -1463,7 +1586,7 @@ NAME: nti_wavelet_read_wav
      1    -1
      0    1
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_signum.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_signum.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_SINC">
@@ -1491,13 +1614,13 @@ NAME: nti_wavelet_read_wav
  Output:
  y: sinc of the input array
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_sinc.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_sinc.pro)</STRONG><P>
 <HR>
  
 <A NAME="NTI_WAVELET_TIMESTAMP">
 <H2>NTI_WAVELET_TIMESTAMP</H2></A>
 <A HREF="#NTI_WAVELET_SINC">[Previous Routine]</A>
-<A HREF="#PG_ANAL2">[Next Routine]</A>
+<A HREF="#PG_ACORR">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  NAME:
@@ -1520,13 +1643,73 @@ NAME: nti_wavelet_read_wav
    TIME_ID: the timestamp of the file
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\nti_wavelet_time_id.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\nti_wavelet_time_id.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_ACORR">
+<H2>PG_ACORR</H2></A>
+<A HREF="#NTI_WAVELET_TIMESTAMP">[Previous Routine]</A>
+<A HREF="#PG_ACORRERREMP2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_acorr
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.04.07.
+
+ Purpose: Calculate autocorrelation
+
+ Calling sequence:
+	acorr=pg_acorr(data [,/fast] [,/dc] [,/nonorm])
+
+ Input:
+	data: 1D data vector
+	/fast (optional): Calculate with fast circular convolution
+	/dc (optional): Without mean subtraction
+	/nonorm (optional): Does not norm
+
+ Output:
+	acorr: Autocorrelation vector (centered, same length as data)
+
+ Modifications:
+	Gergo Pokol 2003.12.16. : Zero padding added to fast convolution
+ Gergely Papp 2008.12.16.: Calculating autocorrelation with pg_ccorr
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_acorr.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_ACORRERREMP2">
+<H2>PG_ACORRERREMP2</H2></A>
+<A HREF="#PG_ACORR">[Previous Routine]</A>
+<A HREF="#PG_ANAL2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ NAME: pg_acorrerremp2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.05.22.
+
+ Purpose: Estimate the error of the ACF by calculating the standard deviation of ACFs of seperate segments
+
+ Calling sequence:
+	err=pg_acorrerremp2(data, segment [,/plot] [,/fast] [,/nodiv] [,mean=mean])
+
+ Input:
+	data: 1D data vector
+	segment: Length of segments for empirical variation calulation
+	/plot (optional): Plot ACFs for each segment
+	/fast (optional): Obsolete option: always calculates correlations with fast circular convolution
+	/nodiv (optional): Do not divide by sqrt(n)
+
+ Output:
+	err: Standard deviation vector of ACFs of the segments
+	mean (optional): Mean of ACFs of the segments
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_acorrerremp2.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_ANAL2">
 <H2>PG_ANAL2</H2></A>
-<A HREF="#NTI_WAVELET_TIMESTAMP">[Previous Routine]</A>
-<A HREF="#PG_CCORR">[Next Routine]</A>
+<A HREF="#PG_ACORRERREMP2">[Previous Routine]</A>
+<A HREF="#PG_ANAL3">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  NAME: pg_anal2
@@ -1562,13 +1745,222 @@ NAME: nti_wavelet_read_wav
 	timeax (optional): New time axis is returtned!
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_anal2.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_anal2.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_ANAL3">
+<H2>PG_ANAL3</H2></A>
+<A HREF="#PG_ANAL2">[Previous Routine]</A>
+<A HREF="#PG_AUG_RUN">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_anal3
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2004.10.12.
+
+ Purpose: Plot autocorrelations, crosscorrelations of bandpowers
+
+ Calling sequence:
+	pg_anal3, bp, b, [,timeax] [,corrlength] [,plot] [,/print] [/poster] [,/nodiv]$
+		[,acorr=acorr] [,aerr=aerr] [,ccorr=ccorr] [,cerr=cerr] [,nsegment=nsegment]
+
+ Input:
+	bp: Band powers
+	b: Frequency bands (kHz)
+	timeax (optional): Time axis
+	corrlength (optional): Maximum correlation length plotted (s) !Use with timeax set!
+	plot (optional): Display mode (available:
+						  1: 0+crosscorrelations
+						  2: 1+autocorrelations)
+						   ; default: 0
+	/print (optional): Produce ps files
+	/poster (optional): Print in poster form
+	/nodiv (optional): Do not divide by sqrt(n) in error estimation
+
+ Output:
+	acorr (optional): Autocorrelations of the band powers (b*n matrix)
+	aerr (optional): Errors of autocorrelations of the band powers (b*n matrix)
+	ccorr (optional): Crosscorrelations of each pair of band powers ((b^2-b)/2*n matrix)
+	cerr (optional): Errors of crosscorrelations of each pair of band powers ((b^2-b)/2*n matrix)
+	nsegment (optional): Number of segments the error estimation is calculated from
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_anal3.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_AUG_RUN">
+<H2>PG_AUG_RUN</H2></A>
+<A HREF="#PG_ANAL3">[Previous Routine]</A>
+<A HREF="#PG_AUG_RUN2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_aug_run
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2008.01.02.
+
+ Purpose: Run programs on AUG data
+
+ Calling sequence:
+	pg_aug_run
+
+ Input:
+
+ Output:
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_aug_run.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_AUG_RUN2">
+<H2>PG_AUG_RUN2</H2></A>
+<A HREF="#PG_AUG_RUN">[Previous Routine]</A>
+<A HREF="#PG_BALLOONING">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_aug_run2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2008.12.03.
+
+ Purpose: Run programs on AUG data if pg_aug_run is busy
+
+ Calling sequence:
+	pg_aug_run2
+
+ Input:
+
+ Output:
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_aug_run2.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_BALLOONING">
+<H2>PG_BALLOONING</H2></A>
+<A HREF="#PG_AUG_RUN2">[Previous Routine]</A>
+<A HREF="#PG_BPS">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_ballooning
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.03.09.
+
+ Purpose: Plot time-frequency transform amplitudes at given time and frequency
+				as a function of probe position
+
+ Calling sequence:
+	amplitudes=pg_ballooning(transforms, chpos, timeax, freqax, timea, freq [,weights] [,shot] [,channels] [,plot] [,/print])
+
+ Inputs:
+		transforms: time-frequency transrofms
+		chpos: channel positions in degrees; default: W7-AS Mirnov/MIR-1 coils
+		timeax: Time axis
+		freqax: Frequency axis
+		time: Time of phase diagram
+		freq: Frequency of phase diagram
+		weights (optional): Normalization coefficients of probe sensitivity
+		shot (optional): shot number
+		channels (optional): channel numbers; default: W7-AS Mirnov/MIR-1 coils
+		plot (optional): display mode (available:
+										0:Plot amplitudes in polar plot
+										1:0+Plot amplitudes in simple plot
+										-1:None; default: 0
+		/print (optional): Print to file instead of plotting
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_ballooning.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_BPS">
+<H2>PG_BPS</H2></A>
+<A HREF="#PG_BALLOONING">[Previous Routine]</A>
+<A HREF="#PG_BPS_ALL">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_bps
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.12.10.
+             Modification S. Zoletnik 2004.04.15
+
+ Purpose: Calculate selected band powers for a whole experiment and save in files
+
+ Calling sequence:
+	pg_bps, exp, b [,channels] [,trange] [,windowname] [,windowsize] [,masksize] [,step] [,freqres] $
+		[,family] [,order] [,dscale] [,start_scale] [,nscale] $
+		[,plot] [,/print] [,/cwt] [,bps=bps] [,filename=filename]
+
+ Input:
+	exp: 2 element vector containing the number of the first and the last shot
+	b: Frequency bands (kHz)
+	channels (optional): Channel numbers to be considered
+	trange (optional): Timerange to view (s), 2 element vector; default: whole range
+	windowsize (optional-STFT): Length of window (standard deviation /2 for Gauss window); default: 50
+	masksize (optional-STFT): Length of mask vector; default: all nonzero values
+	windowname (optional-STFT): Shape of the window (available: see in pg_gen_win.pro)
+	step (optional-STFT): time Steps of FFT; default: 1
+	freqres (optional-STFT): Frequency resolution; default: length of data
+	family (optional-CWT): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional-CWT): order of the wavelet; default: default of the family
+	dscale (optional-CWT): fraction of diadic scaling; default:0.25
+	start_scale (optional-CWT): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional-CWT): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): Display mode (available: 0: Plot power bands
+						  1: 0+time integrated spectra
+						  2: 1+time-frequency energy density distribution
+						   ; default: 0
+	/print (optional): Produce ps files
+	/cwt (optional): Use CWT instead of STFT
+
+ Output:
+	bps (optional): Band powers
+       filename: filename (IDL save) containing the names of the output data files
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_bps.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_BPS_ALL">
+<H2>PG_BPS_ALL</H2></A>
+<A HREF="#PG_BPS">[Previous Routine]</A>
+<A HREF="#PG_CCORR">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_pbs_all
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.12.10.
+
+ Purpose: Calculate selected band powers for a whole experiment and save in files
+
+ Calling sequence:
+	pg_bps_all, b [,channels] [,trange] [,windowname] [,windowsize] [,masksize] [,step] [,freqres] $
+		[,family] [,order] [,dscale] [,start_scale] [,nscale] $
+		[,plot] [,/print] [,/cwt]
+
+ Input:
+	b: Frequency bands (kHz)
+	channels (optional): Channel numbers to be considered
+	trange (optional): Timerange to view (s), 2 element vector; default: whole range
+	windowsize (optional-STFT): Length of window (standard deviation /2 for Gauss window); default: 50
+	masksize (optional-STFT): Length of mask vector; default: all nonzero values
+	windowname (optional-STFT): Shape of the window (available: see in pg_gen_win.pro)
+	step (optional-STFT): time Steps of FFT; default: 1
+	freqres (optional-STFT): Frequency resolution; default: length of data
+	family (optional-CWT): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional-CWT): order of the wavelet; default: default of the family
+	dscale (optional-CWT): fraction of diadic scaling; default:0.25
+	start_scale (optional-CWT): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional-CWT): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): Display mode (available: 0: Plot power bands
+						  1: 0+time integrated spectra
+						  2: 1+time-frequency energy density distribution
+						   ; default: 0
+	/print (optional): Produce ps files
+	/cwt (optional): Use CWT instead of STFT
+
+ Output: -
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_bps_all.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_CCORR">
 <H2>PG_CCORR</H2></A>
-<A HREF="#PG_ANAL2">[Previous Routine]</A>
-<A HREF="#PG_COLORSCALE">[Next Routine]</A>
+<A HREF="#PG_BPS_ALL">[Previous Routine]</A>
+<A HREF="#PG_CCORRERREMP2">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_ccorr
@@ -1597,13 +1989,97 @@ the covariance function
        Gergely Papp 2008.12.16.: Added normalize switch - correct norm
        
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_ccorr.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_ccorr.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CCORRERREMP2">
+<H2>PG_CCORRERREMP2</H2></A>
+<A HREF="#PG_CCORR">[Previous Routine]</A>
+<A HREF="#PG_CCORRPLOT_SAVED">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_ccorrerremp2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.05.22.
+ Rewritten by: Gergo Pokol (pokol@reak.bme.hu) 2004.10.06.
+
+ Purpose: Estimate the error of the CCF by calculating the standard deviation of CCFs of seperate segments
+
+ Calling sequence:
+	err=pg_ccorrerremp2(data1, data2, segment [,/plot] [,/fast] [,/nodiv] [,mean=mean])
+
+ Input:
+	data1: 1D data vector
+	data2: 1D data vector of the same length
+	segment (optional): Length of segments for empirical variation calulation
+	/plot (optional): Plot ACFs for each segment
+	/fast (optional): Obsolete option: always calculates correlations with fast circular convolution
+	/nodiv (optional): Do not divide by sqrt(n)
+
+ Output:
+	err: Standard deviation vector of ACFs of the segments
+	mean (optional): Mean of ACFs of the segments
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_ccorrerremp2.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CCORRPLOT_SAVED">
+<H2>PG_CCORRPLOT_SAVED</H2></A>
+<A HREF="#PG_CCORRERREMP2">[Previous Routine]</A>
+<A HREF="#PG_CLOSEWIN">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_ccorrplot_saved
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.12.10.
+
+ Purpose: Read band powers from file and plot crosscorrelations between the band power of channels of a single shot averaged for an experiment
+
+ Calling sequence:
+	pg_ccorrplot_saved, filename [,corrlength] [,plot] [,/print] [,/interp] [,ct]
+
+ Input:
+	filename: Name of data file
+	corrlength (optional): Maximum correlation length (s); default whole time intervall
+	plot (optional): Display mode (available: 0: Plot average maximum crosscorrelations
+						  1: 0+maximum crosscorrelations
+						  2: 1+crosscorrelations
+						  ; default: 0
+	ct (optional): Color table index (Built-in color tables)
+	/print (optional): Produce ps files
+	/interp (optonal): Interpolate, when drawing
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_ccorrplot_saved.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CLOSEWIN">
+<H2>PG_CLOSEWIN</H2></A>
+<A HREF="#PG_CCORRPLOT_SAVED">[Previous Routine]</A>
+<A HREF="#PG_COLORSCALE">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_closewin
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.04.28.
+
+ Purpose: Close all plot windows
+
+ Calling sequence:
+	pg_closewin
+
+ Input: -
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_closewin.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_COLORSCALE">
 <H2>PG_COLORSCALE</H2></A>
-<A HREF="#PG_CCORR">[Previous Routine]</A>
-<A HREF="#PG_CWT">[Next Routine]</A>
+<A HREF="#PG_CLOSEWIN">[Previous Routine]</A>
+<A HREF="#PG_CONVOL">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_colorscale
@@ -1622,13 +2098,364 @@ the covariance function
 
  Output: -
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_colorscale.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_colorscale.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CONVOL">
+<H2>PG_CONVOL</H2></A>
+<A HREF="#PG_COLORSCALE">[Previous Routine]</A>
+<A HREF="#PG_CSCALOGRAM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_convol
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.04.17.
+
+ Purpose: Fast circular convolution of 2 vectors of equal length
+
+ Calling sequence:
+	convol=pg_convol(x,y)
+
+ Input:
+	x: 1D vector (signal)
+	y: 1D vector (filter)
+
+ Output:
+	convol: fast circular convolution of x and y
+
+ Modified:
+	Gergo Pokol (2007.05.16): Conjugate corrected
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_convol.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CSCALOGRAM">
+<H2>PG_CSCALOGRAM</H2></A>
+<A HREF="#PG_CONVOL">[Previous Routine]</A>
+<A HREF="#PG_CSCALOGRAM_PG">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_cscalogram
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.10.01.
+ Modified by: Gergo Pokol (pokol@reak.bme.hu) 2004.10.11. Resampling added
+
+ Purpose: Plot the scalograms, cross-scalogram, cross-phase and cross-coherence
+			 of a measurement in the Nicolet system
+
+ Calling sequence:
+	coh=pg_cscalogram( shot, channel [,trange] [,family] [,order] [,dscale] [,start_scale] [,nscale]  $
+		[,plot] [,inttime] [,phaselevel] [,/print] [,/pad] [,/log] [,opt] [,/double] [,timeax=timeax] [,freqax=freqax])
+
+ Inputs:
+	shot: shot numbers
+	channel: channel numbers
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	family (optional): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional): order of the wavelet; default: default of the family
+	dscale (optional): fraction of diadic scaling; default:0.25
+	start_scale (optional): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): display mode (available:
+										 0:All,
+										 1:Scale scale,
+										 3:Freq. scale (for Morlet wavelets only), other:None; default: 0
+	inttime (optional): integration time; default: 100
+	opt (optional): exponent for opimized scale visualization
+	phaselevel (optional): plot phase above a critical cross spectrum level (in %); default: 0
+	/print (optional): Print to file instead of plotting
+	/pad (optional): use zero padding instead of cutting the data vector to 2^x length
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	ccwt: cross-scalogram of signals
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cscalogram.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CSCALOGRAM_PG">
+<H2>PG_CSCALOGRAM_PG</H2></A>
+<A HREF="#PG_CSCALOGRAM">[Previous Routine]</A>
+<A HREF="#PG_CSCALOGRAM_PG_SIM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_cscalogram_pg
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.01.25.
+
+ Purpose: Plot the scalograms, cross-scalogram, cross-phase and cross-coherence calculated with scaled smoothing
+			 of a measurement in the Nicolet system
+
+ Calling sequence:
+	coh=pg_cscalogram( shot, channel [,trange] [,family] [,order] [,dscale] [,start_scale] [,nscale]  $
+		[,plot] [,avr] [,phaselevel] [,/print] [,/pad] [,/log] [,opt] [,/double] [,timeax=timeax] [,freqax=freqax])
+
+ Inputs:
+	shot: shot numbers
+	channel: channel numbers
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	family (optional): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional): order of the wavelet; default: default of the family
+	dscale (optional): fraction of diadic scaling; default:0.25
+	start_scale (optional): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): display mode (available:
+										 0:All,
+										 1:Scale scale,
+										 3:Freq. scale (for Morlet wavelets only), other:None; default: 0
+	opt (optional): exponent for opimized scale visualization
+	avr (optional): number of independent averages (0 switches averaging off); default: 0
+	phaselevel (optional): plot phase above a critical cross spectrum level (in %); default: 0
+	/print (optional): Print to file instead of plotting
+	/pad (optional): use zero padding instead of cutting the data vector to 2^x length
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	ccwt: cross-scalogram of signals
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cscalogram_pg.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CSCALOGRAM_PG_SIM">
+<H2>PG_CSCALOGRAM_PG_SIM</H2></A>
+<A HREF="#PG_CSCALOGRAM_PG">[Previous Routine]</A>
+<A HREF="#PG_CSCALOGRAM_SIM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_cscalogram_pg_sim
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.01.25.
+
+ Purpose: Plot the Scalograms, Phase of the Cross Wavelet Spectrum and Coherence
+		calculated with scaled smoothing of two 1D data vectors
+
+ Calling sequence:
+	ccwt=pg_cscalogram_pg_sim(data1, data2, timeax [,shot] [,channel] [,trange] [,family] [,order] [,dscale] [,start_scale] [,nscale]  $
+		[,plot] [,avr] [,phaselevel] [,/print] [,/pad] [,/log] [,opt] [,/double] [,freqax])
+
+ Inputs:
+	data1: signal 1
+	data2: signal 2
+	timeax: time axis
+	shot (optional): shot numbers
+	channel (optional): channel numbers
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	family (optional): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional): order of the wavelet; default: default of the family
+	dscale (optional): fraction of diadic scaling; default:0.25
+	start_scale (optional): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): display mode (available:
+										 0:All,
+										 1:Scale scale,
+										 3:Freq. scale (for Morlet wavelets only), other:None; default: 0
+	avr (optional): number of independent averages (0 switches averaging off); default: 0
+	opt (optional): exponent for opimized scale visualization
+	phaselevel (optional): plot phase above a critical cross spectrum level (in %); default: 1
+	/print (optional): Print to file instead of plotting
+	/pad (optional): use zero padding instead of cutting the data vector to 2^x length
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	CCWT: Cross-CWT of signal
+	freqax (optional): Frequency scale
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cscalogram_pg_sim.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CSCALOGRAM_SIM">
+<H2>PG_CSCALOGRAM_SIM</H2></A>
+<A HREF="#PG_CSCALOGRAM_PG_SIM">[Previous Routine]</A>
+<A HREF="#PG_CSCALOGRAM_SIM2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_cscalogram_sim
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.07.21. - 2003.10.01.
+
+ Purpose: Plot the Scalogram or the Phase of the Cross-Coherence Wavelet Spectrum of two 1D data vectors
+
+ Calling sequence:
+	cwt=pg_cscalogram_sim(data1, data2, timeax [,shot] [,channel] [,trange] [,family] [,order] [,dscale] [,start_scale] [,nscale]  $
+		[,plot] [,inttime] [,/print] [,/pad] [,/log] [,opt] [,/double] [,freqax])
+
+ Inputs:
+	data1: signal 1
+	data2: signal 2
+	timeax: time axis
+	shot (optional): shot numbers
+	channel (optional): channel numbers
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	family (optional): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional): order of the wavelet; default: default of the family
+	dscale (optional): fraction of diadic scaling; default:0.25
+	start_scale (optional): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): display mode (available:
+										 0:All,
+										 1:Scale scale,
+										 3:Freq. scale (for Morlet wavelets only), other:None; default: 0
+	inttime (optional): integration time; default: 100
+	opt (optional): exponent for opimized scale visualization
+	/print (optional): Print to file instead of plotting
+	/pad (optional): use zero padding instead of cutting the data vector to 2^x length
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	cwt: CWT of signal
+	freqax (optional): Frequency scale
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cscalogram_sim.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CSCALOGRAM_SIM2">
+<H2>PG_CSCALOGRAM_SIM2</H2></A>
+<A HREF="#PG_CSCALOGRAM_SIM">[Previous Routine]</A>
+<A HREF="#PG_CSPECTROGRAM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_cscalogram_sim2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2006.11.20.
+
+ Purpose: Plot the Scalograms, Phase of the Cross Wavelet Spectrum and Coherence of two 1D data vectors
+
+ Calling sequence:
+	ccwt=pg_cscalogram_sim2(data1, data2, timeax [,shot] [,channel] [,trange] [,family] [,order] [,dscale] [,start_scale] [,nscale]  $
+		[,plot] [,inttime] [,phaselevel] [,/print] [,/pad] [,/log] [,opt] [,/double] [,freqax])
+
+ Inputs:
+	data1: signal 1
+	data2: signal 2
+	timeax: time axis
+	shot (optional): shot numbers
+	channel (optional): channel numbers
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	family (optional): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional): order of the wavelet; default: default of the family
+	dscale (optional): fraction of diadic scaling; default:0.25
+	start_scale (optional): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): display mode (available:
+										 0:All,
+										 1:Scale scale,
+										 3:Freq. scale (for Morlet wavelets only), other:None; default: 0
+	inttime (optional): integration time; default: 100
+	opt (optional): exponent for opimized scale visualization
+	phaselevel (optional): plot phase above a critical cross spectrum level (in %); default: 1
+	/print (optional): Print to file instead of plotting
+	/pad (optional): use zero padding instead of cutting the data vector to 2^x length
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	CCWT: Cross-CWT of signal
+	freqax (optional): Frequency scale
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cscalogram_sim2.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CSPECTROGRAM">
+<H2>PG_CSPECTROGRAM</H2></A>
+<A HREF="#PG_CSCALOGRAM_SIM2">[Previous Routine]</A>
+<A HREF="#PG_CSPECTROGRAM_SIM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_cspectrogram
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.01.16.
+
+ Purpose: Plot the spectrograms, cross-spectrogram, cross-phase and cross-coherence
+			 of measurements in the Nicolet system
+
+ Calling sequence:
+	cspectr=pg_cscalogram( shots, channels [,trange] [,windowname] [,windowsize] [,masksize] [,step] $
+		[,freqres] [,plot] [,avr] [,phaselevel] [,/print] [,/log] [,opt] [,/double] [,timeax=timeax] [,freqax=freqax])
+
+ Inputs:
+	shots: shot numbers
+	channels: channel numbers
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	windowsize (optional): length of window (standard deviation *2 for Gauss window); default: 50
+	masksize (optional): length of mask vector; default: 500
+	windowname (optional): shape of the window (available: see in pg_gen_win.pro); default: 'Gaussian'
+	step (optional): time steps of FFT; default: 10
+	freqres (optional): frequency resolution; default: 250
+	plot (optional): display mode (available:
+										 0:All; default: 0
+	avr (optional): number of independent averages (0 switches averaging off); default: 0
+	opt (optional): exponent for opimized scale visualization
+	phaselevel (optional): plot phase above a critical cross spectrum level (in %); default: 0
+	/print (optional): Print to file instead of plotting
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	cspectr: cross-spectrogram of signals
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cspectrogram.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_CSPECTROGRAM_SIM">
+<H2>PG_CSPECTROGRAM_SIM</H2></A>
+<A HREF="#PG_CSPECTROGRAM">[Previous Routine]</A>
+<A HREF="#PG_CWT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_cspectrogram_sim
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.01.16.
+
+ Purpose: Plot the spectrograms, cross-spectrogram, cross-phase and cross-coherence
+	 of two 1D data vectors. Optional averaging id done by smoothing.
+
+ Calling sequence:
+	ccwt=pg_cspectrogram_sim( data1, data2, timeax0 [,shots] [,channels] [,trange] $
+		[,windowsize] [,masksize] [,step] [,freqres] [,plot] [,avr] [,phaselevel] $
+		[,/print] [,/log] [,opt] [,freqax=freqax])
+
+ Inputs:
+	data1: signal 1
+	data2: signal 2
+	timeax0: time axis
+	shots(optional): shot numbers
+	channels(optional): channel numbers
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	windowsize (optional): length of window (standard deviation *2 for Gauss window); default: length of data / 10
+	masksize (optional): length of mask vector; default: all nonzero values
+	windowname (optional): shape of the window (available: see in pg_gen_win.pro)
+	step (optional): time steps of FFT; default: 1
+	freqres (optional): frequency resolution; default: length of data
+	plot (optional): display mode (available:
+										 0:All; default: 0
+	avr (optional): number of independent averages (0 switches averaging off); default: 0
+	opt (optional): exponent for opimized scale visualization
+	phaselevel (optional): plot phase above a critical cross spectrum level (in %); default: 1
+	/print (optional): Print to file instead of plotting
+	/log (optional): visualize on log scale (except for Phase)
+
+ Output:
+	cspectr: cross-spectrogram of signals
+	freqax (optional): Frequency scale
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cspectrogram_sim.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_CWT">
 <H2>PG_CWT</H2></A>
-<A HREF="#PG_COLORSCALE">[Previous Routine]</A>
-<A HREF="#PG_DOWNSAMPLE">[Next Routine]</A>
+<A HREF="#PG_CSPECTROGRAM_SIM">[Previous Routine]</A>
+<A HREF="#PG_DAT2SAV">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 NAME: WV_CWT
@@ -1713,13 +2540,73 @@ NAME: WV_CWT
     Gergo Pokol 2003.05.15: Progress indicator added, calls pg_fn_*.pro for wavelets
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_cwt.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_cwt.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_DAT2SAV">
+<H2>PG_DAT2SAV</H2></A>
+<A HREF="#PG_CWT">[Previous Routine]</A>
+<A HREF="#PG_DECOMP2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_dat2sav
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2005.04.19.
+
+ Purpose: Convert .dat files of pg_bps.pro to .sav files read by get_rawsignal.pro
+
+ Calling sequence:
+	pg_dat2sav,filenames
+
+ Input: -
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_dat2sav.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_DECOMP2">
+<H2>PG_DECOMP2</H2></A>
+<A HREF="#PG_DAT2SAV">[Previous Routine]</A>
+<A HREF="#PG_DOWNSAMPLE">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_decomp2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.05.29.
+
+ Purpose: Calculate signal reconstructed from a single row of the STFT transform with the right phase
+
+ Calling sequence:
+	pg_decomp2, stft, b [,timeax] [,freqax] [,windowname] [,windowsize] [,masksize] $
+		[,trange] [,plot] [,/print] [,/double] [,sign=sign]
+
+ Input:
+	stft: STFT of 1D data vector !Full resolution!
+	b: Frequencies to reconstruct from (kHz)
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+	windowsize (optional): length of window (standard deviation /2 for Gauss window); default: length of data / 10
+	masksize (optional): length of mask vector; default: all nonzero values
+	windowname (optional): shape of the window (available: see in pg_gen_win.pro)
+	trange (optional): Time range of the plot (s) !Use with dt set!
+	plot (optional): Display mode (available: 0: Plot reconstructed signal and amplitude as multiplot
+						  1: Plot reconstructed signal
+						  2: Plot modulating amplitude
+						   ; default: 0
+	/double (optional): double precision window
+	/print (optional): Produce ps files
+
+ Output:
+	sign (optional): Reconstructed signal
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_decomp2.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_DOWNSAMPLE">
 <H2>PG_DOWNSAMPLE</H2></A>
-<A HREF="#PG_CWT">[Previous Routine]</A>
-<A HREF="#PG_FILENAME">[Next Routine]</A>
+<A HREF="#PG_DECOMP2">[Previous Routine]</A>
+<A HREF="#PG_EXP_SAVED">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_downsample
@@ -1742,12 +2629,102 @@ NAME: WV_CWT
 	2005.04.14: later: (y=(x(step-1),x(2*step-1),...)
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_downsample.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_downsample.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_EXP_SAVED">
+<H2>PG_EXP_SAVED</H2></A>
+<A HREF="#PG_DOWNSAMPLE">[Previous Routine]</A>
+<A HREF="#PG_EXP_SAVED2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_exp_saved
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.12.10.-2003.12.12.
+
+ Purpose: Read band powers from file and plot autocorrelations, crosscorrelations for a whole experiment
+
+ Calling sequence:
+	pg_exp_saved, filenames [,channels] [,corrlength] [,plot] [,/print] [err=err] [,acorr=acorr] [,ccorr=ccorr]
+
+ Input:
+	filenames: Names of data files of the different band powers
+	channels (optional): Channel numbers to be considered; default: all channels
+	corrlength (optional): Maximum correlation length plotted (s); default: 0.003
+	plot (optional): Display mode (available:
+						  0: Plot experiment means
+						  1: 0+shot means
+						  2: 1+crosscorrelations
+						  3: 2+autocorrelations
+						   ; default: 0
+	/print (optional): Produce ps files
+	err (optional): Error handling in averaging (available:
+						  0: Supposing independent data in different shots and channels
+						  1: Supposing independent data in different shots and correlated data in channels
+						  2: Calculate error using direct empirical standard deviation on all levels
+						  3: NOT FUNCTIONING! Supposing independent data in different shots and correlated data in channels (weighted)
+						   ; dafault: 0
+
+ Output:
+	acorr (optional): Autocorrelations of the band powers
+	ccorr (optional): Crosscorrelations of each pair of band powers
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_exp_saved.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_EXP_SAVED2">
+<H2>PG_EXP_SAVED2</H2></A>
+<A HREF="#PG_EXP_SAVED">[Previous Routine]</A>
+<A HREF="#PG_FILENAME">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_exp_saved2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.12.10.-2003.12.12.
+ Rewritten by: Gergo Pokol (pokol@reak.bme.hu) 2004.10.06.
+ Modified by: Gergo Pokol (pokol@reak.bme.hu) 2005.05.26. (APDS, Coherence, Phase added)
+
+ Purpose: Read band powers from file and plot autocorrelations, crosscorrelations,
+  APSDs, CPSDs, coherences and phase functions for a whole experiment
+
+ Calling sequence:
+	pg_exp_saved2, filenames [,channels] [,corrlength] [,plot] [,/print] [,/freq] [,blocksize] [,maxf]
+   [err=err] [,acorr=acorr] [,ccorr=ccorr]
+
+ Input:
+	filenames: Names of data files of the different band powers
+	channels (optional): Channel numbers to be considered; default: all channels
+	corrlength (optional): Maximum correlation length plotted (s); default: 0.003
+	/freq (optional): Nor correlations, but APSD, Coh. and Phase functions will be plotted
+	blocksize (optional): Size of blocks for /freq; default: 4096
+	maxf (optional): Maximum frequency plotted /freq; default: 1/windowlength
+	fitmaxf (optional): Maximum frequency fitted /freq; default: maxf/3
+	plot (optional): Display mode (available:
+						  0: Plot experiment means
+						  1: 0+shot means
+						  2: 1+crosscorrelations / coh+phase
+						  3: 2+autocorrelations / APSD1+APSD2+CPSD
+						   ; default: 0
+	/print (optional): Produce ps files
+	err (optional): Error handling in averaging (available:
+						  0: Supposing independent data in different shots and channels
+						  1: Supposing independent data in different shots and correlated data in channels
+						  2: Calculate error using direct empirical standard deviation on all levels
+						  3: NOT FUNCTIONING! Supposing independent data in different shots and correlated data in channels (weighted)
+						   ; dafault: 0
+
+ Output:
+	acorr (optional): Autocorrelations of the band powers
+	ccorr (optional): Crosscorrelations of each pair of band powers
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_exp_saved2.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_FILENAME">
 <H2>PG_FILENAME</H2></A>
-<A HREF="#PG_DOWNSAMPLE">[Previous Routine]</A>
+<A HREF="#PG_EXP_SAVED2">[Previous Routine]</A>
 <A HREF="#PG_FN_GAUSSIAN">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -1770,7 +2747,7 @@ NAME: pg_filename
 	filename: Filename of the PS file
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_filename.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_filename.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_FN_GAUSSIAN">
@@ -1863,7 +2840,7 @@ NAME: pg_filename
     Written by: Chris Torrence, 2000
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_fn_gaussian.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_fn_gaussian.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_FN_MORLET">
@@ -1956,7 +2933,7 @@ NAME: pg_filename
     Written by: Chris Torrence, 2000
     Modified by: Gergo Pokol 2003.05.27: Allow parameters (orders) upto 100000
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_fn_morlet.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_fn_morlet.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_FN_PAUL">
@@ -2048,7 +3025,7 @@ NAME: pg_filename
     Written by: Chris Torrence, 2000
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_fn_paul.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_fn_paul.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_GEN_WIN">
@@ -2081,13 +3058,13 @@ NAME: pg_filename
 	Gergo Pokol 2003.12.16. : Correct masksize for Gauss window
 	Gergo Pokol 2004.02.11. : Modify to L2 norm
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_gen_win.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_gen_win.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_INITGRAPH">
 <H2>PG_INITGRAPH</H2></A>
 <A HREF="#PG_GEN_WIN">[Previous Routine]</A>
-<A HREF="#PG_LOG2">[Next Routine]</A>
+<A HREF="#PG_LOADWAV">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  NAME: pg_initgraph
@@ -2108,13 +3085,39 @@ NAME: pg_filename
  EXAMPLE:
    pg_initgraph, /print
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_initgraph.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_initgraph.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_LOADWAV">
+<H2>PG_LOADWAV</H2></A>
+<A HREF="#PG_INITGRAPH">[Previous Routine]</A>
+<A HREF="#PG_LOG2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_loadwav
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2004.04.28.
+
+ Purpose: Load signal from wav file
+
+ Calling sequence:
+	data=pg_loadwav(filename [,time] [,trange])
+
+ Input:
+	filename: Name of wav file
+	trange (optional): Time range of the signal (s); default: whole range
+
+ Output:
+	time (optional): Time scale
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_loadwav.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_LOG2">
 <H2>PG_LOG2</H2></A>
-<A HREF="#PG_INITGRAPH">[Previous Routine]</A>
-<A HREF="#PG_MODEFILTER_FITREL">[Next Routine]</A>
+<A HREF="#PG_LOADWAV">[Previous Routine]</A>
+<A HREF="#PG_MIRPHASE_SIM">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_log2
@@ -2133,12 +3136,123 @@ NAME: pg_filename
 	y: log base 2 of x
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_log2.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_log2.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_MIRPHASE_SIM">
+<H2>PG_MIRPHASE_SIM</H2></A>
+<A HREF="#PG_LOG2">[Previous Routine]</A>
+<A HREF="#PG_MODEFILTER0">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_mirphase_sim
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2005.04.07.
+
+ Purpose: Simulate all 16 Mirnov-signals
+
+ Calling sequence:
+  sig_mir=pg_mirphase_sim(timeax=timeax,trange=trange)
+
+ Inputs:
+  num: number of simulated channels
+  theta: phase position of channels in degree
+  timeax: time axis of the simulated signal
+  timerange: timerange of the simulated signal
+
+ Output:
+  sig_mir: array of all 16 simulated Mirnov-signals
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_mirphase_sim.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_MODEFILTER0">
+<H2>PG_MODEFILTER0</H2></A>
+<A HREF="#PG_MIRPHASE_SIM">[Previous Routine]</A>
+<A HREF="#PG_MODEFILTER_FIT">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_modefilter0
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.02.26.
+
+ Purpose: Filter 0 modenumber modes from pre-calculated cross-phases
+
+ Calling sequence:
+	modenum=pg_modefilter0(cphases,chpos)
+
+ Inputs:
+		cphases: relative cross-phases
+		chpos: channel positions in degrees
+
+ Output:
+		modenum: 0 for 0 modenumber, 1000 for not 0 modenumber
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_modefilter0.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_MODEFILTER_FIT">
+<H2>PG_MODEFILTER_FIT</H2></A>
+<A HREF="#PG_MODEFILTER0">[Previous Routine]</A>
+<A HREF="#PG_MODEFILTER_FIT2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_modefilter_fit
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.03.21.-2007.04.11.
+
+ Purpose: Filter modenumbers from pre-calculated cross-phases by linear regression
+				(Can be used for a set of probes limited to a segment of the cross section)
+
+ Calling sequence:
+	modenum=pg_modefilter_fit(cphases, chpos [,problim] [,chisqlim])
+
+ Inputs:
+		cphases: relative cross-phases
+		chpos: channel positions in degrees
+		problim (optional): Limit of acceptance of the probability of a good fit; default: None
+		chisqlim (optional): Limit of acceptance of the probability of a good fit; default: None
+
+ Output:
+		modenum: modenumber, or 1000 for not defined modenumber
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_modefilter_fit.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_MODEFILTER_FIT2">
+<H2>PG_MODEFILTER_FIT2</H2></A>
+<A HREF="#PG_MODEFILTER_FIT">[Previous Routine]</A>
+<A HREF="#PG_MODEFILTER_FITREL">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_modefilter_fit
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.04.03.
+
+ Purpose: Filter modenumbers from pre-calculated cross-phases by linear regression
+				(Can be used for a set of probes limited to a segment of the cross section)
+
+ Calling sequence:
+	modenum=pg_modefilter_monoton(cphases, chpos [,problim])
+
+ Inputs:
+		cphases: relative cross-phases
+		chpos: channel positions in degrees
+		problim (optional): Limit of acceptance of the probability of a good fit; default:0.5
+
+ Output:
+		modenum: modenumber, or 1000 for not defined modenumber
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_modefilter_fit2.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_MODEFILTER_FITREL">
 <H2>PG_MODEFILTER_FITREL</H2></A>
-<A HREF="#PG_LOG2">[Previous Routine]</A>
+<A HREF="#PG_MODEFILTER_FIT2">[Previous Routine]</A>
 <A HREF="#PG_MODEFILTER_MONOTON">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -2171,13 +3285,13 @@ NAME: pg_filename
 		qs (optional): Q_m vector (with normalized weights)
    chi2 (optional): chi2 value of each fit
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_modefilter_fitrel.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_modefilter_fitrel.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_MODEFILTER_MONOTON">
 <H2>PG_MODEFILTER_MONOTON</H2></A>
 <A HREF="#PG_MODEFILTER_FITREL">[Previous Routine]</A>
-<A HREF="#PG_NUM2STR">[Next Routine]</A>
+<A HREF="#PG_MODEFILTER_VARFIT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_modefilter_monoton
@@ -2198,12 +3312,147 @@ NAME: pg_filename
 		modenum: modenumber, or 1000 for not defined modenumber
    ms (optional): mode number vector [positive, negative]
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_modefilter_monoton.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_modefilter_monoton.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_MODEFILTER_VARFIT">
+<H2>PG_MODEFILTER_VARFIT</H2></A>
+<A HREF="#PG_MODEFILTER_MONOTON">[Previous Routine]</A>
+<A HREF="#PG_MODENUMBER">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_modefilter_varfit
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.04.17.
+
+ Purpose: Filter modenumbers from pre-calculated cross-phases by linear regression without
+				the condition of being strictly monotone
+				(Can be used for a set of probes limited to a segment of the cross section)
+
+ Calling sequence:
+	modenum=pg_modefilter_varfit(cphases, chpos [,problim] [,chisqlim])
+
+ Inputs:
+		cphases: relative cross-phases
+		chpos: channel positions in degrees
+		problim (optional): Limit of acceptance of the probability of a good fit; default: None
+		chisqlim (optional): Limit of acceptance of the probability of a good fit; default: None
+
+ Output:
+		modenum: modenumber, or 1000 for not defined modenumber
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_modefilter_varfit.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_MODENUMBER">
+<H2>PG_MODENUMBER</H2></A>
+<A HREF="#PG_MODEFILTER_VARFIT">[Previous Routine]</A>
+<A HREF="#PG_MOVEDATA">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_modenumber
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.02.14.-03.02.
+
+ Purpose: Calculate and plot coherences and modenumbers on the time-frequency plane
+	 derived from data in the Nicolet system
+
+ Calling sequence:
+	modenum=pg_modenumber(shot [,channels] [,chpos] [,trange] [,filters] [,windowname] [,windowsize] [,masksize] [,step] $
+		[,freqres]  [,/cwt] [,family] [,order] [,dscale] [,start_scale] [,nscale] [,modescale], [,/nophase]$
+		[,plot] [,avr] [,/print] [,opt] [,filterparam1] [,filterparam2] [,cohlim] [,powlim]$
+		[,timeax=timeax] [,freqax=freqax] [,cphases=cphases] [,transforms=transforms])
+
+ Inputs:
+		shot: shot numbers
+		channels (optional): channel numbers; default: W7-AS Mirnov/MIR-1 coils
+		chpos (optional): channel positions in degrees; default: W7-AS Mirnov/MIR-1 coils
+		trange (optional): timerange to view, 2 element vector; default: whole range
+		modescale (optional): range of mode numbers; default: not set
+		filters (optional): vector of filter numbers to use; default: [0,1] available filters:
+			-1: No filter
+			0: In phase filter giving 0 modenumber limiting the maxmum deviation from 0 phase
+			1: Positive-negative modenumbers filter assuming strictly monoton phase diagram
+				and same modenumber for all reference signals (must use whole array)
+			2: Positive-negative modenumbers filter assuming strictly monoton phase diagram
+				and using linear fit to mean phase diagram (does not require whole array)
+			3: Optimized positive-negative modenumbers filter not assuming strictly monoton phase diagram
+				and using linear fit to mean phase diagram (does not require whole array)
+			4: Select most fitting linear to the relative phases as a function of their relative position
+				(does not require whole array)
+					filterparam1 (optional): modenumber steps to be considered; default:1
+					filterparam2 (optional): minimum distance accepted Q values from Q_mean measured in Q_stddev units
+						default: 10000 (everything is accepted)
+		/nophase (optional): no phase calculation (less memory needed)
+  STFT parameters:
+		windowname (optional); window type; default: 'Gauss'
+		windowsize (optional): length of window (standard deviation *2 for Gauss window); default: 50
+		masksize (optional): length of mask vector; default: 500
+		step (optional): time steps of FFT; default: 1
+		freqres (optional): frequency resolution; default: 1 (giving masksize/2)
+	CWT parameters:
+		/cwt (optional): Use CWT instead of STFT
+		family (optional): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+		order (optional): order of the wavelet; default: 6
+		dscale (optional): fraction of diadic scaling; default:0.25
+		start_scale (optional): starting scale (has no effect on CWT using Morlet wavelets; default:2
+		nscale (optional): total number of scale values; default:log2(N/start_scale)/dscale+1
+	Visualization parameters:
+		plot (optional): display mode (available:
+										 0:Modenumbers of the time-frequency plane,
+										 1:0+time-frequency energy-density distributions,
+										 2:1+phaes+Freq. scale (for Morlet wavelets only), other:None; default: 0
+		opt (optional): exponent for opimized scale visualization
+		avr (optional): number of independent averages (0 switches averaging off); default: 0
+		modescale (optional): scale of plotted modes; default: all modes
+		cohlim (optional): lower limit of minimal coherence for plotting; default: none
+		powlim (optional): limit of CPSD for plotting (fraction of maximum); default: none
+		/print (optional): Print to file instead of plotting
+
+ Output:
+		modenum: modenumbers of the time-frequency plane
+		timeax (optional): Time axis
+		freqax (optional): Frequency axis
+		cphases (optional): Cross-phases
+		transforms (optional): Unsmoothed time-frequency transforms of the channels
+		smoothed_apsds (optional): Smoothed APSDs of the channels
+
+ Modifications:
+		2007.04.10. Gergo Pokol: coherence calculation added
+		2007.08.16. Gergo Pokol: powlim added
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_modenumber.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_MOVEDATA">
+<H2>PG_MOVEDATA</H2></A>
+<A HREF="#PG_MODENUMBER">[Previous Routine]</A>
+<A HREF="#PG_NUM2STR">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_movedata
+
+ Written by: Gergo Pokol (lokop@uze.net) 2002.07.18. - 2002.07.19.
+
+ Purpose: move data to desired location
+
+ Calling sequence:
+	pg_movedata, filename, location
+
+ Input:
+	filename: filename(s) to move
+	location: location to move to
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_movedata.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_NUM2STR">
 <H2>PG_NUM2STR</H2></A>
-<A HREF="#PG_MODEFILTER_MONOTON">[Previous Routine]</A>
+<A HREF="#PG_MOVEDATA">[Previous Routine]</A>
 <A HREF="#PG_OTV">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -2224,13 +3473,13 @@ NAME: pg_filename
 	str: string
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_num2str.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_num2str.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_OTV">
 <H2>PG_OTV</H2></A>
 <A HREF="#PG_NUM2STR">[Previous Routine]</A>
-<A HREF="#PG_PHASEDIAGRAM">[Next Routine]</A>
+<A HREF="#PG_PHASE">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_otv
@@ -2248,13 +3497,55 @@ NAME: pg_filename
 		/original (optional): Plot original size
 		/nearest (optional): Use nearest neibourghood resampling
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_otv.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_otv.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_PHASE">
+<H2>PG_PHASE</H2></A>
+<A HREF="#PG_OTV">[Previous Routine]</A>
+<A HREF="#PG_PHASEDIAGRAM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_phase
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.05.26.
+
+ Purpose: Plot crosscorrelations between the band power of one selected channel and the other channels
+		of the shot
+
+ Calling sequence:
+	pg_phase, shot [,b] [,startch] [,trange] [,windowname] [,windowsize] [,masksize] [,step] [,freqres] $
+		[,corrlength] [,plot] [,/rawsignal] [,/print] [,ccorr=ccorr]
+
+ Input:
+	shot: Shot number
+	b (optional): One frequency band (kHz); default: whole range
+	startch (optional): phase=0 channel; default: 1
+	corrlength (optional): Maximum correlation length plotted (s); default whole time intervall
+	trange (optional): timerange to view (s), 2 element vector; default: whole range
+	windowsize (optional): length of window (standard deviation /2 for Gauss window); default: 50
+	masksize (optional): length of mask vector; default: all nonzero values
+	windowname (optional): shape of the window (available: see in pg_gen_win.pro)
+	step (optional): time steps of FFT; default: 1
+	freqres (optional): frequency resolution; default: length of data
+	plot (optional): Display mode (available: 0: Plot crosscorrelations
+						  1: 0+STFT spectra
+						  2: 1+band powers)
+						  ; default: 0
+	/rawsignal (optional): Calculate crosscorrelations for the rawsignal
+	/print (optional): Produce ps files
+
+ Output:
+	ccorr (optional): Crosscorrelations of the band power of different channels
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_phase.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_PHASEDIAGRAM">
 <H2>PG_PHASEDIAGRAM</H2></A>
-<A HREF="#PG_OTV">[Previous Routine]</A>
-<A HREF="#PG_PLOT4">[Next Routine]</A>
+<A HREF="#PG_PHASE">[Previous Routine]</A>
+<A HREF="#PG_PLOT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  NAME: pg_phasediagram
@@ -2322,13 +3613,116 @@ NAME: pg_filename
  MODIFICATION HISTORY:
 		2007.04.11. Gergo Pokol: filters 3,4 added
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_phasediagram.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_phasediagram.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_PLOT">
+<H2>PG_PLOT</H2></A>
+<A HREF="#PG_PHASEDIAGRAM">[Previous Routine]</A>
+<A HREF="#PG_PLOT2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_plot
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.04.25.
+
+ Purpose: Visualize a 2D matrix (STFT or CWT)
+
+ Calling sequence:
+	pg_plot, matrix [,ct] [,xrange] [,yrange] [,xtitle] [,ytitle] [,title] [,opt] [,/norm] [,/log] 
+
+ Input:
+	matrix: 2D matrix to be visualized
+	ct (optional): Color table index (Built-in color tables)
+	xrange (optional): Range of x axis
+	yrange (optional): Range of y axis
+	xtitle (optional): Title of x axis
+	ytitle (optional): Title of y axis
+	title (optional): Title of the plot
+	opt (optional): exponent for opimized scale visualization
+	/norm (optional): Norm matrix values
+	/log (optional): visualize on log scale
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_plot.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_PLOT2">
+<H2>PG_PLOT2</H2></A>
+<A HREF="#PG_PLOT">[Previous Routine]</A>
+<A HREF="#PG_PLOT3">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_plot2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2004.02.16.
+
+ Purpose: Visualize a 2D matrix (STFT or CWT)
+
+ Calling sequence:
+	pg_plot, matrix [,ct] [,xrange] [,yrange] [,zrange] [,data] [,xtitle] [,ytitle] $ 
+		[,title] [,opt] [,/log] [,/interp]
+
+ Input:
+	matrix: 2D matrix to be visualized
+	ct (optional): Color table index (Built-in color tables)
+	xrange (optional): Range of x axis; default: matrix x-dimension
+	yrange (optional): Range of y axis; default: matrix y-dimension
+	zrange (optional): Range of colorscale; default: matrix value range
+	data (optional): Extra data to be written on graph
+	xtitle (optional): Title of x axis
+	ytitle (optional): Title of y axis
+	title (optional): Title of the plot
+	opt (optional): exponent for opimized scale visualization
+	/log (optional): visualize on log scale
+	/interp (optonal): Interpolate, when drawing
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_plot2.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_PLOT3">
+<H2>PG_PLOT3</H2></A>
+<A HREF="#PG_PLOT2">[Previous Routine]</A>
+<A HREF="#PG_PLOT4">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_plot3
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2004.02.21.
+
+ Purpose: Visualize a 2D matrix
+
+ Calling sequence:
+	pg_plot3, matrix [,ct] [,xrange] [,yrange] [,zrange] [,data] [,xtitle] [,ytitle] $
+		[,title] [,opt] [,/log] [,/interp] [,/poster]
+
+ Input:
+	matrix: 2D matrix to be visualized
+	ct (optional): Color table index (Built-in color tables)
+	xrange (optional): Range of x axis; default: matrix x-dimension
+	yrange (optional): Range of y axis; default: matrix y-dimension
+	zrange (optional): Range of colorscale; default: matrix value range
+	data (optional): Extra data to be written on graph
+	xtitle (optional): Title of x axis
+	ytitle (optional): Title of y axis
+	title (optional): Title of the plot
+	opt (optional): exponent for opimized scale visualization
+	/log (optional): visualize on log scale
+	/interp (optonal): Interpolate, when drawing
+	/poster (optional): Print in poster form
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_plot3.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_PLOT4">
 <H2>PG_PLOT4</H2></A>
-<A HREF="#PG_PHASEDIAGRAM">[Previous Routine]</A>
-<A HREF="#PG_REMOVESTR">[Next Routine]</A>
+<A HREF="#PG_PLOT3">[Previous Routine]</A>
+<A HREF="#PG_PROBE_SETS">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
 NAME: pg_plot4
@@ -2368,12 +3762,78 @@ NAME: pg_plot4
  MODIFICATION HISTORY:
    Automatic resize of matrix in pg_otv (Gergo Pokol, 2007.02.23)
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_plot4.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_plot4.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_PROBE_SETS">
+<H2>PG_PROBE_SETS</H2></A>
+<A HREF="#PG_PLOT4">[Previous Routine]</A>
+<A HREF="#PG_RAWSIGNALS">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+NAME: pg_probe_sets
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.12.29.
+
+ PURPOSE: Give channel names and angular coordinates of probes in a probe array.
+ 	Uses file data/angle.dat.##### for AUG_mirnov probes.
+
+ INPUTS:
+	set: index of probe set, available:
+		0: AUG B31 poloidal array
+		1: AUG B31 toroidal array
+		2: AUG C09 poloidal array
+		3: AUG B31 approximate toroidal array
+		4: AUG B31 approximate toroidal array without B31-03
+   5: AUG B31 approximate toroidal array with B31-02
+   6: AUG B31 approximate toroidal array without B31-01
+   7: AUG B31 approximate toroidal array with B31-02 without B31-03
+		10: W7-AS MIR-1 poloidal array
+		11: W7-AS simulated MIR-1 poloidal array
+ shot (optional): shot number
+
+ OUTPUT:
+	channels (optional): channel names
+	chpos (optional): angular coordinates
+	chradial (optional): minor radial coordinates
+	chR (optional): major radial coordinates
+	chZ (optional): vertical coordinates
+
+ EXAMPLE:
+   pg_probe_sets,4,channels=channels,chpos=chpos,shot=shot
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_probe_sets.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_RAWSIGNALS">
+<H2>PG_RAWSIGNALS</H2></A>
+<A HREF="#PG_PROBE_SETS">[Previous Routine]</A>
+<A HREF="#PG_REMOVESTR">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_rawsignals
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.04.28.
+
+ Purpose: Plot rawsignals
+
+ Calling sequence:
+	pg_rawsignals, shots [,channels] [,/print] [,/multi]
+
+ Input:
+	shot: Intevall of shot numbers
+	channels (optional): Channels to be plotted
+	/print (optional): Print to file instead of plotting
+	/multi (optional): Plot all channels on a single multiplot
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_rawsignals.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_REMOVESTR">
 <H2>PG_REMOVESTR</H2></A>
-<A HREF="#PG_PLOT4">[Previous Routine]</A>
+<A HREF="#PG_RAWSIGNALS">[Previous Routine]</A>
 <A HREF="#PG_RESAMPLE">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -2392,7 +3852,7 @@ NAME: pg_plot4
  Output: 
 	str2: string
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_removestr.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_removestr.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_RESAMPLE">
@@ -2421,13 +3881,13 @@ NAME: pg_plot4
  time_domain: resampling in time domain (it takes up a lot of time, because
               the double for loop)
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_resample.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_resample.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_RETRIGGER">
 <H2>PG_RETRIGGER</H2></A>
 <A HREF="#PG_RESAMPLE">[Previous Routine]</A>
-<A HREF="#PG_SCALOGRAM_SIM2">[Next Routine]</A>
+<A HREF="#PG_SAVE">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_retrigger
@@ -2447,13 +3907,108 @@ NAME: pg_plot4
 	xx: timeshifted data vector
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_retrigger.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_retrigger.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_SAVE">
+<H2>PG_SAVE</H2></A>
+<A HREF="#PG_RETRIGGER">[Previous Routine]</A>
+<A HREF="#PG_SAVE_SIG">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ NAME: pg_save
+
+ Written by: Gergo Pokol (lokop@uze.net) 2002.07.18. - 2002.07.19.
+
+ PURPOSE: Save displayed image into an image file
+
+ CALLING SEQUENCE:
+	pg_save
+
+ INPUT: -
+
+ OUTPUT: -
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_save.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_SAVE_SIG">
+<H2>PG_SAVE_SIG</H2></A>
+<A HREF="#PG_SAVE">[Previous Routine]</A>
+<A HREF="#PG_SCALOGRAM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_save_sig
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2007.12.28.
+
+ Purpose: Save signals of AUG magnetic pick-up ciols to data/...sav using get_rawsignal.pro
+	for a given shot
+
+ Calling sequence:
+	pg_save_sig, shots (vector)
+
+ Input:
+	shot: shot numbers
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_save_sig.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_SCALOGRAM">
+<H2>PG_SCALOGRAM</H2></A>
+<A HREF="#PG_SAVE_SIG">[Previous Routine]</A>
+<A HREF="#PG_SCALOGRAM_SIM2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_scalogram
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2002.07.17. - 2002.07.18.
+ Modified by: Gergo Pokol (pokol@reak.bme.hu) 2004.12.08. (call pg_scalogram_sim2)
+
+ Purpose: Plot the Scalogram or the Phase of the Continous Wavelet Transform of a measurement in the Nicolet system
+
+ Calling sequence:
+	cwt=pg_scalogram( shot, channel [,trange] [,family] [,order] [,dscale] [,start_scale] [,nscale]  $
+		[,plot] [,/print] [,/poster] [,/pad] [,/log] [,opt] [,/double] [,timeax=timeax] [,freqax=freqax])
+
+ Inputs:
+	shot: shot number
+	channel: channel number
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	fmax (optional): frequency maximum of spectrogram (in kHz), resampled with pg_resample, Downsamples time axis!
+	family (optional): wavelet family to use (available: 'Morlet'); default: 'Morlet'
+	order (optional): order of the wavelet; default: default of the family
+	dscale (optional): fraction of diadic scaling; default:0.25
+	start_scale (optional): starting scale (has no effect on CWT using Morlet wavelets; default:2
+	nscale (optional): total number of scale values; default:log2(N/start_scale)/dscale+1
+	plot (optional): display mode (available: 0:All, 1:Scalogram(log), 2:Phase,
+					3:Scalogram(lin) (for Morlet wavelets only), other:None; default: 0
+	opt (optional): exponent for opimized scale visualization
+	/print (optional): Print to file instead of plotting
+	/poster (optional): Print in poster form
+	/pad (optional): use zero padding instead of cutting the data vector to 2^x length
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	cwt: CWT of signal
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+
+ Modification:
+	Gergo Pokol 2003.03.31: Output added
+	Gergo Pokol 2003.06.12: Moved to pg_scalogram_sim
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_scalogram.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_SCALOGRAM_SIM2">
 <H2>PG_SCALOGRAM_SIM2</H2></A>
-<A HREF="#PG_RETRIGGER">[Previous Routine]</A>
-<A HREF="#PG_SPECTROGRAM_SIM">[Next Routine]</A>
+<A HREF="#PG_SCALOGRAM">[Previous Routine]</A>
+<A HREF="#PG_SIM">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  NAME: pg_scalogram_sim2
@@ -2499,12 +4054,158 @@ NAME: pg_plot4
  MODIFICATION HISTORY:
   Gergo Pokol (pokol@reak.bme.hu) 2004.12.08. (frequency axis added)
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_scalogram_sim2.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_scalogram_sim2.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_SIM">
+<H2>PG_SIM</H2></A>
+<A HREF="#PG_SCALOGRAM_SIM2">[Previous Routine]</A>
+<A HREF="#PG_SIMNOISE">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_sim
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.06.12.
+
+ Purpose: Simulate Mirnov signal
+
+ Calling sequence:
+	sign=pg_sim([bs] [,dt] [,trange] [,burstlength] [,burstdens] [,nburst] [,snr] [,plot] $
+		[,/print] [,/xcorr] [,/mcorr] [,/lcorr] [,sims=sims] [,envelope=envelope] $
+		[,time=time])
+
+ Input:
+	bs (optional): Simulated frequencies (kHz); default: [30,100]
+	dt (optional): Time step (s); default: 0.000003
+	trange (optional): Time range (s); default: [0,0.1]
+	burstlength (optional): Average burst length; default: 32
+	burstdens (optional): Normed rate of bursts; default: 2
+	nburst (optional): Number of bursts; default: simsize/burstlength*burstdens
+	snr (optional): Singal to noise power ratio; default: 0
+	plot (optional): Display mode (available: 1: Plot signal
+						  2: 1+modulated frequiencies
+						   ; default: 0
+	/print (optional): Produce ps files
+	/xcorr (optional): Correlation in time of bursts
+	/mcorr (optional): Correlation in magnitude of bursts
+	/lcorr (optional): Correlation in length of bursts
+
+ Output:
+	sign: Simulated signal
+	sims (optional): Array of modulated frequencies
+	envelope (optional): Array of envelopes of modulation
+	time (optional): Time axis
+
+ Modifications:
+	2006.08.13. Pokol: 	burstlength distribution narrowed by a fector of 2
+								added 0.1 to the distribution function of burst magnitude
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_sim.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_SIMNOISE">
+<H2>PG_SIMNOISE</H2></A>
+<A HREF="#PG_SIM">[Previous Routine]</A>
+<A HREF="#PG_SIM_RUN">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_simnoise
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2006.08.13.
+
+ Purpose: Generate Simulation Figure for publication showing the effect of noise
+
+ Calling sequence:
+	pg_simnoise [,/print]
+
+ Input:
+	/print: Generate ps file
+
+ Output: -
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_simnoise.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_SIM_RUN">
+<H2>PG_SIM_RUN</H2></A>
+<A HREF="#PG_SIMNOISE">[Previous Routine]</A>
+<A HREF="#PG_SPECTROGRAM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_sim_run
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2008.04.22.
+
+ Purpose: Run programs on simulated data
+
+ Calling sequence:
+	pg_sim_run
+
+ Input:
+
+ Output:
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_sim_run.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_SPECTROGRAM">
+<H2>PG_SPECTROGRAM</H2></A>
+<A HREF="#PG_SIM_RUN">[Previous Routine]</A>
+<A HREF="#PG_SPECTROGRAM_SIM">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_spectrogram
+
+ Written by: Gergo Pokol (lokop@uze.net) 2002.07.16. - 2002.07.17.
+
+ Purpose: Plot the Spectrogram or the Phase of the Short Time Fourier Transform of a measurement in the Nicolet system
+
+ Calling sequence:
+	stft=pg_spectrogram( shot, channel [,trange] [,fmax] [,windowname] [,windowsize] [,masksize] [,step] $
+		[,freqres] [,plot] [,/print] [,/poster] [,/dc] [,/log] [,opt] [,/double] [,timeax=timeax] [,freqax=freqax])
+
+ Inputs:
+	shot: shot number
+	channel: channel number
+	trange (optional): timerange to view, 2 element vector; default: whole range
+ fmax (optional): frequency maximum of spectrogram (in kHz), resampled with pg_resample, Downsamples time axis!
+	windowsize (optional): length of window (standard deviation *2 for Gauss window); default: length of data / 10
+	masksize (optional): length of mask vector; default: all nonzero values
+	windowname (optional): shape of the window (available: see in pg_gen_win.pro)
+	step (optional): time steps of FFT; default: 1
+	freqres (optional): frequency resolution; default: length of data
+	plot (optional): display mode (available: 0:All, 1:Spectrogram, 2:Phase, other:None); default: 0
+	opt (optional): exponent for opimized scale visualization
+	/print (optional): Print to file instead of plotting
+	/poster (optional): Print in poster form
+	/dc (optional): without mean subtraction
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	stft: STFT of signal
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+
+ Modification:
+	Gergo Pokol 2002.07.18: Title added
+	Gergo Pokol 2003.03.25: Changes in title
+				Changes in the use of pg_stft
+	Gergo Pokol 2003.03.31: Output added
+	Gergo Pokol 2003.04.15: Frequency resolution added
+	Gergo Pokol 2003.05.22: dt output added
+	Gergo Pokol 2003.06.12: Moved to pg_spectrogram_sim
+       Gergely Papp 2008.11.14: added fmax switch - frequency maximum
+       	of spectrogram, resampled with pg_resample, fmax is in kHz!!
+       Gergely Papp 2008.11.24: added ID as optional parameter, for
+       	better identification
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_spectrogram.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_SPECTROGRAM_SIM">
 <H2>PG_SPECTROGRAM_SIM</H2></A>
-<A HREF="#PG_SCALOGRAM_SIM2">[Previous Routine]</A>
+<A HREF="#PG_SPECTROGRAM">[Previous Routine]</A>
 <A HREF="#PG_STFT">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -2551,13 +4252,13 @@ NAME: pg_plot4
  EXAMPLE:
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_spectrogram_sim.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_spectrogram_sim.pro)</STRONG><P>
 <HR>
  
 <A NAME="PG_STFT">
 <H2>PG_STFT</H2></A>
 <A HREF="#PG_SPECTROGRAM_SIM">[Previous Routine]</A>
-<A HREF="#PI_LOADNCOL">[Next Routine]</A>
+<A HREF="#PG_WINSCAN">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
  Name: pg_stft
@@ -2596,12 +4297,97 @@ NAME: pg_plot4
 	Gergo Pokol 2004.02.11: FFT norming factor added
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_stft.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_stft.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_WINSCAN">
+<H2>PG_WINSCAN</H2></A>
+<A HREF="#PG_STFT">[Previous Routine]</A>
+<A HREF="#PG_WINSCAN2">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_winscan
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2003.12.23.
+
+ Purpose: Plot time integrated Spectrogram as a function of windowsize for a measurement in the Nicolet system
+
+ Calling sequence:
+	winscan=pg_winscan(shot, channel [,trange] [,windowname] [,windowsize] [,masksize] [,step] $
+		[,freqres] [,plot] [,/print] [,/dc] [,/log] [,opt] [,/double] [,timeax=timeax] [,freqax=freqax])
+
+ Inputs:
+	shot: shot number
+	channel: channel number
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	windowsize (optional): length of window (standard deviation *2 for Gauss window); default: [1,500]
+	masksize (optional): length of mask vector (must be GT max(windowsize)); default: all nonzero values
+	windowname (optional): shape of the window (available: see in pg_gen_win.pro)
+	step (optional): time steps of FFT; default: 1
+	freqres (optional): frequency resolution (must be GT masksize); default: length of data
+	plot (optional): Display mode (available: 0: Plot time integrated spectrogram as a function of windowsize
+						  1: 0+time integrated spectra
+						  2: 1+time-frequency energy density distributions
+						   ; default: 0)
+	opt (optional): exponent for opimized scale visualization
+	/print (optional): Print to file instead of plotting
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	winscan: Time integrated spectrogram as a function of windowsize
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_winscan.pro)</STRONG><P>
+<HR>
+ 
+<A NAME="PG_WINSCAN2">
+<H2>PG_WINSCAN2</H2></A>
+<A HREF="#PG_WINSCAN">[Previous Routine]</A>
+<A HREF="#PI_LOADNCOL">[Next Routine]</A>
+<A HREF="#ROUTINELIST">[List of Routines]</A>
+<PRE>
+ Name: pg_winscan2
+
+ Written by: Gergo Pokol (pokol@reak.bme.hu) 2004.02.18.
+
+ Purpose: Plot time integrated Spectrogram as a function of windowsize for a measurement in the Nicolet system
+		Fast algoritm (no calculation of STFT)
+
+ Calling sequence:
+	winscan=pg_winscan2(shot, channel [,trange] [,windowname] [,windowsize] [,masksize] [,step] $
+		[,freqres] [,plot] [,/print] [,/dc] [,/log] [,opt] [,/double] [,timeax=timeax] [,freqax=freqax])
+
+ Inputs:
+	shot: shot number
+	channel: channel number
+	trange (optional): timerange to view, 2 element vector; default: whole range
+	windowsize (optional): length of window (standard deviation *2 for Gauss window); default: [1,500]
+	masksize (optional): length of mask vector (must be GT max(windowsize)); default: 4*max(windowsize)
+	windowname (optional): shape of the window (available: see in pg_gen_win.pro)
+	step (optional): time steps of FFT; default: 1
+	freqres (optional): frequency resolution (must be GT masksize); default: length of data
+	plot (optional): Display mode (available: 0: Plot time integrated spectrogram as a function of windowsize
+						  1: 0+time integrated spectra
+						   ; default: 0)
+	opt (optional): exponent for opimized scale visualization
+	/print (optional): Print to file instead of plotting
+	/log (optional): visualize on log scale (except for Phase)
+	/double (optional): double precision
+
+ Output:
+	winscan: Time integrated spectrogram as a function of windowsize
+	timeax (optional): Time axis
+	freqax (optional): Frequency axis
+
+</PRE><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_winscan2.pro)</STRONG><P>
 <HR>
  
 <A NAME="PI_LOADNCOL">
 <H2>PI_LOADNCOL</H2></A>
-<A HREF="#PG_STFT">[Previous Routine]</A>
+<A HREF="#PG_WINSCAN2">[Previous Routine]</A>
 <A HREF="#START_WEB_BROWSER">[Next Routine]</A>
 <A HREF="#ROUTINELIST">[List of Routines]</A>
 <PRE>
@@ -2635,7 +4421,7 @@ NAME: pi_loadancol
  /stringout: Return string array, no conversion to floating point
  ***************************************************************************************
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pi_loadncol.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pi_loadncol.pro)</STRONG><P>
 <HR>
  
 <A NAME="START_WEB_BROWSER">
@@ -2660,7 +4446,7 @@ NAME: pi_loadancol
 	START_WEB_BROWSER, 'www.reak.bme.hu'
 
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\start_web_browser.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\start_web_browser.pro)</STRONG><P>
 <HR>
  
 <A NAME="WV_FN_COIFLET">
@@ -2719,7 +4505,7 @@ NAME: pi_loadancol
  MODIFICATION HISTORY:
     Written by: Chris Torrence, 1999
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_fn_coiflet.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_fn_coiflet.pro)</STRONG><P>
 <HR>
  
 <A NAME="WV_FN_DAUBECHIES">
@@ -2778,7 +4564,7 @@ NAME: pi_loadancol
  MODIFICATION HISTORY:
     Written by: Chris Torrence, 1999
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_fn_daubechies.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_fn_daubechies.pro)</STRONG><P>
 <HR>
  
 <A NAME="WV_FN_HAAR">
@@ -2829,7 +4615,7 @@ NAME: pi_loadancol
  MODIFICATION HISTORY:
     Written by: Chris Torrence, 1999
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_fn_haar.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_fn_haar.pro)</STRONG><P>
 <HR>
  
 <A NAME="WV_FN_SYMLET">
@@ -2887,7 +4673,7 @@ NAME: pi_loadancol
  MODIFICATION HISTORY:
     Written by: Chris Torrence, 1999
 </PRE><P>
-<STRONG>(See A:\3programs\NTI_Wavelet_Tools\branches\AUG_NTI_Wavelet_Tools_released\pg_fn_symlet.pro)</STRONG><P>
+<STRONG>(See A:\3programs\NTI_Wavelet_Tools\trunk\pg_fn_symlet.pro)</STRONG><P>
 <HR>
  
 </body>
