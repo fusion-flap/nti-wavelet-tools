@@ -7,6 +7,7 @@ Created on Sat Jul 27 12:22:10 2019
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+from scipy import io
 sys.path.append('./LIB')
 import datetime as dttm
 import calendar as clndr
@@ -14,6 +15,7 @@ import calendar as clndr
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+
 
 # load UI
 qtCreatorFile = "gui_layout.ui"
@@ -37,6 +39,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.timeax = []
         self.channelselection = []
         self.channelnumberLabel.setText(str(len(self.channelselection)))
+        #self.loaded_sav = []
         
         #settings
         
@@ -48,29 +51,49 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
             ####LOAD SIGNAL HERE####
-            
-            ###code missing filled up with random stuff
-            
-            ########################
-            self.channelID = ['Ch1', 'Ch2', 'Ch3','Ch1', 'Ch2', 'Ch3','Ch1', 'Ch2', 'Ch3','Ch1', 'Ch2', 'Ch3']
-            self.channelphi = np.array([0.,10.,20.])
-            self.channeltheta = np.array([1,2,3])
-            self.channelrho = np.array([1,2,3])
-            self.channelselection = np.zeros(len(self.channelID))
-            
-            n = 10000
-            self.data = np.random.randn(3,n)
-            fs = 200e3 #Hz
-            dt = 1./fs
-            self.timeax = np.arange(n)*dt
-                                   
-            self.progresslogTextEdit.append('Signal loaded!')
-            self.datapointsLabel.setText(str(len(self.timeax)))
-            self.samplingfrequencyLabel.setText('{:.2f}'.format(fs/1000.) + ' kHz')
-            self.timerangeLabel.setText('{:.3f}'.format(self.timeax[0])+' - '+'{:.3f}'.format(self.timeax[-1])+' s')
+            if path[-4:] == ".sav":
+                self.progresslogTextEdit.append("Loading sav file...")
+                loaded_sav = io.readsav(path, python_dict=True)
+
+                self.channelID = ['Ch1', 'Ch2', 'Ch3', 'Ch1', 'Ch2', 'Ch3', 'Ch1', 'Ch2', 'Ch3', 'Ch1', 'Ch2', 'Ch3']
+                self.channelphi = np.array([0., 10., 20.])
+                self.channeltheta = np.array([1, 2, 3])
+                self.channelrho = np.array([1, 2, 3])
+                self.channelselection = np.zeros(len(self.channelID))
+
+                self.timeax = np.array(loaded_sav['timeax'])
+                n = self.timeax.size
+                self.data = np.array(loaded_sav['data'])
+                dt = (max(self.timeax)-min(self.timeax))/n
+                fs = 1 / dt
+
+                self.datapointsLabel.setText(str(len(self.timeax)))
+                self.samplingfrequencyLabel.setText('{:.2f}'.format(fs / 1000.) + ' kHz')
+                self.timerangeLabel.setText(
+                    '{:.3f}'.format(self.timeax[0]) + ' - ' + '{:.3f}'.format(self.timeax[-1]) + ' s')
+
+                self.progresslogTextEdit.append("Loaded " + path)
+
+            else:
+                self.channelID = ['Ch1', 'Ch2', 'Ch3','Ch1', 'Ch2', 'Ch3','Ch1', 'Ch2', 'Ch3','Ch1', 'Ch2', 'Ch3']
+                self.channelphi = np.array([0.,10.,20.])
+                self.channeltheta = np.array([1,2,3])
+                self.channelrho = np.array([1,2,3])
+                self.channelselection = np.zeros(len(self.channelID))
+
+                n = 10000
+                self.data = np.random.randn(3,n)
+                fs = 200e3 #Hz
+                dt = 1./fs
+                self.timeax = np.arange(n)*dt
+
+                self.progresslogTextEdit.append("Unknown data format, random data loaded")
+                self.datapointsLabel.setText(str(len(self.timeax)))
+                self.samplingfrequencyLabel.setText('{:.2f}'.format(fs/1000.) + ' kHz')
+                self.timerangeLabel.setText('{:.3f}'.format(self.timeax[0])+' - '+'{:.3f}'.format(self.timeax[-1])+' s')
         except:
-            self.progresslogTextEdit.append('cica')
-    
+            self.progresslogTextEdit.append('Loading ERROR')
+
     def selectchannels(self):
         def setchannelsselected(self):
             print('thing')
