@@ -1,3 +1,5 @@
+import flap
+
 def convert_dict_to_flap(input_dict, skip_keys=[], create_channel_no=False):
     # input_dict: a NTI wavelet tools sav file loaded as a python dictionary,
     # preferably loaded with the io.readsav command
