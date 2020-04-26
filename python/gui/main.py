@@ -79,13 +79,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
         except:
             self.progresslogTextEdit.append('Loading ERROR')  
-            
+           
         if self.loadSuccessful is True:
             self.updateSignalParameters()
+        self.savesignalButton.setEnabled(self.loadSuccessful)
+        # self.selectchannelsButton.setEnabled(self.loadSuccessful)
+        self.calcgroupBox.setEnabled(self.loadSuccessful)
         
     def savesignal(self):
         try:
-            flap.save(self.data, filename="saved_flap.flapdata")
+            path = QtWidgets.QFileDialog.getSaveFileName()[0]
+            filename = (path.split('/'))[-1]+'.flapdata'
+            flap.save(self.data, filename=filename)
             self.progresslogTextEdit.append("Saved signals")
         except:
             self.progresslogTextEdit.append('Saving ERROR')
