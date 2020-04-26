@@ -38,17 +38,22 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.data = []
 
         # settings
-
+        self.loadSuccessful = False
         # connect buttons
         self.loadsignalButton.clicked.connect(self.loadsignal)
         self.savesignalButton.clicked.connect(self.savesignal)
+        
         self.selectchannelsButton.clicked.connect(self.selectchannels)
+
+        self.stftRadioButton.toggled.connect(self.setOtherGrey)
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
+        
+        self.domodenumbersCheckBox.clicked.connect(self.setGrey)
 
     def loadsignal(self):
+        self.loadSuccessful = False
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
-            ####LOAD SIGNAL HERE####
             if path[-9:] == ".flapdata":
                 self.progresslogTextEdit.append('Loading flap object...')
                 flap_object = flap.load(path)
@@ -59,20 +64,25 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 # self.samplingfrequencyLabel.setText('{:.2f}'.format(fs / 1000.) + ' kHz')
                 # self.timerangeLabel.setText(
                 #     '{:.3f}'.format(self.timeax[0]) + ' - ' + '{:.3f}'.format(self.timeax[-1]) + ' s')
-
+                self.loadSuccessful = True
+                
             elif path[-4:] == ".sav":
                 self.progresslogTextEdit.append("Loading sav file...")
+                self.progresslogTextEdit.append(path)
                 loaded_sav = io.readsav(path, python_dict=True)
                 flap_object = convert_dict_to_flap.convert_dict_to_flap(loaded_sav)
                 self.data = flap_object
                 self.progresslogTextEdit.append("Loaded " + path)
                 self.progresslogTextEdit.append(str(flap.list_data_objects(flap_object)))
-
+                self.loadSuccessful = True
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
         except:
-            self.progresslogTextEdit.append('Loading ERROR')
-
+            self.progresslogTextEdit.append('Loading ERROR')  
+            
+        if self.loadSuccessful is True:
+            self.updateSignalParameters()
+        
     def savesignal(self):
         try:
             flap.save(self.data, filename="saved_flap.flapdata")
@@ -102,6 +112,30 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progresslogTextEdit.append('Quick and dirty button pressed')
         ### update stft settings
 
+    def updateSignalParameters(self):
+        #get information from flap-object >> self.data
+        n = 10000
+        self.datapointsLabel.setText(str(n))
+        fs = 2e3
+        self.samplingfrequencyLabel.setText('{:.0f}'.format(fs)+' kHz')
+        dt = 20*1000 #ms
+        self.timerangeLabel.setText('{:.0f}'.format(dt)+' ms')
+    
+    def setOtherGrey(self):
+        self.stftwindowtypeComboBox.setEnabled(self.stftRadioButton.isChecked())
+        self.stftlengthLineEdit.setEnabled(self.stftRadioButton.isChecked())
+        
+        self.cwtwindowtypeComboBox.setEnabled(self.cwtRadioButton.isChecked())
+        self.cwtorderLineEdit.setEnabled(self.cwtRadioButton.isChecked())
+        self.cwtscaleLineEdit.setEnabled(self.cwtRadioButton.isChecked())
+        
+    def setGrey(self):
+        self.toroidalCheckBox.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.poloidalCheckBox.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.averageLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.modelowLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
 
 class graph():
     '''

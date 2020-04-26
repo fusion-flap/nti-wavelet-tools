@@ -38,7 +38,7 @@
      <property name="title">
       <string>Transform</string>
      </property>
-     <widget class="QLineEdit" name="l0line">
+     <widget class="QLineEdit" name="stftlengthLineEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -73,8 +73,14 @@
         <height>21</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Downsampling frequency [kHz]</string>
+      </property>
+      <property name="toolTipDuration">
+       <number>2</number>
+      </property>
       <property name="text">
-       <string>Window length:</string>
+       <string>Sampl. freq:</string>
       </property>
      </widget>
      <widget class="QLabel" name="firsttime_5">
@@ -87,10 +93,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>Sampling frequency:</string>
+       <string>Window length:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_2">
+     <widget class="QLineEdit" name="samplingfreqLineEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -116,7 +122,7 @@
        <string>Quicky and dirty settings</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="stftwindowtypeComboBox">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -125,6 +131,19 @@
         <height>22</height>
        </rect>
       </property>
+      <property name="currentText">
+       <string>gaussian</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>gaussian</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>box</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="firsttime_8">
       <property name="geometry">
@@ -139,7 +158,7 @@
        <string>Step:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_3">
+     <widget class="QLineEdit" name="stepLineEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -152,7 +171,7 @@
        <string>5</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton">
+     <widget class="QRadioButton" name="stftRadioButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -164,8 +183,11 @@
       <property name="text">
        <string>STFT</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_2">
+     <widget class="QRadioButton" name="cwtRadioButton">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -178,7 +200,10 @@
        <string>Wavelet</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_2">
+     <widget class="QComboBox" name="cwtwindowtypeComboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -187,6 +212,16 @@
         <height>22</height>
        </rect>
       </property>
+      <item>
+       <property name="text">
+        <string>gaussian</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>box</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="firsttime_16">
       <property name="geometry">
@@ -201,7 +236,10 @@
        <string>Window type:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_8">
+     <widget class="QLineEdit" name="cwtorderLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -224,10 +262,13 @@
        </rect>
       </property>
       <property name="text">
-       <string>Order</string>
+       <string>Order:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_9">
+     <widget class="QLineEdit" name="cwtscaleLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -250,7 +291,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Discret scale</string>
+       <string>Discret scale:</string>
       </property>
      </widget>
      <widget class="QProgressBar" name="progressBar_2">
@@ -289,10 +330,13 @@
        </rect>
       </property>
       <property name="text">
-       <string>Averaging</string>
+       <string>Averaging:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_4">
+     <widget class="QLineEdit" name="averageLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>340</x>
@@ -305,7 +349,10 @@
        <string>5</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_5">
+     <widget class="QLineEdit" name="modelowLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>340</x>
@@ -328,10 +375,13 @@
        </rect>
       </property>
       <property name="text">
-       <string>Modenumber range</string>
+       <string>Modenumber range:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_6">
+     <widget class="QLineEdit" name="modehighLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>410</x>
@@ -357,7 +407,10 @@
        <string>Step:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="l0line_7">
+     <widget class="QLineEdit" name="modestepLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>340</x>
@@ -370,7 +423,7 @@
        <string>1</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="domodenumbersCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -383,7 +436,10 @@
        <string>Should I do mode number calculation?</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_2">
+     <widget class="QCheckBox" name="toroidalCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -396,7 +452,10 @@
        <string>Toroidal</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_3">
+     <widget class="QCheckBox" name="poloidalCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -512,7 +571,7 @@
       <string>Load signal</string>
      </property>
     </widget>
-	<widget class="QPushButton" name="savesignalButton">
+    <widget class="QPushButton" name="savesignalButton">
      <property name="geometry">
       <rect>
        <x>85</x>
