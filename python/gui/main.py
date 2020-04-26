@@ -58,12 +58,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.progresslogTextEdit.append('Loading flap object...')
                 flap_object = flap.load(path)
                 self.data = flap_object
-                self.progresslogTextEdit.append("Loaded " + path)
-                self.progresslogTextEdit.append(str(flap.list_data_objects(flap_object)))
-                # self.datapointsLabel.setText(str(len(self.timeax)))
-                # self.samplingfrequencyLabel.setText('{:.2f}'.format(fs / 1000.) + ' kHz')
-                # self.timerangeLabel.setText(
-                #     '{:.3f}'.format(self.timeax[0]) + ' - ' + '{:.3f}'.format(self.timeax[-1]) + ' s')
                 self.loadSuccessful = True
                 
             elif path[-4:] == ".sav":
@@ -72,16 +66,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 loaded_sav = io.readsav(path, python_dict=True)
                 flap_object = convert_dict_to_flap.convert_dict_to_flap(loaded_sav)
                 self.data = flap_object
-                self.progresslogTextEdit.append("Loaded " + path)
-                self.progresslogTextEdit.append(str(flap.list_data_objects(flap_object)))
                 self.loadSuccessful = True
+                
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
         except:
             self.progresslogTextEdit.append('Loading ERROR')  
            
         if self.loadSuccessful is True:
+            self.progresslogTextEdit.append("Loaded " + path)
             self.updateSignalParameters()
+        
         self.savesignalButton.setEnabled(self.loadSuccessful)
         # self.selectchannelsButton.setEnabled(self.loadSuccessful)
         self.calcgroupBox.setEnabled(self.loadSuccessful)
@@ -91,7 +86,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             path = QtWidgets.QFileDialog.getSaveFileName()[0]
             filename = (path.split('/'))[-1]+'.flapdata'
             flap.save(self.data, filename=filename)
-            self.progresslogTextEdit.append("Saved signals")
+            self.progresslogTextEdit.append('Saved signals')
         except:
             self.progresslogTextEdit.append('Saving ERROR')
 
