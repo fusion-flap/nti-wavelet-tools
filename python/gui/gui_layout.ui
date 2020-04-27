@@ -728,7 +728,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Number of selected channel:</string>
+     <string>Number of selected channels:</string>
     </property>
    </widget>
    <widget class="QLabel" name="channelnumberLabel">

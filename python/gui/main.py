@@ -33,12 +33,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.progresslogTextEdit.append('Welcome!')
-
+        # checkbox list for select channel
+        self.CB = []
+        self.selectedChannels = []
         # data storage structures
         self.data = []
 
         # settings
         self.loadSuccessful = False
+        
         # connect buttons
         self.loadsignalButton.clicked.connect(self.loadsignal)
         self.savesignalButton.clicked.connect(self.savesignal)
@@ -78,7 +81,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.updateSignalParameters()
         
         self.savesignalButton.setEnabled(self.loadSuccessful)
-        # self.selectchannelsButton.setEnabled(self.loadSuccessful)
+        self.selectchannelsButton.setEnabled(self.loadSuccessful)
         self.calcgroupBox.setEnabled(self.loadSuccessful)
         
     def savesignal(self):
@@ -91,22 +94,47 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.progresslogTextEdit.append('Saving ERROR')
 
     def selectchannels(self):
-        def setchannelsselected(self):
-            print('thing')
-
-        self.progresslogTextEdit.append('Select channels button pressed')
-        Ui_ChannelsWindow, _ = uic.loadUiType(qtChannelsFile)
-        self.channelswindow = QtWidgets.QMainWindow()
-        Ui_ChannelsWindow.__init__(self.channelswindow)
-        bt = QtWidgets.QPushButton('Select', self.channelswindow)
-        bt.move(0, 0)
-        bt.clicked.connect(setchannelsselected)
+        # reset selected channels
+        self.selectedChannels = []
+        
+        # init window
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_ChannelsWindow()
+        self.ui.setupUi(self.window)
+        
+        # define buttons
+        def selectAll():
+            for cb in self.CB:
+                cb.setChecked(True)
+        def deselectAll():
+            for cb in self.CB:
+                cb.setChecked(False)
+        def returnSelected():
+            self.progresslogTextEdit.append('Selected channels:')
+            j = 0
+            for i, cb in enumerate(self.CB):
+                self.selectedChannels.append(cb.isChecked())
+                if cb.isChecked():
+                    self.progresslogTextEdit.append(self.channelID[i])
+                    j+=1
+            self.progresslogTextEdit.append('----====----')
+            self.channelnumberLabel.setText(str(j))
+            self.window.close()
+            
+        # test list to be filled with values from FLAP
+        self.channelID = ['MHA-B31-14','MHA-B31-15','MHA-B31-16','MHA-B31-17','MHA-B31-18','MHA-B31-19','MHA-B31-20','MHA-B31-21']
         channelCB = []
         for i in range(len(self.channelID)):
-            w = QtWidgets.QCheckBox(self.channelID[i], self.channelswindow)
-            w.move(100, i * 20)
+            w = QtWidgets.QCheckBox(self.channelID[i], self.window)
+            w.setObjectName(self.channelID[i]+'CheckBox')
+            w.move(120, i * 20)
             channelCB.append(w)
-        self.channelswindow.show()
+        self.CB = channelCB
+
+        self.ui.selectallButton.clicked.connect(selectAll)
+        self.ui.deselectallButton.clicked.connect(deselectAll)
+        self.ui.doneButton.clicked.connect(returnSelected)
+        self.window.show()
 
     def quickanddirtysetting(self):
         self.progresslogTextEdit.append('Quick and dirty button pressed')
