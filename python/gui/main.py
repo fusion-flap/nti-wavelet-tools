@@ -35,7 +35,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progresslogTextEdit.append('Welcome!')
         # checkbox list for select channel
         self.CB = []
-        self.selectedChannels = []
+        self.channelSelected = []
         # data storage structures
         self.data = []
 
@@ -79,10 +79,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.loadSuccessful is True:
             self.progresslogTextEdit.append("Loaded " + path)
             self.updateSignalParameters()
-        
+            # set selected channels to empty
+            self.channelSelected = []
+            self.channelnumberLabel.setText(str(0))
         self.savesignalButton.setEnabled(self.loadSuccessful)
         self.selectchannelsButton.setEnabled(self.loadSuccessful)
         self.calcgroupBox.setEnabled(self.loadSuccessful)
+        
         
     def savesignal(self):
         try:
@@ -94,9 +97,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.progresslogTextEdit.append('Saving ERROR')
 
     def selectchannels(self):
-        # reset selected channels
-        self.selectedChannels = []
-        
         # init window
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_ChannelsWindow()
@@ -112,8 +112,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         def returnSelected():
             self.progresslogTextEdit.append('Selected channels:')
             j = 0
+            self.channelSelected = []
             for i, cb in enumerate(self.CB):
-                self.selectedChannels.append(cb.isChecked())
+                self.channelSelected.append(cb.isChecked())
                 if cb.isChecked():
                     self.progresslogTextEdit.append(self.channelID[i])
                     j+=1
@@ -122,15 +123,19 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.window.close()
             
         # test list to be filled with values from FLAP
+        # set up checkBox with channel IDs
         self.channelID = ['MHA-B31-14','MHA-B31-15','MHA-B31-16','MHA-B31-17','MHA-B31-18','MHA-B31-19','MHA-B31-20','MHA-B31-21']
         channelCB = []
         for i in range(len(self.channelID)):
             w = QtWidgets.QCheckBox(self.channelID[i], self.window)
             w.setObjectName(self.channelID[i]+'CheckBox')
             w.move(120, i * 20)
+            if (self.channelSelected != []) and (self.channelSelected[i] is True):
+                w.setChecked(True)
             channelCB.append(w)
         self.CB = channelCB
-
+        
+        # connect buttons
         self.ui.selectallButton.clicked.connect(selectAll)
         self.ui.deselectallButton.clicked.connect(deselectAll)
         self.ui.doneButton.clicked.connect(returnSelected)
