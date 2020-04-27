@@ -5,13 +5,13 @@ Created on Sat Jul 27 12:22:10 2019
 @author: poloskei
 """
 import matplotlib.pyplot as plt
-import numpy as np
+# import numpy as np
 import sys
 from scipy import io
 
 sys.path.append('./LIB')
-import datetime as dttm
-import calendar as clndr
+# import datetime as dttm
+# import calendar as clndr
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -26,7 +26,6 @@ qtChannelsFile = "channel_selection.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 Ui_ChannelsWindow, _ = uic.loadUiType(qtChannelsFile)
 
-
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -38,19 +37,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.channelSelected = []
         # data storage structures
         self.data = []
-
         # settings
         self.loadSuccessful = False
-        
         # connect buttons
         self.loadsignalButton.clicked.connect(self.loadsignal)
         self.savesignalButton.clicked.connect(self.savesignal)
-        
         self.selectchannelsButton.clicked.connect(self.selectchannels)
-
         self.stftRadioButton.toggled.connect(self.setOtherGrey)
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
-        
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
 
     def loadsignal(self):
@@ -62,7 +56,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 flap_object = flap.load(path)
                 self.data = flap_object
                 self.loadSuccessful = True
-                
             elif path[-4:] == ".sav":
                 self.progresslogTextEdit.append("Loading sav file...")
                 self.progresslogTextEdit.append(path)
@@ -70,12 +63,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 flap_object = convert_dict_to_flap.convert_dict_to_flap(loaded_sav)
                 self.data = flap_object
                 self.loadSuccessful = True
-                
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
         except:
-            self.progresslogTextEdit.append('Loading ERROR')  
-           
+            self.progresslogTextEdit.append('Loading ERROR')
         if self.loadSuccessful is True:
             self.progresslogTextEdit.append("Loaded " + path)
             self.updateSignalParameters()
@@ -84,9 +75,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.channelnumberLabel.setText(str(0))
         self.savesignalButton.setEnabled(self.loadSuccessful)
         self.selectchannelsButton.setEnabled(self.loadSuccessful)
-        self.calcgroupBox.setEnabled(self.loadSuccessful)
-        
-        
     def savesignal(self):
         try:
             path = QtWidgets.QFileDialog.getSaveFileName()[0]
@@ -98,10 +86,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def selectchannels(self):
         # init window
-        self.window = QtWidgets.QMainWindow()
+        self.window = QtWidgets.QDialog()
+        self.window.setModal(True) #disable main window until channels being selected
+
         self.ui = Ui_ChannelsWindow()
         self.ui.setupUi(self.window)
-        
         # define buttons
         def selectAll():
             for cb in self.CB:
@@ -117,14 +106,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.channelSelected.append(cb.isChecked())
                 if cb.isChecked():
                     self.progresslogTextEdit.append(self.channelID[i])
-                    j+=1
+                    j += 1
             self.progresslogTextEdit.append('----====----')
             self.channelnumberLabel.setText(str(j))
-            self.window.close()
-            
+            if j > 0:
+                self.calcgroupBox.setEnabled(self.loadSuccessful)
+            else:
+                self.calcgroupBox.setEnabled(False)
+            self.window.close()    
         # test list to be filled with values from FLAP
         # set up checkBox with channel IDs
-        self.channelID = ['MHA-B31-14','MHA-B31-15','MHA-B31-16','MHA-B31-17','MHA-B31-18','MHA-B31-19','MHA-B31-20','MHA-B31-21']
+        self.channelID = ['MHA-B31-14', 'MHA-B31-15', 'MHA-B31-16', 'MHA-B31-17', 
+                          'MHA-B31-18', 'MHA-B31-19', 'MHA-B31-20', 'MHA-B31-21']
         channelCB = []
         for i in range(len(self.channelID)):
             w = QtWidgets.QCheckBox(self.channelID[i], self.window)
@@ -134,7 +127,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 w.setChecked(True)
             channelCB.append(w)
         self.CB = channelCB
-        
         # connect buttons
         self.ui.selectallButton.clicked.connect(selectAll)
         self.ui.deselectallButton.clicked.connect(deselectAll)
@@ -157,7 +149,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def setOtherGrey(self):
         self.stftwindowtypeComboBox.setEnabled(self.stftRadioButton.isChecked())
         self.stftlengthLineEdit.setEnabled(self.stftRadioButton.isChecked())
-        
         self.cwtwindowtypeComboBox.setEnabled(self.cwtRadioButton.isChecked())
         self.cwtorderLineEdit.setEnabled(self.cwtRadioButton.isChecked())
         self.cwtscaleLineEdit.setEnabled(self.cwtRadioButton.isChecked())
@@ -276,3 +267,4 @@ if __name__ == "__main__":
     window = MyApp()
     window.show()
     sys.exit(app.exec_())
+    
