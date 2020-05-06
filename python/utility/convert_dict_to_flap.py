@@ -18,7 +18,7 @@ def convert_dict_to_flap(input_dict, skip_keys=[], create_channel_no=False):
                                   unit="s",
                                   mode=flap.CoordinateMode(equidistant=True),
                                   start=input_dict["timeax"][0],
-                                  step=input_dict["timeax"][1] - input_dict["timeax"][0],
+                                  step=(input_dict["timeax"][-1] - input_dict["timeax"][0])/len(input_dict["timeax"]),
                                   # values=loaded_sav["timeax"]
                                   dimension_list=[1]
                                   )
