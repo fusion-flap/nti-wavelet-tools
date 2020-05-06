@@ -39,6 +39,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.data = []
         # settings
         self.loadSuccessful = False
+        # signal processing parameters
+        self.defaultTransformParameters()
         # connect buttons
         self.loadsignalButton.clicked.connect(self.loadsignal)
         self.savesignalButton.clicked.connect(self.savesignal)
@@ -46,7 +48,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.stftRadioButton.toggled.connect(self.setOtherGrey)
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
-
+    def defaultTransformParameters(self):
+        self.transformParameters = {}
+        self.transformParameters['type'] = 'STFT'
+        self.transformParameters['step'] = 5
+        self.transformParameters['fd'] = 300 # kHz
+        self.transformParameters['window'] = 'gaussian'
+        self.transformParameters['windowlength'] = 200 # data point
+        self.transformParameters['order'] = 5
+        self.transformParameters['scale'] = 0.1
+        
     def loadsignal(self):
         self.loadSuccessful = False
         try:
@@ -60,6 +71,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.progresslogTextEdit.append("Loading sav file...")
                 self.progresslogTextEdit.append(path)
                 loaded_sav = io.readsav(path, python_dict=True)
+                # print(loaded_sav)
                 flap_object = convert_dict_to_flap.convert_dict_to_flap(loaded_sav)
                 self.data = flap_object
                 self.loadSuccessful = True
@@ -68,9 +80,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         except:
             self.progresslogTextEdit.append('Loading ERROR')
         if self.loadSuccessful is True:
-            self.progresslogTextEdit.append("Loaded " + path)
+            self.progresslogTextEdit.append("Loaded")
             self.updateSignalParameters()
-            # set selected channels to empty
+            # reset selected channels to empty
             self.channelSelected = []
             self.channelnumberLabel.setText(str(0))
         self.savesignalButton.setEnabled(self.loadSuccessful)
@@ -114,10 +126,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 self.calcgroupBox.setEnabled(False)
             self.window.close()    
-        # test list to be filled with values from FLAP
         # set up checkBox with channel IDs
-        self.channelID = ['MHA-B31-14', 'MHA-B31-15', 'MHA-B31-16', 'MHA-B31-17', 
-                          'MHA-B31-18', 'MHA-B31-19', 'MHA-B31-20', 'MHA-B31-21']
         channelCB = []
         for i in range(len(self.channelID)):
             w = QtWidgets.QCheckBox(self.channelID[i], self.window)
@@ -138,13 +147,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         ### update stft settings
 
     def updateSignalParameters(self):
-        #get information from flap-object >> self.data
-        n = 10000
+        self.channelID = []
+        n = self.data.data.shape[-1]
         self.datapointsLabel.setText(str(n))
-        fs = 2e3
+        _time = self.data.get_coordinate_object('Time') #presumably in [s] 2b checked
+        fs = 1./_time.step[0]/1000 # kHz
         self.samplingfrequencyLabel.setText('{:.0f}'.format(fs)+' kHz')
-        dt = 20*1000 #ms
+        dt = n/fs #ms
         self.timerangeLabel.setText('{:.0f}'.format(dt)+' ms')
+        _id = self.data.get_coordinate_object('Channels').values
+        for ch in _id:
+            self.channelID.append(str(ch).replace("'","").replace("b",""))
     
     def setOtherGrey(self):
         self.stftwindowtypeComboBox.setEnabled(self.stftRadioButton.isChecked())
