@@ -74,9 +74,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 loaded_sav = io.readsav(path, python_dict=True)
                 # print(loaded_sav)
                 try:
-                    flap_object = convert_dict_to_flap.convert_dict_to_flap(loaded_sav)
-                except TypeError('loaded_sav is not a dictionary'):
-                    self.progresslogTextEdit.append('loaded_sav is not a dictionary')
+                    flap_object = convert_dict_to_flap.convert_raw(loaded_sav)
+                except TypeError('loaded_sav is not a dictionary of a raw sav file'):
+                    self.progresslogTextEdit.append('loaded_sav is not a dictionary of a raw sav file')
                 self.data = flap_object
                 self.loadSuccessful = True
             else:
