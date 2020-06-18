@@ -74,4 +74,6 @@ def convert_dict_to_flap(input_dict, skip_keys, create_channel_no=False):
         data_shape=input_dict['data'].shape,
     )
 
+    flap_object.history = [input_dict["data_history"], input_dict["coord_history"]]
+
     return flap_object
