@@ -18,7 +18,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import flap
 
-sys.path.append(r"E:\marci main\Fusion\nti-wavelet-tools\python\utility")
+
 import convert_dict_to_flap
 
 # load UI
@@ -60,6 +60,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.transformParameters['scale'] = 0.1
         
     def loadsignal(self):
+        global flap_object
         self.loadSuccessful = False
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
@@ -74,7 +75,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 loaded_sav = io.readsav(path, python_dict=True)
                 # print(loaded_sav)
                 try:
-                    flap_object = convert_dict_to_flap.convert_raw(loaded_sav)
+                    flap_object = convert_dict_to_flap.convert_dict_to_flap(loaded_sav)
                 except TypeError('loaded_sav is not a dictionary'):
                     self.progresslogTextEdit.append('loaded_sav is not a dictionary')
                 self.data = flap_object
