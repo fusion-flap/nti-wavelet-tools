@@ -60,7 +60,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.transformParameters['scale'] = 0.1
         
     def loadsignal(self):
-        global flap_object
         self.loadSuccessful = False
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
