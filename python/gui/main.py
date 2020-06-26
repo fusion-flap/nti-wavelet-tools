@@ -17,7 +17,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import flap
-
+import logging
 
 sys.path.append(r"..\utility")
 import convert_dict_to_flap
@@ -27,6 +27,14 @@ qtCreatorFile = "gui_layout.ui"
 qtChannelsFile = "channel_selection.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 Ui_ChannelsWindow, _ = uic.loadUiType(qtChannelsFile)
+
+
+logging.basicConfig(filename='log.log',
+                    filemode='w',
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%y.%b.%d. %H:%M:%S',
+                    level=logging.INFO)
+ui_logger = logging.getLogger('ui_logger')
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -66,28 +74,35 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
             if path[-9:] == ".flapdata":
                 self.progresslogTextEdit.append('Loading flap object...')
+                ui_logger.info('Loading flap object: '+path)
                 flap_object = flap.load(path)
                 self.data = flap_object
                 self.loadSuccessful = True
             elif path[-4:] == ".sav":
                 self.progresslogTextEdit.append("Loading sav file...")
-                self.progresslogTextEdit.append(path)
+                ui_logger.info("Loading sav file: "+path)
                 loaded_sav = io.readsav(path, python_dict=True)
                 # print(loaded_sav)
                 try:
                     flap_object = convert_dict_to_flap.convert_raw(loaded_sav)
+                    self.data = flap_object
+                    self.loadSuccessful = True
                 except TypeError('loaded_sav is not a dictionary of a raw sav file'):
                     self.progresslogTextEdit.append('loaded_sav is not a dictionary of a raw sav file')
-                self.data = flap_object
-                self.loadSuccessful = True
+                    ui_logger.error('loaded_sav is not a dictionary of a raw sav file', exc_info=True)
+                except Exception as e:
+                    ui_logger.error("Exception occurred during dict to flap conversion:", exc_info=True)
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
+                ui_logger.warning("Unknown data format, no data loaded")
 
-        except:
+        except Exception as e:
             self.progresslogTextEdit.append('Loading ERROR')
+            ui_logger.error('Error during loading', exc_info=True)
 
         if self.loadSuccessful is True:
-            self.progresslogTextEdit.append("Loaded")
+            self.progresslogTextEdit.append("File loaded")
+            ui_logger.info("File loaded")
             self.updateSignalParameters()
             # reset selected channels to empty
             self.channelSelected = []
@@ -100,8 +115,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             filename = (path.split('/'))[-1]+'.flapdata'
             flap.save(self.data, filename=filename)
             self.progresslogTextEdit.append('Saved signals')
-        except:
+            ui_logger.info('Saved signals to: ' + filename)
+        except Exception as e:
             self.progresslogTextEdit.append('Saving ERROR')
+            ui_logger.error('Error during saving', exc_info=True)
 
     def selectchannels(self):
         # init window
@@ -119,6 +136,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 cb.setChecked(False)
         def returnSelected():
             self.progresslogTextEdit.append('Selected channels:')
+            ui_logger.info('Selected channels')
             j = 0
             self.channelSelected = []
             for i, cb in enumerate(self.CB):
@@ -151,6 +169,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def quickanddirtysetting(self):
         self.progresslogTextEdit.append('Quick and dirty button pressed')
+        ui_logger.info('Quick and dirty button pressed')
         ### update stft settings
 
     def updateSignalParameters(self):
