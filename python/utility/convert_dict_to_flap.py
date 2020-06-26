@@ -1,7 +1,7 @@
 import flap
 
 
-def convert_raw(input_dict, skip_keys, create_channel_no=False):
+def convert_raw(input_dict, skip_keys=[], create_channel_no=False):
     # input_dict: a NTI wavelet tools sav file loaded as a python dictionary,
     # preferably loaded with the io.readsav command
 
