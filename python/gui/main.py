@@ -19,6 +19,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 import flap
 
 
+sys.path.append(r"..\utility")
 import convert_dict_to_flap
 
 # load UI
