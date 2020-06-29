@@ -23,7 +23,7 @@ qtChannelsFile = "channel_selection.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 Ui_ChannelsWindow, _ = uic.loadUiType(qtChannelsFile)
 
-
+# This command does not overwrite loggers, only needed at initialization
 logging.basicConfig(filename='log.log',
                     filemode='w',
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -301,4 +301,3 @@ if __name__ == "__main__":
     window = MyApp()
     window.show()
     sys.exit(app.exec_())
-    
