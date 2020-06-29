@@ -5,13 +5,8 @@ Created on Sat Jul 27 12:22:10 2019
 @author: poloskei
 """
 import matplotlib.pyplot as plt
-# import numpy as np
 import sys
 from scipy import io
-
-sys.path.append('./LIB')
-# import datetime as dttm
-# import calendar as clndr
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
