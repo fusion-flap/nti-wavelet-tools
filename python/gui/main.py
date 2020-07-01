@@ -64,6 +64,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.transformParameters['scale'] = 0.1
         
     def loadsignal(self):
+        ui_logger.debug('Loading signal started')
         self.loadSuccessful = False
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
@@ -105,6 +106,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.savesignalButton.setEnabled(self.loadSuccessful)
         self.selectchannelsButton.setEnabled(self.loadSuccessful)
     def savesignal(self):
+        ui_logger.debug('Saving signal started')
         try:
             path = QtWidgets.QFileDialog.getSaveFileName()[0]
             filename = (path.split('/'))[-1]+'.flapdata'
@@ -116,6 +118,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             ui_logger.error('Error during saving', exc_info=True)
 
     def selectchannels(self):
+        ui_logger.debug('Selecting channels started')
         # init window
         self.window = QtWidgets.QDialog()
         self.window.setModal(True) #disable main window until channels being selected
@@ -168,6 +171,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         ### update stft settings
 
     def updateSignalParameters(self):
+        ui_logger.debug('Updating signal parameters started')
         self.channelID = []
         n = self.data.data.shape[-1]
         self.datapointsLabel.setText(str(n))
@@ -203,6 +207,7 @@ class graph():
     def __init__(self, verticalLayout, x_label=None, y_label=None,
                  scale='log', showHint=False, figure=None,
                  canvas=None, toolBar=True, sharex=None):
+        ui_logger.debug('Graph initialization started')
         plt.rcParams.update({'font.size': 12})
         if figure is None:
             self.figure = plt.Figure(dpi=100)
@@ -246,6 +251,7 @@ class graph():
         '''
         Grab background for blitting
         '''
+        ui_logger.debug('Grabbing background started')
         canvas = self.figure.canvas
         if not self.timeSpan == None:
             self.timeSpan.set_visible(False)
@@ -258,6 +264,7 @@ class graph():
         '''
         Method for dafe blitting
         '''
+        ui_logger.debug('Dafe blitting started')
         line.set_visible(True)
         self.canvas.restore_region(self.background1)
         self.canvas.mpl_disconnect(self.draw_cid)
@@ -297,6 +304,7 @@ class graph():
 
 
 if __name__ == "__main__":
+    ui_logger.debug('Application started')
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()
     window.show()
