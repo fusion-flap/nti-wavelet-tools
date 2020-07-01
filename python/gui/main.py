@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import sys
 from scipy import io
 
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5 import QtWidgets, uic
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import flap
@@ -30,6 +30,7 @@ logging.basicConfig(filename='log.log',
                     datefmt='%y.%b.%d. %H:%M:%S',
                     level=logging.INFO)
 ui_logger = logging.getLogger('ui_logger')
+
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -53,6 +54,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.stftRadioButton.toggled.connect(self.setOtherGrey)
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
+
     def defaultTransformParameters(self):
         self.transformParameters = {}
         self.transformParameters['type'] = 'STFT'
@@ -105,6 +107,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.channelnumberLabel.setText(str(0))
         self.savesignalButton.setEnabled(self.loadSuccessful)
         self.selectchannelsButton.setEnabled(self.loadSuccessful)
+
     def savesignal(self):
         ui_logger.debug('Saving signal started')
         try:
@@ -121,7 +124,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         ui_logger.debug('Selecting channels started')
         # init window
         self.window = QtWidgets.QDialog()
-        self.window.setModal(True) #disable main window until channels being selected
+        self.window.setModal(True)  # disable main window until channels being selected
 
         self.ui = Ui_ChannelsWindow()
         self.ui.setupUi(self.window)
@@ -168,21 +171,21 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def quickanddirtysetting(self):
         self.progresslogTextEdit.append('Quick and dirty button pressed')
         ui_logger.info('Quick and dirty button pressed')
-        ### update stft settings
+        # update stft settings
 
     def updateSignalParameters(self):
         ui_logger.debug('Updating signal parameters started')
         self.channelID = []
         n = self.data.data.shape[-1]
         self.datapointsLabel.setText(str(n))
-        _time = self.data.get_coordinate_object('Time') #presumably in [s] 2b checked
-        fs = 1./_time.step[0]/1000 # kHz
+        _time = self.data.get_coordinate_object('Time')  # presumably in [s] 2b checked
+        fs = 1./_time.step[0]/1000  # kHz
         self.samplingfrequencyLabel.setText('{:.0f}'.format(fs)+' kHz')
-        dt = n/fs #ms
+        dt = n/fs  # ms
         self.timerangeLabel.setText('{:.0f}'.format(dt)+' ms')
         _id = self.data.get_coordinate_object('Channels').values
         for ch in _id:
-            self.channelID.append(str(ch).replace("'","").replace("b",""))
+            self.channelID.append(str(ch).replace("'", "").replace("b", ""))
     
     def setOtherGrey(self):
         self.stftwindowtypeComboBox.setEnabled(self.stftRadioButton.isChecked())
@@ -199,6 +202,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
 
+
 class graph():
     '''
     Plot class that creates a plot on the specified verticalLayout widget.
@@ -214,7 +218,7 @@ class graph():
         else:
             self.figure = figure
 
-        if canvas == None:
+        if canvas is None:
             self.canvas = FigureCanvas(self.figure)
         else:
             self.canvas = canvas
