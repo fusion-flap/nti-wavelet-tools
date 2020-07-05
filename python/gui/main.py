@@ -54,6 +54,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.stftRadioButton.toggled.connect(self.setOtherGrey)
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
+        self.startcalculationButton.clicked.connect(self.startCalculation)
 
     def defaultTransformParameters(self):
         self.transformParameters = {}
@@ -201,7 +202,41 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modelowLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
-
+        
+    def startCalculation(self):
+        if self.checkInputs():
+            self.progresslogTextEdit.append('Doing some mathmagic')
+            for i in range(100):    
+                self.progressBar.setValue(i+1)
+                #place for some math
+        else:
+            self.progresslogTextEdit.append('Some inputs are not okay (marked red)')
+   
+    def checkInputs(self):
+        def checkIfNumber(LineEdit):
+            inputOkayColor = '#c4df9b'
+            inputNotOkayColor = '#f6989d'
+            var = LineEdit.text()
+            try:
+                _ = int(var)
+                LineEdit.setStyleSheet("background-color:"+inputOkayColor+" ;")
+                return True
+            except:
+                LineEdit.setStyleSheet("background-color:"+inputNotOkayColor+" ;")
+                return False
+        
+        i = 0 #correct input number
+        #check input parameters' validity and mark wrong ones, calculation wont be started until every parameter is correct
+        i+=checkIfNumber(self.samplingfreqLineEdit)
+        i+=checkIfNumber(self.stepLineEdit)
+        i+=checkIfNumber(self.stftlengthLineEdit)
+        i+=checkIfNumber(self.samplingfreqLineEdit)
+        i+=checkIfNumber(self.stftresolutionLineEdit)
+        # self.samplingfreqLineEdit.setStyleSheet("background-color:"+color+" ;")
+        if i == 5: #checksum for stft
+            return True
+        else :
+            return False
 
 class graph():
     '''
