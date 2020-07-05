@@ -20,8 +20,10 @@ import convert_dict_to_flap
 # load UI
 qtCreatorFile = "gui_layout.ui"
 qtChannelsFile = "channel_selection.ui"
+qtPlotOptionsFile = "plot_options.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 Ui_ChannelsWindow, _ = uic.loadUiType(qtChannelsFile)
+Ui_PlotOptionsWindow, _ = uic.loadUiType(qtPlotOptionsFile)
 
 # This command does not overwrite loggers, only needed at initialization
 logging.basicConfig(filename='log.log',
@@ -47,7 +49,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.loadSuccessful = False
         # signal processing parameters
         self.defaultTransformParameters()
-        # connect buttons
+        # connect buttons - part 1 - transform
         self.loadsignalButton.clicked.connect(self.loadsignal)
         self.savesignalButton.clicked.connect(self.savesignal)
         self.selectchannelsButton.clicked.connect(self.selectchannels)
@@ -55,6 +57,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
         self.startcalculationButton.clicked.connect(self.startCalculation)
+        # connect buttons - part 2 - plotting
+        self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
+        self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
+        self.plotdoButton.clicked.connect(self.doPlot)
+        self.plotoptionsButton.clicked.connect(self.updatePlotOptions)
+        self.plotresetButton.clicked.connect(self.resetPlot)
 
     def defaultTransformParameters(self):
         self.transformParameters = {}
@@ -242,6 +250,22 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             return True
         else :
             return False
+        
+    def loadProcessedSignal(self):
+        self.progresslogTextEdit.append('load processed signal button pressed')
+        return
+    def saveProcessedSignal(self):
+        self.progresslogTextEdit.append('save processed signal button pressed')
+        return
+    def updatePlotOptions(self):
+        self.progresslogTextEdit.append('plot options button pressed')
+        return
+    def doPlot(self):
+        self.progresslogTextEdit.append('do plot button pressed')
+        return
+    def resetPlot(self):
+        self.progresslogTextEdit.append('reset plot button pressed')
+        return 
 
 class graph():
     '''

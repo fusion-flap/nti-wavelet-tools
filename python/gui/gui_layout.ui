@@ -623,7 +623,7 @@
      <property name="title">
       <string>Load processed signal</string>
      </property>
-     <widget class="QPushButton" name="savesignalButton_2">
+     <widget class="QPushButton" name="saveprocessedsignalButton">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -639,7 +639,7 @@
        <string>Save signal</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="loadsignalButton_2">
+     <widget class="QPushButton" name="loadprocessedsignalButton">
       <property name="geometry">
        <rect>
         <x>10</x>
