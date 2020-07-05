@@ -587,7 +587,7 @@
    </widget>
    <widget class="QGroupBox" name="plottingBox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -604,113 +604,47 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>80</y>
+       <y>100</y>
        <width>541</width>
-       <height>441</height>
+       <height>421</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="vlSpectra"/>
     </widget>
-    <widget class="QPushButton" name="doplotButton">
-     <property name="geometry">
-      <rect>
-       <x>300</x>
-       <y>50</y>
-       <width>121</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Plot</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="plotoptionsButton">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>20</y>
-       <width>121</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Options</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="resetplotButton">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>50</y>
-       <width>121</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Reset</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="plottypetypeComboBox">
-     <property name="geometry">
-      <rect>
-       <x>300</x>
-       <y>20</y>
-       <width>121</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="currentText">
-      <string>Spectrogram</string>
-     </property>
-     <item>
-      <property name="text">
-       <string>Spectrogram</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Modenumber</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Cross-spectrum</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Transfer fuction</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Coherence</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>etc.</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QGroupBox" name="loadGB_2">
+    <widget class="QGroupBox" name="loadprocessedGB">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
        <width>231</width>
-       <height>51</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="title">
       <string>Load processed signal</string>
      </property>
+     <widget class="QPushButton" name="savesignalButton_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>30</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save signal</string>
+      </property>
+     </widget>
      <widget class="QPushButton" name="loadsignalButton_2">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
-        <width>81</width>
+        <y>30</y>
+        <width>75</width>
         <height>23</height>
        </rect>
       </property>
@@ -718,20 +652,138 @@
        <string>Load signal</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="savesignalButton_2">
+    </widget>
+    <widget class="QGroupBox" name="plotoptionsGB">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>20</y>
+       <width>291</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>What and how to plot</string>
+     </property>
+     <widget class="QPushButton" name="plotdoButton">
       <property name="enabled">
        <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>20</y>
-        <width>81</width>
-        <height>23</height>
+        <x>10</x>
+        <y>40</y>
+        <width>120</width>
+        <height>20</height>
        </rect>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
-       <string>Save signal</string>
+       <string>Plot</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="plotoptionsButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>20</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Options</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="plottypetypeComboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>20</y>
+        <width>118</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentText">
+       <string>Spectrogram</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Spectrogram</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Modenumber</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Cross-spectrum</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Transfer fuction</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Coherence</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>etc.</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="plotresetButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>40</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Reset</string>
       </property>
      </widget>
     </widget>
@@ -767,7 +819,7 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>85</x>
+       <x>90</x>
        <y>20</y>
        <width>75</width>
        <height>23</height>

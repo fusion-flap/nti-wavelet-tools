@@ -209,6 +209,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             for i in range(100):    
                 self.progressBar.setValue(i+1)
                 #place for some math
+            
+            self.plotdoButton.setEnabled(True)
+            self.plotoptionsButton.setEnabled(True)
+            self.plotresetButton.setEnabled(True)
+            self.plottypetypeComboBox.setEnabled(True)
         else:
             self.progresslogTextEdit.append('Some inputs are not okay (marked red)')
    
