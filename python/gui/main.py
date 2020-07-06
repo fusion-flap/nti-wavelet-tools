@@ -20,8 +20,10 @@ import convert_dict_to_flap
 # load UI
 qtCreatorFile = "gui_layout.ui"
 qtChannelsFile = "channel_selection.ui"
+qtPlotOptionsFile = "plot_options.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 Ui_ChannelsWindow, _ = uic.loadUiType(qtChannelsFile)
+Ui_PlotOptionsWindow, _ = uic.loadUiType(qtPlotOptionsFile)
 
 # This command does not overwrite loggers, only needed at initialization
 logging.basicConfig(filename='log.log',
@@ -47,13 +49,20 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.loadSuccessful = False
         # signal processing parameters
         self.defaultTransformParameters()
-        # connect buttons
+        # connect buttons - part 1 - transform
         self.loadsignalButton.clicked.connect(self.loadsignal)
         self.savesignalButton.clicked.connect(self.savesignal)
         self.selectchannelsButton.clicked.connect(self.selectchannels)
         self.stftRadioButton.toggled.connect(self.setOtherGrey)
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
+        self.startcalculationButton.clicked.connect(self.startCalculation)
+        # connect buttons - part 2 - plotting
+        self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
+        self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
+        self.plotdoButton.clicked.connect(self.doPlot)
+        self.plotoptionsButton.clicked.connect(self.updatePlotOptions)
+        self.plotresetButton.clicked.connect(self.resetPlot)
 
     def defaultTransformParameters(self):
         self.transformParameters = {}
@@ -201,7 +210,62 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modelowLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
-
+        
+    def startCalculation(self):
+        if self.checkInputs():
+            self.progresslogTextEdit.append('Doing some mathmagic')
+            for i in range(100):    
+                self.progressBar.setValue(i+1)
+                #place for some math
+            
+            self.plotdoButton.setEnabled(True)
+            self.plotoptionsButton.setEnabled(True)
+            self.plotresetButton.setEnabled(True)
+            self.plottypetypeComboBox.setEnabled(True)
+        else:
+            self.progresslogTextEdit.append('Some inputs are not okay (marked red)')
+   
+    def checkInputs(self):
+        def checkIfNumber(LineEdit):
+            inputOkayColor = '#c4df9b'
+            inputNotOkayColor = '#f6989d'
+            var = LineEdit.text()
+            try:
+                _ = int(var)
+                LineEdit.setStyleSheet("background-color:"+inputOkayColor+" ;")
+                return True
+            except:
+                LineEdit.setStyleSheet("background-color:"+inputNotOkayColor+" ;")
+                return False
+        
+        i = 0 #correct input number
+        #check input parameters' validity and mark wrong ones, calculation wont be started until every parameter is correct
+        i+=checkIfNumber(self.samplingfreqLineEdit)
+        i+=checkIfNumber(self.stepLineEdit)
+        i+=checkIfNumber(self.stftlengthLineEdit)
+        i+=checkIfNumber(self.samplingfreqLineEdit)
+        i+=checkIfNumber(self.stftresolutionLineEdit)
+        # self.samplingfreqLineEdit.setStyleSheet("background-color:"+color+" ;")
+        if i == 5: #checksum for stft
+            return True
+        else :
+            return False
+        
+    def loadProcessedSignal(self):
+        self.progresslogTextEdit.append('load processed signal button pressed')
+        return
+    def saveProcessedSignal(self):
+        self.progresslogTextEdit.append('save processed signal button pressed')
+        return
+    def updatePlotOptions(self):
+        self.progresslogTextEdit.append('plot options button pressed')
+        return
+    def doPlot(self):
+        self.progresslogTextEdit.append('do plot button pressed')
+        return
+    def resetPlot(self):
+        self.progresslogTextEdit.append('reset plot button pressed')
+        return 
 
 class graph():
     '''

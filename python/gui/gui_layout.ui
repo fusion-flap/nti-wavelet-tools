@@ -45,20 +45,26 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>60</y>
+        <y>110</y>
         <width>71</width>
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>300</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="firsttime_3">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>40</y>
+        <y>90</y>
         <width>71</width>
         <height>21</height>
        </rect>
@@ -67,49 +73,17 @@
        <string>Window type:</string>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_4">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>81</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Downsampling frequency [kHz]</string>
-      </property>
-      <property name="toolTipDuration">
-       <number>2</number>
-      </property>
-      <property name="text">
-       <string>Sampl. freq:</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="firsttime_5">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>110</y>
         <width>111</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Window length:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="samplingfreqLineEdit">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>100</y>
-        <width>71</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>200</string>
       </property>
      </widget>
      <widget class="QPushButton" name="quickanddirtyButton">
@@ -129,7 +103,7 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>40</y>
+        <y>90</y>
         <width>71</width>
         <height>22</height>
        </rect>
@@ -148,37 +122,11 @@
        </property>
       </item>
      </widget>
-     <widget class="QLabel" name="firsttime_8">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>120</y>
-        <width>81</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Step:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="stepLineEdit">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>120</y>
-        <width>71</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>5</string>
-      </property>
-     </widget>
      <widget class="QRadioButton" name="stftRadioButton">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>70</y>
         <width>82</width>
         <height>17</height>
        </rect>
@@ -194,7 +142,7 @@
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>20</y>
+        <y>70</y>
         <width>82</width>
         <height>17</height>
        </rect>
@@ -210,9 +158,9 @@
       <property name="geometry">
        <rect>
         <x>360</x>
-        <y>40</y>
+        <y>90</y>
         <width>71</width>
-        <height>22</height>
+        <height>21</height>
        </rect>
       </property>
       <item>
@@ -230,7 +178,7 @@
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>40</y>
+        <y>90</y>
         <width>71</width>
         <height>21</height>
        </rect>
@@ -246,20 +194,26 @@
       <property name="geometry">
        <rect>
         <x>360</x>
-        <y>60</y>
+        <y>110</y>
         <width>71</width>
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="firsttime_17">
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>60</y>
+        <y>110</y>
         <width>111</width>
         <height>21</height>
        </rect>
@@ -275,20 +229,26 @@
       <property name="geometry">
        <rect>
         <x>360</x>
-        <y>80</y>
+        <y>130</y>
         <width>71</width>
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>0.1</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="firsttime_18">
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>80</y>
+        <y>130</y>
         <width>111</width>
         <height>21</height>
        </rect>
@@ -310,30 +270,106 @@
        <number>0</number>
       </property>
      </widget>
-     <widget class="QLineEdit" name="stftlengthLineEdit_2">
+     <widget class="QLineEdit" name="stftresolutionLineEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>80</y>
+        <y>130</y>
         <width>71</width>
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>1000</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="firsttime_6">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>130</y>
         <width>111</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Freq res.:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="samplingfreqLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>20</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>200</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="firsttime_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Step:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="firsttime_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Downsampling frequency [kHz]</string>
+      </property>
+      <property name="toolTipDuration">
+       <number>2</number>
+      </property>
+      <property name="text">
+       <string>Sampl. freq:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="stepLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>40</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
     </widget>
@@ -374,8 +410,14 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLineEdit" name="modelowLineEdit">
@@ -390,8 +432,14 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>-5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="firsttime_10">
@@ -419,8 +467,14 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="firsttime_11">
@@ -448,8 +502,14 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
       <property name="text">
        <string>1</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
       </property>
      </widget>
      <widget class="QCheckBox" name="domodenumbersCheckBox">
@@ -498,7 +558,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="startcalculationButton">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -527,7 +587,7 @@
    </widget>
    <widget class="QGroupBox" name="plottingBox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -544,38 +604,188 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>60</y>
+       <y>100</y>
        <width>541</width>
-       <height>461</height>
+       <height>421</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="vlSpectra"/>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>20</y>
-       <width>121</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Do plot</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QGroupBox" name="loadprocessedGB">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>191</width>
-       <height>21</height>
+       <width>231</width>
+       <height>71</height>
       </rect>
      </property>
-     <property name="text">
-      <string>Options</string>
+     <property name="title">
+      <string>Load processed signal</string>
      </property>
+     <widget class="QPushButton" name="saveprocessedsignalButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>30</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save signal</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="loadprocessedsignalButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Load signal</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="plotoptionsGB">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>20</y>
+       <width>291</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>What and how to plot</string>
+     </property>
+     <widget class="QPushButton" name="plotdoButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Plot</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="plotoptionsButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>20</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Options</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="plottypetypeComboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>20</y>
+        <width>118</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentText">
+       <string>Spectrogram</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Spectrogram</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Modenumber</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Cross-spectrum</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Transfer fuction</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Coherence</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>etc.</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="plotresetButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>40</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Reset</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QGroupBox" name="loadGB">
@@ -609,7 +819,7 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>85</x>
+       <x>90</x>
        <y>20</y>
        <width>75</width>
        <height>23</height>
@@ -694,7 +904,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>0 s</string>
+      <string>0 ms</string>
      </property>
     </widget>
    </widget>
