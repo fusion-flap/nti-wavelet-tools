@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1118</width>
-    <height>600</height>
+    <height>656</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PyWaveletTools</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="calcgroupBox">
+   <widget class="QGroupBox" name="CTFTGB">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -29,7 +29,7 @@
     <property name="title">
      <string>Continuous-Time-Frequency Transform</string>
     </property>
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="transformsGB">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -60,7 +60,7 @@
        <number>10</number>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_3">
+     <widget class="QLabel" name="stftwindowText">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -73,7 +73,7 @@
        <string>Window type:</string>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_5">
+     <widget class="QLabel" name="stftwindowsizeText">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -174,7 +174,7 @@
        </property>
       </item>
      </widget>
-     <widget class="QLabel" name="firsttime_16">
+     <widget class="QLabel" name="cwtwindowText">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -209,7 +209,7 @@
        <number>10</number>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_17">
+     <widget class="QLabel" name="cwtorderText">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -244,7 +244,7 @@
        <number>10</number>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_18">
+     <widget class="QLabel" name="cwtscaleText">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -257,7 +257,7 @@
        <string>Discret scale:</string>
       </property>
      </widget>
-     <widget class="QProgressBar" name="progressBar_2">
+     <widget class="QProgressBar" name="transformProgressBar">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -289,7 +289,7 @@
        <number>10</number>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_6">
+     <widget class="QLabel" name="stftfreqresText">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -321,7 +321,7 @@
        <number>10</number>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_8">
+     <widget class="QLabel" name="transformstepText">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -334,7 +334,7 @@
        <string>Step:</string>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_4">
+     <widget class="QLabel" name="samplingfreqText">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -373,7 +373,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_6">
+    <widget class="QGroupBox" name="modenumbercalcGB">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -385,7 +385,7 @@
      <property name="title">
       <string>Modenumber calculation</string>
      </property>
-     <widget class="QLabel" name="firsttime_9">
+     <widget class="QLabel" name="modeaverageText">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -442,7 +442,7 @@
        <number>10</number>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_10">
+     <widget class="QLabel" name="moderangeText">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -477,7 +477,7 @@
        <number>10</number>
       </property>
      </widget>
-     <widget class="QLabel" name="firsttime_11">
+     <widget class="QLabel" name="modestepText">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -561,9 +561,9 @@
     <widget class="QPushButton" name="startcalculationButton">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>310</y>
-       <width>191</width>
+       <width>181</width>
        <height>23</height>
       </rect>
      </property>
@@ -571,7 +571,7 @@
       <string>Start calculation</string>
      </property>
     </widget>
-    <widget class="QProgressBar" name="progressBar">
+    <widget class="QProgressBar" name="modeProgressBar">
      <property name="geometry">
       <rect>
        <x>260</x>
@@ -594,198 +594,66 @@
       <x>530</x>
       <y>10</y>
       <width>571</width>
-      <height>531</height>
+      <height>591</height>
      </rect>
     </property>
     <property name="title">
-     <string>Plotting</string>
+     <string>Quick plotting</string>
     </property>
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>100</y>
+       <y>50</y>
        <width>541</width>
-       <height>421</height>
+       <height>531</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="vlSpectra"/>
     </widget>
-    <widget class="QGroupBox" name="loadprocessedGB">
+    <widget class="QPushButton" name="quickplotButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>100</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Quick plot</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="quickplottypeButton">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>231</width>
-       <height>71</height>
+       <width>101</width>
+       <height>22</height>
       </rect>
      </property>
-     <property name="title">
-      <string>Load processed signal</string>
+     <property name="currentText">
+      <string>Spectrogram</string>
      </property>
-     <widget class="QPushButton" name="saveprocessedsignalButton">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>30</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
+     <item>
       <property name="text">
-       <string>Save signal</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="loadprocessedsignalButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Load signal</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="plotoptionsGB">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>260</x>
-       <y>20</y>
-       <width>291</width>
-       <height>71</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>What and how to plot</string>
-     </property>
-     <widget class="QPushButton" name="plotdoButton">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>120</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Plot</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="plotoptionsButton">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>20</y>
-        <width>120</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Options</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="plottypetypeComboBox">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>20</y>
-        <width>118</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="currentText">
        <string>Spectrogram</string>
       </property>
-      <item>
-       <property name="text">
-        <string>Spectrogram</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Modenumber</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Cross-spectrum</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Transfer fuction</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Coherence</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>etc.</string>
-       </property>
-      </item>
-     </widget>
-     <widget class="QPushButton" name="plotresetButton">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>40</y>
-        <width>120</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+     </item>
+     <item>
       <property name="text">
-       <string>Reset</string>
+       <string>Modenumber</string>
       </property>
-     </widget>
+     </item>
+     <item>
+      <property name="text">
+       <string>Coherence</string>
+      </property>
+     </item>
     </widget>
    </widget>
    <widget class="QGroupBox" name="loadGB">
@@ -793,7 +661,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>231</width>
+      <width>241</width>
       <height>131</height>
      </rect>
     </property>
@@ -829,7 +697,7 @@
       <string>Save signal</string>
      </property>
     </widget>
-    <widget class="QLabel" name="text1">
+    <widget class="QLabel" name="datapointText">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -842,7 +710,7 @@
       <string>Number of data point:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="text2">
+    <widget class="QLabel" name="samplingfreqText_2">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -881,7 +749,7 @@
       <string>0 kHz</string>
      </property>
     </widget>
-    <widget class="QLabel" name="text3">
+    <widget class="QLabel" name="timerangeText">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -911,9 +779,9 @@
    <widget class="QGroupBox" name="progressGB">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>260</x>
       <y>10</y>
-      <width>271</width>
+      <width>261</width>
       <height>131</height>
      </rect>
     </property>
@@ -947,20 +815,20 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>160</y>
-      <width>191</width>
-      <height>21</height>
+      <width>181</width>
+      <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Select channels</string>
     </property>
    </widget>
-   <widget class="QLabel" name="text4">
+   <widget class="QLabel" name="selectedchannelsText">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>270</x>
       <y>160</y>
       <width>151</width>
       <height>16</height>
@@ -982,6 +850,77 @@
     <property name="text">
      <string>0</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="loadprocessedGB">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>550</y>
+      <width>241</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Processed signal</string>
+    </property>
+    <widget class="QPushButton" name="saveprocessedsignalButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>100</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save processedl</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loadprocessedsignalButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>100</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load processed</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="plottinginterfaceGB">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>550</y>
+      <width>261</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Open detailed plotting interface</string>
+    </property>
+    <widget class="QPushButton" name="openplottinginterfaceButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Open plot interface</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
