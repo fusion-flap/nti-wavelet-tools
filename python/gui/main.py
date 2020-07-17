@@ -272,7 +272,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 ui_logger.info('Loading flap object: ' + path)
                 data_dict = flap.load(path)
                 self.data = data_dict
-                ui_logger.info(str(data_dict["transforms"].data[0, 0, 0]))
                 self.loadSuccessful = True
             elif path[-4:] == ".sav":
                 self.progresslogTextEdit.append("Loading processed sav file...")
@@ -308,10 +307,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             ui_logger.info("Processed file loaded")
             # self.updateSignalParameters()
             # reset selected channels to empty
-            # self.channelSelected = []
+            self.channelSelected = []
             # self.channelnumberLabel.setText(str(0))
         self.saveprocessedsignalButton.setEnabled(self.loadSuccessful)
-        # self.selectchannelsButton.setEnabled(self.loadSuccessful)
+        self.selectchannelsButton.setEnabled(self.loadSuccessful)
 
         return
 
