@@ -32,6 +32,7 @@ logging.basicConfig(filename='log.log',
                     datefmt='%y.%b.%d. %H:%M:%S',
                     level=logging.INFO)
 ui_logger = logging.getLogger('ui_logger')
+ui_logger.setLevel(logging.DEBUG)
 
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -68,12 +69,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.transformParameters = {}
         self.transformParameters['type'] = 'STFT'
         self.transformParameters['step'] = 5
-        self.transformParameters['fd'] = 300 # kHz
+        self.transformParameters['fd'] = 300  # kHz
         self.transformParameters['window'] = 'gaussian'
-        self.transformParameters['windowlength'] = 200 # data point
+        self.transformParameters['windowlength'] = 200  # data point
         self.transformParameters['order'] = 5
         self.transformParameters['scale'] = 0.1
-        
+
     def loadsignal(self):
         ui_logger.debug('Loading signal started')
         self.loadSuccessful = False
@@ -81,15 +82,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
             if path[-9:] == ".flapdata":
                 self.progresslogTextEdit.append('Loading flap object...')
-                ui_logger.info('Loading flap object: '+path)
+                ui_logger.info('Loading flap object: ' + path)
                 flap_object = flap.load(path)
                 self.data = flap_object
                 self.loadSuccessful = True
             elif path[-4:] == ".sav":
                 self.progresslogTextEdit.append("Loading sav file...")
-                ui_logger.info("Loading sav file: "+path)
+                ui_logger.info("Loading sav file: " + path)
                 loaded_sav = io.readsav(path, python_dict=True)
-                # print(loaded_sav)
+                if "transf_timeax" in loaded_sav or "transf_freqax" in loaded_sav:
+                    self.progresslogTextEdit.append("Probably trying to load processed sav, "
+                                                    "please use 'Load processed' button")
+                    raise Exception("Probably trying to load processed sav, please use 'Load processed' button")
                 try:
                     flap_object = convert_dict_to_flap.convert_raw_sav(loaded_sav, skip_keys=[])
                     self.data = flap_object
@@ -99,6 +103,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     ui_logger.error('loaded_sav is not a dictionary of a raw sav file', exc_info=True)
                 except Exception as e:
                     ui_logger.error("Exception occurred during dict to flap conversion:", exc_info=True)
+            elif path[-13:] == ".procflapdata":
+                self.progresslogTextEdit.append("Trying to load processed sav, please use 'Load processed' button")
+                ui_logger.warning("Trying to load processed sav, please use 'Load processed' button")
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
                 ui_logger.warning("Unknown data format, no data loaded")
@@ -121,7 +128,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         ui_logger.debug('Saving signal started')
         try:
             path = QtWidgets.QFileDialog.getSaveFileName()[0]
-            filename = (path.split('/'))[-1]+'.flapdata'
+            filename = (path.split('/'))[-1] + '.flapdata'
             flap.save(self.data, filename=filename)
             self.progresslogTextEdit.append('Saved signals')
             ui_logger.info('Saved signals to: ' + filename)
@@ -137,13 +144,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.ui = Ui_ChannelsWindow()
         self.ui.setupUi(self.window)
+
         # define buttons
         def selectAll():
             for cb in self.CB:
                 cb.setChecked(True)
+
         def deselectAll():
             for cb in self.CB:
                 cb.setChecked(False)
+
         def returnSelected():
             self.progresslogTextEdit.append('Selected channels:')
             ui_logger.info('Selected channels')
@@ -160,12 +170,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.calcgroupBox.setEnabled(self.loadSuccessful)
             else:
                 self.calcgroupBox.setEnabled(False)
-            self.window.close()    
-        # set up checkBox with channel IDs
+            self.window.close()
+            # set up checkBox with channel IDs
+
         channelCB = []
         for i in range(len(self.channelID)):
             w = QtWidgets.QCheckBox(self.channelID[i], self.window)
-            w.setObjectName(self.channelID[i]+'CheckBox')
+            w.setObjectName(self.channelID[i] + 'CheckBox')
             w.move(120, i * 20)
             if (self.channelSelected != []) and (self.channelSelected[i] is True):
                 w.setChecked(True)
@@ -188,21 +199,21 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         n = self.data.data.shape[-1]
         self.datapointsLabel.setText(str(n))
         _time = self.data.get_coordinate_object('Time')  # presumably in [s] 2b checked
-        fs = 1./_time.step[0]/1000  # kHz
-        self.samplingfrequencyLabel.setText('{:.0f}'.format(fs)+' kHz')
-        dt = n/fs  # ms
-        self.timerangeLabel.setText('{:.0f}'.format(dt)+' ms')
+        fs = 1. / _time.step[0] / 1000  # kHz
+        self.samplingfrequencyLabel.setText('{:.0f}'.format(fs) + ' kHz')
+        dt = n / fs  # ms
+        self.timerangeLabel.setText('{:.0f}'.format(dt) + ' ms')
         _id = self.data.get_coordinate_object('Channels').values
         for ch in _id:
             self.channelID.append(str(ch).replace("'", "").replace("b", ""))
-    
+
     def setOtherGrey(self):
         self.stftwindowtypeComboBox.setEnabled(self.stftRadioButton.isChecked())
         self.stftlengthLineEdit.setEnabled(self.stftRadioButton.isChecked())
         self.cwtwindowtypeComboBox.setEnabled(self.cwtRadioButton.isChecked())
         self.cwtorderLineEdit.setEnabled(self.cwtRadioButton.isChecked())
         self.cwtscaleLineEdit.setEnabled(self.cwtRadioButton.isChecked())
-        
+
     def setGrey(self):
         self.toroidalCheckBox.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.poloidalCheckBox.setEnabled(self.domodenumbersCheckBox.isChecked())
@@ -210,21 +221,21 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modelowLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
-        
+
     def startCalculation(self):
         if self.checkInputs():
             self.progresslogTextEdit.append('Doing some mathmagic')
-            for i in range(100):    
-                self.progressBar.setValue(i+1)
-                #place for some math
-            
+            for i in range(100):
+                self.progressBar.setValue(i + 1)
+                # place for some math
+
             self.plotdoButton.setEnabled(True)
             self.plotoptionsButton.setEnabled(True)
             self.plotresetButton.setEnabled(True)
             self.plottypetypeComboBox.setEnabled(True)
         else:
             self.progresslogTextEdit.append('Some inputs are not okay (marked red)')
-   
+
     def checkInputs(self):
         def checkIfNumber(LineEdit):
             inputOkayColor = '#c4df9b'
@@ -232,40 +243,103 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             var = LineEdit.text()
             try:
                 _ = int(var)
-                LineEdit.setStyleSheet("background-color:"+inputOkayColor+" ;")
+                LineEdit.setStyleSheet("background-color:" + inputOkayColor + " ;")
                 return True
             except:
-                LineEdit.setStyleSheet("background-color:"+inputNotOkayColor+" ;")
+                LineEdit.setStyleSheet("background-color:" + inputNotOkayColor + " ;")
                 return False
-        
-        i = 0 #correct input number
-        #check input parameters' validity and mark wrong ones, calculation wont be started until every parameter is correct
-        i+=checkIfNumber(self.samplingfreqLineEdit)
-        i+=checkIfNumber(self.stepLineEdit)
-        i+=checkIfNumber(self.stftlengthLineEdit)
-        i+=checkIfNumber(self.samplingfreqLineEdit)
-        i+=checkIfNumber(self.stftresolutionLineEdit)
+
+        i = 0  # correct input number
+        # check input parameters' validity and mark wrong ones, calculation wont be started until every parameter is correct
+        i += checkIfNumber(self.samplingfreqLineEdit)
+        i += checkIfNumber(self.stepLineEdit)
+        i += checkIfNumber(self.stftlengthLineEdit)
+        i += checkIfNumber(self.samplingfreqLineEdit)
+        i += checkIfNumber(self.stftresolutionLineEdit)
         # self.samplingfreqLineEdit.setStyleSheet("background-color:"+color+" ;")
-        if i == 5: #checksum for stft
+        if i == 5:  # checksum for stft
             return True
-        else :
+        else:
             return False
-        
+
     def loadProcessedSignal(self):
-        self.progresslogTextEdit.append('load processed signal button pressed')
+        ui_logger.debug('Loading processed signal started')
+        # self.loadSuccessful = False
+        try:
+            path = QtWidgets.QFileDialog.getOpenFileName()[0]
+            if path[-13:] == ".procflapdata":
+                self.progresslogTextEdit.append('Loading flap object...')
+                ui_logger.info('Loading flap object: ' + path)
+                data_dict = flap.load(path)
+                self.data = data_dict
+                ui_logger.info(str(data_dict["transforms"].data[0, 0, 0]))
+                self.loadSuccessful = True
+            elif path[-4:] == ".sav":
+                self.progresslogTextEdit.append("Loading processed sav file...")
+                ui_logger.info("Loading sav file: " + path)
+                loaded_sav = io.readsav(path, python_dict=True)
+                # print(loaded_sav)
+                try:
+                    raw_data, transforms, smoothed_apsds, crosstransforms, smoothed_crosstransforms, coherences, \
+                    transfers, modenumbers, qs = convert_dict_to_flap.convert_processed_sav(loaded_sav)
+                    data_dict = {"raw_data": raw_data,
+                                 "transforms": transforms,
+                                 "smoothed_apsds": smoothed_apsds,
+                                 "crosstransforms": crosstransforms,
+                                 "smoothed_crosstransforms": smoothed_crosstransforms,
+                                 "coherences": coherences,
+                                 "transfers": transfers,
+                                 "modenumbers": modenumbers,
+                                 "qs": qs}
+                    ui_logger.debug("Dict created")
+                    self.data = data_dict
+                    self.loadSuccessful = True
+                except Exception as e:
+                    ui_logger.error("Exception occurred during dict to flap conversion:", exc_info=True)
+            else:
+                self.progresslogTextEdit.append("Unknown data format, no data loaded")
+                ui_logger.warning("Unknown data format, no data loaded")
+        except Exception as e:
+            self.progresslogTextEdit.append('Loading ERROR')
+            ui_logger.error('Error during processed data loading', exc_info=True)
+
+        if self.loadSuccessful is True:
+            self.progresslogTextEdit.append("Processed file loaded")
+            ui_logger.info("Processed file loaded")
+            # self.updateSignalParameters()
+            # reset selected channels to empty
+            # self.channelSelected = []
+            # self.channelnumberLabel.setText(str(0))
+        self.saveprocessedsignalButton.setEnabled(self.loadSuccessful)
+        # self.selectchannelsButton.setEnabled(self.loadSuccessful)
+
         return
+
     def saveProcessedSignal(self):
-        self.progresslogTextEdit.append('save processed signal button pressed')
+        ui_logger.debug('Saving processed signal started')
+        try:
+            path = QtWidgets.QFileDialog.getSaveFileName()[0]
+            filename = (path.split('/'))[-1] + '.procflapdata'
+            flap.save(self.data, filename=filename)
+            self.progresslogTextEdit.append('Saved signals')
+            ui_logger.info('Saved signals to: ' + filename)
+        except Exception as e:
+            self.progresslogTextEdit.append('Saving ERROR')
+            ui_logger.error('Error during saving', exc_info=True)
         return
+
     def updatePlotOptions(self):
         self.progresslogTextEdit.append('plot options button pressed')
         return
+
     def doPlot(self):
         self.progresslogTextEdit.append('do plot button pressed')
         return
+
     def resetPlot(self):
         self.progresslogTextEdit.append('reset plot button pressed')
-        return 
+        return
+
 
 class graph():
     '''
