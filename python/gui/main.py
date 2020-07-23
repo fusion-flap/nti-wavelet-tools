@@ -9,6 +9,8 @@ import sys
 from scipy import io
 
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtCore import QRegExp
+from PyQt5.QtGui import QRegExpValidator
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import flap
@@ -37,6 +39,9 @@ ui_logger.setLevel(logging.DEBUG)
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
+        reg_ex_number = QRegExp('[1-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
+        reg_ex_int = QRegExp('[1-9]+[0-9]*')
+        
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
@@ -61,10 +66,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # connect buttons - part 2 - plotting
         self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
         self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
-        self.plotdoButton.clicked.connect(self.doPlot)
-        self.plotoptionsButton.clicked.connect(self.updatePlotOptions)
-        self.plotresetButton.clicked.connect(self.resetPlot)
-
+        # set regexp for line edit inputs
+        input_validator = QRegExpValidator(reg_ex_number, self.stftresolutionLineEdit)
+        self.stftresolutionLineEdit.setValidator(input_validator)
+        input_validator = QRegExpValidator(reg_ex_int, self.stepLineEdit)
+        self.stepLineEdit.setValidator(input_validator)
+        
     def defaultTransformParameters(self):
         self.transformParameters = {}
         self.transformParameters['type'] = 'STFT'
@@ -226,13 +233,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.checkInputs():
             self.progresslogTextEdit.append('Doing some mathmagic')
             for i in range(100):
-                self.progressBar.setValue(i + 1)
+                self.transformProgressBar.setValue(i + 1)
+                self.modeProgressBar.setValue(i + 1)
                 # place for some math
 
-            self.plotdoButton.setEnabled(True)
-            self.plotoptionsButton.setEnabled(True)
-            self.plotresetButton.setEnabled(True)
-            self.plottypetypeComboBox.setEnabled(True)
+            self.openplottinginterfaceButton.setEnabled(True)
+            self.saveprocessedsignalButton.setEnabled(True)
+            self.quickplotButton.setEnabled(True)
+            # self.plotresetButton.setEnabled(True)
+            self.quickplottypeComboBox.setEnabled(True)
         else:
             self.progresslogTextEdit.append('Some inputs are not okay (marked red)')
 

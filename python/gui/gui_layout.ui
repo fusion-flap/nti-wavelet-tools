@@ -14,7 +14,7 @@
    <string>PyWaveletTools</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="CTFTGB">
+   <widget class="QGroupBox" name="calcgroupBox">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -627,7 +627,10 @@
       <string>Quick plot</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="quickplottypeButton">
+    <widget class="QComboBox" name="quickplottypeComboBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
