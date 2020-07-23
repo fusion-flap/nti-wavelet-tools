@@ -63,9 +63,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
         self.startcalculationButton.clicked.connect(self.startCalculation)
-        # connect buttons - part 2 - plotting
+        # connect buttons - part 2 - processed data
         self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
         self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
+        # connect buttons - part 3 - detailed plotting
+        # self.openplottinginterfaceButton.clicked.connect()
+        # connect buttons - part 4 - quick plotting
+        self.quickplotButton.clicked.connect(self.doQuickPlot)
+        
         # set regexp for line edit inputs
         input_validator = QRegExpValidator(reg_ex_number, self.stftresolutionLineEdit)
         self.stftresolutionLineEdit.setValidator(input_validator)
@@ -251,7 +256,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             inputNotOkayColor = '#f6989d'
             var = LineEdit.text()
             try:
-                _ = int(var)
+                _ = float(var)
                 LineEdit.setStyleSheet("background-color:" + inputOkayColor + " ;")
                 return True
             except:
@@ -340,7 +345,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progresslogTextEdit.append('plot options button pressed')
         return
 
-    def doPlot(self):
+    def doQuickPlot(self):
         self.progresslogTextEdit.append('do plot button pressed')
         return
 
