@@ -7,6 +7,7 @@ Created on Sat Jul 27 12:22:10 2019
 import matplotlib.pyplot as plt
 import sys
 from scipy import io
+import scipy
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QRegExp
@@ -41,7 +42,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         reg_ex_number = QRegExp('[1-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
         reg_ex_int = QRegExp('[1-9]+[0-9]*')
-        
+
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
@@ -70,13 +71,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.openplottinginterfaceButton.clicked.connect()
         # connect buttons - part 4 - quick plotting
         self.quickplotButton.clicked.connect(self.doQuickPlot)
-        
+
         # set regexp for line edit inputs
         input_validator = QRegExpValidator(reg_ex_number, self.stftresolutionLineEdit)
         self.stftresolutionLineEdit.setValidator(input_validator)
         input_validator = QRegExpValidator(reg_ex_int, self.stepLineEdit)
         self.stepLineEdit.setValidator(input_validator)
-        
+
     def defaultTransformParameters(self):
         self.transformParameters = {}
         self.transformParameters['type'] = 'STFT'
@@ -233,6 +234,45 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modelowLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
+
+    def calculate_spectogram(self):
+        data_time_ax = self.data.get_coordinate_object('Time')
+
+        fd = self.transformParameters['fd']
+        window = self.transformParameters['window']  # Gaussian window requires std
+        nperseg = self.transformParameters['windowlength']
+        order = self.transformParameters['order']
+        scale = self.transformParameters['scale']
+        noverlap = nperseg - self.transformParameters['step']
+
+        spectogram_data = scipy.signal.spectogram(x=self.data.data, fs=1. / data_time_ax.step[0], window='hann',
+                                                  nperseg=nperseg, noverlap=noverlap
+                                                  )  # return_onesided = True, nfft = 1000, detrend = 'constant',
+
+        spectogram_time_ax = flap.Coordinate(name="Time",
+                                             unit="s",
+                                             mode=flap.CoordinateMode(equidistant=True),
+                                             start=data_time_ax.start,
+                                             step=data_time_ax.step[0] * self.transformParameters['step'],
+                                             dimension_list=[1]
+                                             )
+
+        spectogram_freq_ax = flap.Coordinate(name="Frequency",
+                                             unit="Hz",
+                                             mode=flap.CoordinateMode(equidistant=True),
+                                             start=0,
+                                             step=1. / data_time_ax.step[0] / 2,
+                                             dimension_list=[0]
+                                             )
+
+        spectogram = flap.DataObject(
+            data_array=spectogram_data,
+            data_unit=flap.Unit(name='Power Spectral density', unit='Watt'),
+            exp_id=self.data.exp_id,
+            coordinates=[spectogram_time_ax, spectogram_freq_ax],
+            data_shape=spectogram_data.shape,
+        )
+        logger.info('Flap object created and filled')
 
     def startCalculation(self):
         if self.checkInputs():
