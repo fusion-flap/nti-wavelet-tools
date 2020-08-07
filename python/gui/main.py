@@ -40,8 +40,9 @@ ui_logger.setLevel(logging.DEBUG)
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
-        reg_ex_number = QRegExp('[1-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
-        reg_ex_int = QRegExp('[1-9]+[0-9]*')
+        reg_ex_number = QRegExp('[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
+        reg_ex_n = QRegExp('[1-9]+[0-9]*')
+        reg_ex_int = QRegExp('-?\ *[0-9]*')
 
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -73,10 +74,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.quickplotButton.clicked.connect(self.doQuickPlot)
 
         # set regexp for line edit inputs
-        input_validator = QRegExpValidator(reg_ex_number, self.stftresolutionLineEdit)
-        self.stftresolutionLineEdit.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_ex_int, self.stepLineEdit)
-        self.stepLineEdit.setValidator(input_validator)
+        self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
+        self.stepLineEdit.setValidator(QRegExpValidator(reg_ex_n, self.stepLineEdit)) 
+        self.stftlengthLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.stftlengthLineEdit))
+        self.stftresolutionLineEdit.setValidator(QRegExpValidator(reg_ex_n, self.stftresolutionLineEdit))
+        self.cwtorderLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.cwtorderLineEdit))
+        self.cwtscaleresLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.cwtscaleresLineEdit))
+        self.averageLineEdit.setValidator(QRegExpValidator(reg_ex_n,self.averageLineEdit))
+        self.modelowLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modelowLineEdit))
+        self.modehighLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modehighLineEdit))
+        self.modestepLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modestepLineEdit))
 
     def defaultTransformParameters(self):
         self.transformParameters = {}
@@ -225,11 +232,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.stftlengthLineEdit.setEnabled(self.stftRadioButton.isChecked())
         self.cwtwindowtypeComboBox.setEnabled(self.cwtRadioButton.isChecked())
         self.cwtorderLineEdit.setEnabled(self.cwtRadioButton.isChecked())
-        self.cwtscaleLineEdit.setEnabled(self.cwtRadioButton.isChecked())
+        self.cwtscaleresLineEdit.setEnabled(self.cwtRadioButton.isChecked())
 
     def setGrey(self):
         self.toroidalCheckBox.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.poloidalCheckBox.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.doaverageCheckBox.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.moderangeText.setEnabled(self.domodenumbersCheckBox.isChecked())
+        self.modestepText.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.averageLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modelowLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())

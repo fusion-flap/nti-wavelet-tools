@@ -222,7 +222,7 @@
        <string>Order:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cwtscaleLineEdit">
+     <widget class="QLineEdit" name="cwtscaleresLineEdit">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -254,7 +254,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Discret scale:</string>
+       <string>Scale res.:</string>
       </property>
      </widget>
      <widget class="QProgressBar" name="transformProgressBar">
@@ -385,19 +385,6 @@
      <property name="title">
       <string>Modenumber calculation</string>
      </property>
-     <widget class="QLabel" name="modeaverageText">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>20</y>
-        <width>81</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Averaging:</string>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="averageLineEdit">
       <property name="enabled">
        <bool>false</bool>
@@ -443,6 +430,9 @@
       </property>
      </widget>
      <widget class="QLabel" name="moderangeText">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -478,6 +468,9 @@
       </property>
      </widget>
      <widget class="QLabel" name="modestepText">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -518,7 +511,7 @@
         <x>10</x>
         <y>20</y>
         <width>211</width>
-        <height>17</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -534,7 +527,7 @@
         <x>10</x>
         <y>40</y>
         <width>101</width>
-        <height>17</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -550,11 +543,27 @@
         <x>10</x>
         <y>60</y>
         <width>101</width>
-        <height>17</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Poloidal</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="doaverageCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>20</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Averaging:</string>
       </property>
      </widget>
     </widget>
