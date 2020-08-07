@@ -8,12 +8,17 @@ import matplotlib.pyplot as plt
 import sys
 from scipy import io
 import scipy
+import numpy as np
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+#redefine NavigationToolbar with custom available buttons
+class NavigationToolbar(NavigationToolbar):
+    toolitems = [t for t in NavigationToolbar.toolitems if
+                 t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
 import flap
 import logging
 
@@ -36,8 +41,7 @@ logging.basicConfig(filename='log.log',
                     level=logging.INFO)
 ui_logger = logging.getLogger('ui_logger')
 ui_logger.setLevel(logging.DEBUG)
-
-
+    
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         reg_ex_number = QRegExp('[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
@@ -84,7 +88,57 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modelowLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modelowLineEdit))
         self.modehighLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modehighLineEdit))
         self.modestepLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modestepLineEdit))
+        
+        #setup canvas and toolbar
+        self.figure = plt.figure(dpi=100)
+        self.canvas = FigureCanvas(self.figure)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+        self.quickPlotLayout.addWidget(self.canvas)
+        self.quickPlotLayout.addWidget(self.toolbar)
+        self.cid6 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
 
+    def doQuickPlot(self):
+        ''' plot some random stuff '''
+        try:
+            self.figure.clf()
+        except:
+            pass
+        #dummy data to be plotted
+        self.data = np.random.randn(100,100)+np.random.randn(1)*10
+        self.data[10:12,:]=50
+        self.timeax = np.linspace(0,1,100)
+        self.freqax = np.linspace(0,1000,100)
+        
+        self.ax = self.figure.add_subplot(111)
+        self.figure.subplots_adjust(right=0.7)
+        self.cax = self.figure.add_axes([0.72, 0.11, 0.02, 0.77])
+    
+        # discards the old graph
+        self.ax.clear()
+        
+        cm = self.ax.contourf(self.timeax,self.freqax,self.data)
+        self.ax.set_xlabel('Time / s')
+        self.ax.set_ylabel('Frequency / kHz')
+        cb = self.figure.colorbar(cm, cax = self.cax)
+        cb.set_label('Power / a.u.')
+        # refresh canvas
+        self.canvas.draw()
+
+    def MouseClickInteraction(self, event):
+        if not(self.toolbar._active):
+            if self.cax == event.inaxes:
+                self.progresslogTextEdit.append('colorbar click')
+            elif self.ax == event.inaxes:
+                # self.progresslogTextEdit.append('contour click')
+                t = event.xdata
+                f = event.ydata
+                indt = np.argmin(np.abs(t-self.timeax))
+                indf = np.argmin(np.abs(f-self.freqax))
+                p = (self.data)[indf,indt]
+                self.progresslogTextEdit.append('t={:.01f}, f={:.01f}, p={:.01f}'.format(t, f, p))
+            else:
+                self.progresslogTextEdit.append('outside plots click')
+    
     def defaultTransformParameters(self):
         self.transformParameters = {}
         self.transformParameters['type'] = 'STFT'
@@ -395,9 +449,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progresslogTextEdit.append('plot options button pressed')
         return
 
-    def doQuickPlot(self):
-        self.progresslogTextEdit.append('do plot button pressed')
-        return
+    # def doQuickPlot(self):
+    #     self.progresslogTextEdit.append('do plot button pressed')
+    #     return
 
     def resetPlot(self):
         self.progresslogTextEdit.append('reset plot button pressed')
