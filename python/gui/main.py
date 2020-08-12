@@ -5,6 +5,7 @@ Created on Sat Jul 27 12:22:10 2019
 @author: poloskei
 """
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 import sys
 from scipy import io
 import scipy
@@ -104,8 +105,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         except:
             pass
         #dummy data to be plotted
-        self.data = np.random.randn(100,100)+np.random.randn(1)*10
-        self.data[10:12,:]=50
+        self.data = 10*np.random.randn(100,100)
+        self.data[10:12,:]+=50
+        self.data[30:32,:]+=20
         self.timeax = np.linspace(0,1,100)
         self.freqax = np.linspace(0,1000,100)
         
@@ -115,19 +117,69 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     
         # discards the old graph
         self.ax.clear()
-        
-        cm = self.ax.contourf(self.timeax,self.freqax,self.data)
+        self.colormap = plt.get_cmap('inferno')
+        cm = self.ax.contourf(self.timeax,self.freqax,self.data, cmap = self.colormap)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
-        cb = self.figure.colorbar(cm, cax = self.cax)
-        cb.set_label('Power / a.u.')
+        self.colorbar = self.figure.colorbar(cm, cax = self.cax)
+        self.colorbar.set_label('Power / a.u.')
         # refresh canvas
         self.canvas.draw()
 
     def MouseClickInteraction(self, event):
-        if not(self.toolbar._active):
-            if self.cax == event.inaxes:
-                self.progresslogTextEdit.append('colorbar click')
+        #check if figure is defined or not
+        try:
+            self.cax == event.inaxes
+        except:
+            return
+        
+        if not(self.toolbar._active): #if no button is activated
+            if self.cax == event.inaxes: #clicking on the colorbar axis
+                if event.button == 1: #left click
+                    #get displayed colorbar boundary values
+                    ypos = event.ydata
+                    lo, hi = self.colorbar.vmin, self.colorbar.vmax
+                    diff = hi-lo
+                    act = lo+(hi-lo)*ypos
+                    step = self.colorbar.boundaries[1]-self.colorbar.boundaries[0]
+                    low = self.colorbar.boundaries[int((act-lo)/step)]
+                    high = self.colorbar.boundaries[int((act-lo)/step)+1]
+                    #create new colormap where not selected values' alpha reduced to 0.1                    
+                    ind0 = int(((low-lo)/diff)*self.colormap.N)
+                    ind1 = int(((high-lo)/diff)*self.colormap.N) 
+                    self.progresslogTextEdit.append(str(ind0)+' '+str(ind1))
+                    selectedCmap = (self.colormap)(np.arange(self.colormap.N))
+                    p = 0.05
+                    if ind0 != 0:
+                        m = 1./(self.colormap.N*p)
+                        b = 1.-m*ind0
+                        alpha = m*np.arange(ind0)+b
+                        alpha[alpha<=0] = 0.
+                        selectedCmap[0:ind0,-1] = alpha
+                    if ind1 != self.colormap.N:
+                        m = -1./(self.colormap.N*p)
+                        b = 1.-m*(ind1+self.colormap.N*p)
+                        alpha = m*np.arange(ind1,self.colormap.N)+b
+                        alpha[alpha<=0] = 0.
+                        alpha[alpha>1] = 1.
+                        selectedCmap[ind1:self.colormap.N,-1] = alpha
+                    selectedCmap[ind0:ind1,-1] = 1.
+                    # print(selectedCmap)
+                    selectedCmap = ListedColormap(selectedCmap)
+                    #redraw contour with custom colormap with current zoom settings
+                    xran = self.ax.get_xlim()
+                    yran = self.ax.get_ylim()
+                    self.ax.clear()
+                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap = selectedCmap)
+                    self.ax.set_xlim(xran)
+                    self.ax.set_ylim(yran)
+                    self.ax.set_xlabel('Time / s')
+                    self.ax.set_ylabel('Frequency / kHz')
+                    
+                    self.canvas.draw()
+                if event.button == 3: #right click
+                    self.doQuickPlot() #reset plot
+            
             elif self.ax == event.inaxes:
                 # self.progresslogTextEdit.append('contour click')
                 t = event.xdata
