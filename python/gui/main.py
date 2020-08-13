@@ -91,7 +91,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modestepLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modestepLineEdit))
         
         #setup canvas and toolbar
-        self.figure = plt.figure(dpi=100)
+        self.figure = plt.Figure(dpi=100)
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.quickPlotLayout.addWidget(self.canvas)
@@ -112,8 +112,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.freqax = np.linspace(0,1000,100)
         
         self.ax = self.figure.add_subplot(111)
-        self.figure.subplots_adjust(right=0.7)
-        self.cax = self.figure.add_axes([0.72, 0.11, 0.02, 0.77])
+        self.figure.subplots_adjust(right=0.8)
+        self.cax = self.figure.add_axes([0.82, 0.11, 0.02, 0.77])
     
         # discards the old graph
         self.ax.clear()
@@ -147,9 +147,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     #create new colormap where not selected values' alpha reduced to 0.1                    
                     ind0 = int(((low-lo)/diff)*self.colormap.N)
                     ind1 = int(((high-lo)/diff)*self.colormap.N) 
-                    self.progresslogTextEdit.append(str(ind0)+' '+str(ind1))
                     selectedCmap = (self.colormap)(np.arange(self.colormap.N))
-                    p = 0.05
+                    p = 0.12 #decay length of 
                     if ind0 != 0:
                         m = 1./(self.colormap.N*p)
                         b = 1.-m*ind0
