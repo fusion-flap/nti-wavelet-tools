@@ -97,6 +97,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         image = plt.imread('logo.png')
         self.ax = self.figure.add_subplot(111)
         self.ax.imshow(image)
+        self.ax.axis('off')
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.quickPlotLayout.addWidget(self.canvas)
         self.quickPlotLayout.addWidget(self.toolbar)
@@ -186,10 +187,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.ax.set_ylim(yran)
                     self.ax.set_xlabel('Time / s')
                     self.ax.set_ylabel('Frequency / kHz')
-                    
-                    self.canvas.draw()
-                if event.button == 3: #right click
-                    self.doQuickPlot() #reset plot
+                if event.button == 2: #middle click -reset plot
+                    self.doQuickPlot()
+                if event.button == 3: #right click - reset colormap
+                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap = self.colormap)
+                self.canvas.draw()
             
             elif self.ax == event.inaxes:
                 # self.progresslogTextEdit.append('contour click')
