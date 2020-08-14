@@ -667,6 +667,19 @@
       </property>
      </item>
     </widget>
+    <widget class="QCheckBox" name="hintCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>20</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show hint on plot</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="loadGB">
     <property name="geometry">

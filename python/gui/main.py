@@ -19,7 +19,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 #redefine NavigationToolbar with custom available buttons
 class NavigationToolbar(NavigationToolbar):
     toolitems = [t for t in NavigationToolbar.toolitems if
-                 t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
+                  t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
 import flap
 import logging
 
@@ -77,6 +77,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.openplottinginterfaceButton.clicked.connect()
         # connect buttons - part 4 - quick plotting
         self.quickplotButton.clicked.connect(self.doQuickPlot)
+        self.hintCheckBox.clicked.connect(self.tryRemoveText)
 
         # set regexp for line edit inputs
         self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
@@ -96,8 +97,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.quickPlotLayout.addWidget(self.canvas)
         self.quickPlotLayout.addWidget(self.toolbar)
-        self.cid6 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
-
+        self.id1 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
+        # if self.hintCB
+        self.id2 = self.canvas.mpl_connect('motion_notify_event', self.MouseHoverInteraction)
+    def tryRemoveText(self):
+        try:
+            self.txt.remove()
+            self.canvas.draw()
+        except:
+            pass
+    
     def doQuickPlot(self):
         ''' plot some random stuff '''
         try:
@@ -189,7 +198,40 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.progresslogTextEdit.append('t={:.01f}, f={:.01f}, p={:.01f}'.format(t, f, p))
             else:
                 self.progresslogTextEdit.append('outside plots click')
-    
+    def MouseHoverInteraction(self,event):
+        if not self.hintCheckBox.isChecked():
+            return
+        try:
+            self.cax == event.inaxes
+        except:
+            return
+        bbox = dict(boxstyle = 'square',
+                    ec = (1.,0.5,0.5),
+                    fc=(1.,1.,1.))
+        if event.inaxes == self.ax:
+            t = event.xdata
+            f = event.ydata
+            indt = np.argmin(np.abs(t-self.timeax))
+            indf = np.argmin(np.abs(f-self.freqax))
+            p = (self.data)[indf,indt]
+            try:
+                self.txt.remove()
+            except:
+                pass
+            text = 't={:.2f}, f={:.2f}, p={:.2f}'.format(t, f, p)
+            halignment = 'left'
+            if t>((np.max(self.timeax)-np.min(self.timeax))*0.5+np.min(self.timeax)):
+                halignment = 'right'
+            self.txt = self.ax.text(t,f,text,
+                                    horizontalalignment=halignment, 
+                                    bbox=bbox)
+        else:
+            try:
+                self.txt.remove()
+            except:
+                pass
+        self.canvas.draw()
+
     def defaultTransformParameters(self):
         self.transformParameters = {}
         self.transformParameters['type'] = 'STFT'
@@ -507,6 +549,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def resetPlot(self):
         self.progresslogTextEdit.append('reset plot button pressed')
         return
+
+# class graph():
+#     def __init__(self):
+        
+        
 
 
 class graph():
