@@ -94,6 +94,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #setup canvas and toolbar
         self.figure = plt.Figure(dpi=100)
         self.canvas = FigureCanvas(self.figure)
+        image = plt.imread('logo.png')
+        self.ax = self.figure.add_subplot(111)
+        self.ax.imshow(image)
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.quickPlotLayout.addWidget(self.canvas)
         self.quickPlotLayout.addWidget(self.toolbar)
