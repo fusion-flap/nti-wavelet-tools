@@ -17,9 +17,9 @@ from PyQt5.QtGui import QRegExpValidator
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 #redefine NavigationToolbar with custom available buttons
-class NavigationToolbar(NavigationToolbar):
-    toolitems = [t for t in NavigationToolbar.toolitems if
-                  t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
+# class NavigationToolbar(NavigationToolbar):
+#     toolitems = [t for t in NavigationToolbar.toolitems if
+#                   t[0] in ('Home', 'Zoom', 'Save')]
 import flap
 import logging
 
@@ -78,6 +78,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # connect buttons - part 4 - quick plotting
         self.quickplotButton.clicked.connect(self.doQuickPlot)
         self.hintCheckBox.clicked.connect(self.tryRemoveText)
+        self.quickplottypeComboBox.currentIndexChanged.connect(self.updateQuickPlot)
 
         # set regexp for line edit inputs
         self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
@@ -131,17 +132,20 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # discards the old graph
         self.ax.clear()
         self.colormap = plt.get_cmap('inferno')
-        cm = self.ax.contourf(self.timeax,self.freqax,self.data, cmap = self.colormap)
+        cm = self.ax.contourf(self.timeax,self.freqax,self.data, cmap = self.colormap, levels = 10)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
         self.colorbar = self.figure.colorbar(cm, cax = self.cax)
         self.colorbar.set_label('Power / a.u.')
         # refresh canvas
         self.canvas.draw()
-
+    
+    def updateQuickPlot(self):
+        selectedPlotOption = self.quickplottypeComboBox.currentText()
+        print('something else is selected for plotting, displayed stuff needs to be updated')
+        print(selectedPlotOption)
     def MouseClickInteraction(self, event):
-        #check if figure is defined or not
-        try:
+        try: #check if figure is defined or not
             self.cax == event.inaxes
         except:
             return
@@ -149,7 +153,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if not(self.toolbar._active): #if no button is activated
             if self.cax == event.inaxes: #clicking on the colorbar axis
                 if event.button == 1: #left click
-                    #get displayed colorbar boundary values
+                    #get current clicked colorbar value
                     ypos = event.ydata
                     lo, hi = self.colorbar.vmin, self.colorbar.vmax
                     diff = hi-lo
@@ -158,25 +162,30 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     low = self.colorbar.boundaries[int((act-lo)/step)]
                     high = self.colorbar.boundaries[int((act-lo)/step)+1]
                     #create new colormap where not selected values' alpha reduced to 0.1                    
-                    ind0 = int(((low-lo)/diff)*self.colormap.N)
-                    ind1 = int(((high-lo)/diff)*self.colormap.N) 
+                    ind0 = int(round(((low-lo)/diff)*self.colormap.N))
+                    ind1 = int(round(((high-lo)/diff)*self.colormap.N))
                     selectedCmap = (self.colormap)(np.arange(self.colormap.N))
-                    p = 0.12 #decay length of 
-                    if ind0 != 0:
-                        m = 1./(self.colormap.N*p)
-                        b = 1.-m*ind0
-                        alpha = m*np.arange(ind0)+b
-                        alpha[alpha<=0] = 0.
-                        selectedCmap[0:ind0,-1] = alpha
-                    if ind1 != self.colormap.N:
-                        m = -1./(self.colormap.N*p)
-                        b = 1.-m*(ind1+self.colormap.N*p)
-                        alpha = m*np.arange(ind1,self.colormap.N)+b
-                        alpha[alpha<=0] = 0.
-                        alpha[alpha>1] = 1.
-                        selectedCmap[ind1:self.colormap.N,-1] = alpha
+                    selectedPlotOption = self.quickplottypeComboBox.currentText()
+                    if selectedPlotOption == 'Spectrogram':
+                        p = 0.25 #decay length of opacity
+                        if ind0 != 0:
+                            m = 1./(self.colormap.N*p)
+                            b = 1.-m*ind0
+                            alpha = m*np.arange(ind0)+b
+                            alpha[alpha<=0] = 0.
+                            selectedCmap[0:ind0,-1] = alpha
+                        if ind1 != self.colormap.N:
+                            m = -1./(self.colormap.N*p)
+                            b = 1.-m*(ind1+self.colormap.N*p)
+                            alpha = m*np.arange(ind1,self.colormap.N)+b
+                            alpha[alpha<=0] = 0.
+                            alpha[alpha>1] = 1.
+                            selectedCmap[ind1:self.colormap.N,-1] = alpha
+                    elif selectedPlotOption == 'Modenumber':
+                        selectedCmap[:,-1] = 0
+                    else:
+                        selectedCmap[:,-1] = 0
                     selectedCmap[ind0:ind1,-1] = 1.
-                    # print(selectedCmap)
                     selectedCmap = ListedColormap(selectedCmap)
                     #redraw contour with custom colormap with current zoom settings
                     xran = self.ax.get_xlim()
@@ -202,11 +211,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 p = (self.data)[indf,indt]
                 self.progresslogTextEdit.append('t={:.01f}, f={:.01f}, p={:.01f}'.format(t, f, p))
             else:
-                self.progresslogTextEdit.append('outside plots click')
+                return
     def MouseHoverInteraction(self,event):
         if not self.hintCheckBox.isChecked():
             return
-        try:
+        try: #check if figure is defined or not
             self.cax == event.inaxes
         except:
             return
