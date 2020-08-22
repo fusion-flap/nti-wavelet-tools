@@ -7,9 +7,9 @@ Created on Sat Jul 27 12:22:10 2019
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import sys
-from scipy import io
 import scipy
 import numpy as np
+import copy
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QRegExp
@@ -25,6 +25,8 @@ import logging
 
 sys.path.append(r"..\utility")
 import convert_dict_to_flap
+sys.path.append(r"..\core")
+import core
 
 # load UI
 qtCreatorFile = "gui_layout.ui"
@@ -58,7 +60,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.CB = []
         self.channelSelected = []
         # data storage structures
-        self.data = []
+        self.data = core.NWTDataObject()
         # settings
         self.loadSuccessful = False
         # signal processing parameters
@@ -268,26 +270,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if path[-9:] == ".flapdata":
                 self.progresslogTextEdit.append('Loading flap object...')
                 ui_logger.info('Loading flap object: ' + path)
-                flap_object = flap.load(path)
-                self.data = flap_object
+                self.data.load_flap_raw_dump(path)
                 self.loadSuccessful = True
             elif path[-4:] == ".sav":
                 self.progresslogTextEdit.append("Loading sav file...")
                 ui_logger.info("Loading sav file: " + path)
-                loaded_sav = io.readsav(path, python_dict=True)
-                if "transf_timeax" in loaded_sav or "transf_freqax" in loaded_sav:
-                    self.progresslogTextEdit.append("Probably trying to load processed sav, "
-                                                    "please use 'Load processed' button")
-                    raise Exception("Probably trying to load processed sav, please use 'Load processed' button")
-                try:
-                    flap_object = convert_dict_to_flap.convert_raw_sav(loaded_sav, skip_keys=[])
-                    self.data = flap_object
-                    self.loadSuccessful = True
-                except TypeError('loaded_sav is not a dictionary of a raw sav file'):
-                    self.progresslogTextEdit.append('loaded_sav is not a dictionary of a raw sav file')
-                    ui_logger.error('loaded_sav is not a dictionary of a raw sav file', exc_info=True)
-                except Exception as e:
-                    ui_logger.error("Exception occurred during dict to flap conversion:", exc_info=True)
+                self.data.load_raw_sav(path)
+                ui_logger.debug("Finished loading raw sav")
+                self.loadSuccessful = True
             elif path[-13:] == ".procflapdata":
                 self.progresslogTextEdit.append("Trying to load processed sav, please use 'Load processed' button")
                 ui_logger.warning("Trying to load processed sav, please use 'Load processed' button")
@@ -313,10 +303,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         ui_logger.debug('Saving signal started')
         try:
             path = QtWidgets.QFileDialog.getSaveFileName()[0]
-            filename = (path.split('/'))[-1] + '.flapdata'
-            flap.save(self.data, filename=filename)
+            d = copy.deepcopy(self.data)
+            core.save_pynwt(d, path)
             self.progresslogTextEdit.append('Saved signals')
-            ui_logger.info('Saved signals to: ' + filename)
+            ui_logger.info('Saved signals to: ' + path)
         except Exception as e:
             self.progresslogTextEdit.append('Saving ERROR')
             ui_logger.error('Error during saving', exc_info=True)
@@ -381,16 +371,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def updateSignalParameters(self):
         ui_logger.debug('Updating signal parameters started')
         self.channelID = []
-        n = self.data.data.shape[-1]
+        n = self.data.raw_datapoints
         self.datapointsLabel.setText(str(n))
-        _time = self.data.get_coordinate_object('Time')  # presumably in [s] 2b checked
+        _time = self.data.raw_data.get_coordinate_object('Time')  # presumably in [s] 2b checked
         fs = 1. / _time.step[0] / 1000  # kHz
         self.samplingfrequencyLabel.setText('{:.0f}'.format(fs) + ' kHz')
+        ui_logger.debug("Sample frequency extracted")
         dt = n / fs  # ms
         self.timerangeLabel.setText('{:.0f}'.format(dt) + ' ms')
-        _id = self.data.get_coordinate_object('Channels').values
+        _id = self.data.raw_data.get_coordinate_object('Channels').values
         for ch in _id:
             self.channelID.append(str(ch).replace("'", "").replace("b", ""))
+        ui_logger.debug("Channel labels extracted")
 
     def setOtherGrey(self):
         self.stftwindowtypeComboBox.setEnabled(self.stftRadioButton.isChecked())
@@ -496,34 +488,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.loadSuccessful = False
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
-            if path[-13:] == ".procflapdata":
+            if path[-6:] == ".pynwt":
                 self.progresslogTextEdit.append('Loading flap object...')
                 ui_logger.info('Loading flap object: ' + path)
-                data_dict = flap.load(path)
-                self.data = data_dict
+                self.data = load_pynwt(path)
                 self.loadSuccessful = True
             elif path[-4:] == ".sav":
                 self.progresslogTextEdit.append("Loading processed sav file...")
                 ui_logger.info("Loading sav file: " + path)
-                loaded_sav = io.readsav(path, python_dict=True)
-                # print(loaded_sav)
-                try:
-                    raw_data, transforms, smoothed_apsds, crosstransforms, smoothed_crosstransforms, coherences, \
-                    transfers, modenumbers, qs = convert_dict_to_flap.convert_processed_sav(loaded_sav)
-                    data_dict = {"raw_data": raw_data,
-                                 "transforms": transforms,
-                                 "smoothed_apsds": smoothed_apsds,
-                                 "crosstransforms": crosstransforms,
-                                 "smoothed_crosstransforms": smoothed_crosstransforms,
-                                 "coherences": coherences,
-                                 "transfers": transfers,
-                                 "modenumbers": modenumbers,
-                                 "qs": qs}
-                    ui_logger.debug("Dict created")
-                    self.data = data_dict
-                    self.loadSuccessful = True
-                except Exception as e:
-                    ui_logger.error("Exception occurred during dict to flap conversion:", exc_info=True)
+                self.data.load_proc_sav(path)
+                self.loadSuccessful = True
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
                 ui_logger.warning("Unknown data format, no data loaded")
@@ -547,10 +521,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         ui_logger.debug('Saving processed signal started')
         try:
             path = QtWidgets.QFileDialog.getSaveFileName()[0]
-            filename = (path.split('/'))[-1] + '.procflapdata'
-            flap.save(self.data, filename=filename)
+            self.data.save(path)
             self.progresslogTextEdit.append('Saved signals')
-            ui_logger.info('Saved signals to: ' + filename)
+            ui_logger.info('Saved signals to: ' + path)
         except Exception as e:
             self.progresslogTextEdit.append('Saving ERROR')
             ui_logger.error('Error during saving', exc_info=True)
