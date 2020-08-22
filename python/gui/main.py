@@ -16,7 +16,7 @@ from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-#redefine NavigationToolbar with custom available buttons
+# redefine NavigationToolbar with custom available buttons
 # class NavigationToolbar(NavigationToolbar):
 #     toolitems = [t for t in NavigationToolbar.toolitems if
 #                   t[0] in ('Home', 'Zoom', 'Save')]
@@ -42,7 +42,8 @@ logging.basicConfig(filename='log.log',
                     level=logging.INFO)
 ui_logger = logging.getLogger('ui_logger')
 ui_logger.setLevel(logging.DEBUG)
-    
+
+
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         reg_ex_number = QRegExp('[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
@@ -82,17 +83,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # set regexp for line edit inputs
         self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
-        self.stepLineEdit.setValidator(QRegExpValidator(reg_ex_n, self.stepLineEdit)) 
-        self.stftlengthLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.stftlengthLineEdit))
+        self.stepLineEdit.setValidator(QRegExpValidator(reg_ex_n, self.stepLineEdit))
+        self.stftlengthLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.stftlengthLineEdit))
         self.stftresolutionLineEdit.setValidator(QRegExpValidator(reg_ex_n, self.stftresolutionLineEdit))
-        self.cwtorderLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.cwtorderLineEdit))
-        self.cwtscaleresLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.cwtscaleresLineEdit))
-        self.averageLineEdit.setValidator(QRegExpValidator(reg_ex_n,self.averageLineEdit))
-        self.modelowLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modelowLineEdit))
-        self.modehighLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modehighLineEdit))
-        self.modestepLineEdit.setValidator(QRegExpValidator(reg_ex_number,self.modestepLineEdit))
-        
-        #setup canvas and toolbar
+        self.cwtorderLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.cwtorderLineEdit))
+        self.cwtscaleresLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.cwtscaleresLineEdit))
+        self.averageLineEdit.setValidator(QRegExpValidator(reg_ex_n, self.averageLineEdit))
+        self.modelowLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.modelowLineEdit))
+        self.modehighLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.modehighLineEdit))
+        self.modestepLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.modestepLineEdit))
+
+        # setup canvas and toolbar
         self.figure = plt.Figure(dpi=100)
         self.canvas = FigureCanvas(self.figure)
         image = plt.imread('logo.png')
@@ -105,139 +106,142 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.id1 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
         # if self.hintCB
         self.id2 = self.canvas.mpl_connect('motion_notify_event', self.MouseHoverInteraction)
+
     def tryRemoveText(self):
         try:
             self.txt.remove()
             self.canvas.draw()
         except:
             pass
-    
+
     def doQuickPlot(self):
         ''' plot some random stuff '''
         try:
             self.figure.clf()
         except:
             pass
-        #dummy data to be plotted
-        self.data = 10*np.random.randn(100,100)
-        self.data[10:12,:]+=50
-        self.data[30:32,:]+=20
-        self.timeax = np.linspace(0,1,100)
-        self.freqax = np.linspace(0,1000,100)
-        
+        # dummy data to be plotted
+        self.data = 10 * np.random.randn(100, 100)
+        self.data[10:12, :] += 50
+        self.data[30:32, :] += 20
+        self.timeax = np.linspace(0, 1, 100)
+        self.freqax = np.linspace(0, 1000, 100)
+
         self.ax = self.figure.add_subplot(111)
         self.figure.subplots_adjust(right=0.8)
         self.cax = self.figure.add_axes([0.82, 0.11, 0.02, 0.77])
-    
+
         # discards the old graph
         self.ax.clear()
         self.colormap = plt.get_cmap('inferno')
-        cm = self.ax.contourf(self.timeax,self.freqax,self.data, cmap = self.colormap, levels = 10)
+        cm = self.ax.contourf(self.timeax, self.freqax, self.data, cmap=self.colormap, levels=10)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
-        self.colorbar = self.figure.colorbar(cm, cax = self.cax)
+        self.colorbar = self.figure.colorbar(cm, cax=self.cax)
         self.colorbar.set_label('Power / a.u.')
         # refresh canvas
         self.canvas.draw()
-    
+
     def updateQuickPlot(self):
         selectedPlotOption = self.quickplottypeComboBox.currentText()
         print('something else is selected for plotting, displayed stuff needs to be updated')
         print(selectedPlotOption)
+
     def MouseClickInteraction(self, event):
-        try: #check if figure is defined or not
+        try:  # check if figure is defined or not
             self.cax == event.inaxes
         except:
             return
-        
-        if not(self.toolbar._active): #if no button is activated
-            if self.cax == event.inaxes: #clicking on the colorbar axis
-                if event.button == 1: #left click
-                    #get current clicked colorbar value
+
+        if not (self.toolbar._active):  # if no button is activated
+            if self.cax == event.inaxes:  # clicking on the colorbar axis
+                if event.button == 1:  # left click
+                    # get current clicked colorbar value
                     ypos = event.ydata
                     lo, hi = self.colorbar.vmin, self.colorbar.vmax
-                    diff = hi-lo
-                    act = lo+(hi-lo)*ypos
-                    step = self.colorbar.boundaries[1]-self.colorbar.boundaries[0]
-                    low = self.colorbar.boundaries[int((act-lo)/step)]
-                    high = self.colorbar.boundaries[int((act-lo)/step)+1]
-                    #create new colormap where not selected values' alpha reduced to 0.1                    
-                    ind0 = int(round(((low-lo)/diff)*self.colormap.N))
-                    ind1 = int(round(((high-lo)/diff)*self.colormap.N))
+                    diff = hi - lo
+                    act = lo + (hi - lo) * ypos
+                    step = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
+                    low = self.colorbar.boundaries[int((act - lo) / step)]
+                    high = self.colorbar.boundaries[int((act - lo) / step) + 1]
+                    # create new colormap where not selected values' alpha reduced to 0.1
+                    ind0 = int(round(((low - lo) / diff) * self.colormap.N))
+                    ind1 = int(round(((high - lo) / diff) * self.colormap.N))
                     selectedCmap = (self.colormap)(np.arange(self.colormap.N))
                     selectedPlotOption = self.quickplottypeComboBox.currentText()
                     if selectedPlotOption == 'Spectrogram':
-                        p = 0.25 #decay length of opacity
+                        p = 0.25  # decay length of opacity
                         if ind0 != 0:
-                            m = 1./(self.colormap.N*p)
-                            b = 1.-m*ind0
-                            alpha = m*np.arange(ind0)+b
-                            alpha[alpha<=0] = 0.
-                            selectedCmap[0:ind0,-1] = alpha
+                            m = 1. / (self.colormap.N * p)
+                            b = 1. - m * ind0
+                            alpha = m * np.arange(ind0) + b
+                            alpha[alpha <= 0] = 0.
+                            selectedCmap[0:ind0, -1] = alpha
                         if ind1 != self.colormap.N:
-                            m = -1./(self.colormap.N*p)
-                            b = 1.-m*(ind1+self.colormap.N*p)
-                            alpha = m*np.arange(ind1,self.colormap.N)+b
-                            alpha[alpha<=0] = 0.
-                            alpha[alpha>1] = 1.
-                            selectedCmap[ind1:self.colormap.N,-1] = alpha
+                            m = -1. / (self.colormap.N * p)
+                            b = 1. - m * (ind1 + self.colormap.N * p)
+                            alpha = m * np.arange(ind1, self.colormap.N) + b
+                            alpha[alpha <= 0] = 0.
+                            alpha[alpha > 1] = 1.
+                            selectedCmap[ind1:self.colormap.N, -1] = alpha
                     elif selectedPlotOption == 'Modenumber':
-                        selectedCmap[:,-1] = 0
+                        selectedCmap[:, -1] = 0
                     else:
-                        selectedCmap[:,-1] = 0
-                    selectedCmap[ind0:ind1,-1] = 1.
+                        selectedCmap[:, -1] = 0
+                    selectedCmap[ind0:ind1, -1] = 1.
                     selectedCmap = ListedColormap(selectedCmap)
-                    #redraw contour with custom colormap with current zoom settings
+                    # redraw contour with custom colormap with current zoom settings
                     xran = self.ax.get_xlim()
                     yran = self.ax.get_ylim()
                     self.ax.clear()
-                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap = selectedCmap)
+                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap=selectedCmap)
                     self.ax.set_xlim(xran)
                     self.ax.set_ylim(yran)
                     self.ax.set_xlabel('Time / s')
                     self.ax.set_ylabel('Frequency / kHz')
-                if event.button == 2: #middle click -reset plot
+                if event.button == 2:  # middle click -reset plot
                     self.doQuickPlot()
-                if event.button == 3: #right click - reset colormap
-                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap = self.colormap)
+                if event.button == 3:  # right click - reset colormap
+                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap=self.colormap)
                 self.canvas.draw()
-            
+
             elif self.ax == event.inaxes:
                 # self.progresslogTextEdit.append('contour click')
                 t = event.xdata
                 f = event.ydata
-                indt = np.argmin(np.abs(t-self.timeax))
-                indf = np.argmin(np.abs(f-self.freqax))
-                p = (self.data)[indf,indt]
+                indt = np.argmin(np.abs(t - self.timeax))
+                indf = np.argmin(np.abs(f - self.freqax))
+                p = (self.data)[indf, indt]
                 self.progresslogTextEdit.append('t={:.01f}, f={:.01f}, p={:.01f}'.format(t, f, p))
             else:
                 return
-    def MouseHoverInteraction(self,event):
+
+    def MouseHoverInteraction(self, event):
         if not self.hintCheckBox.isChecked():
             return
-        try: #check if figure is defined or not
+        try:  # check if figure is defined or not
             self.cax == event.inaxes
         except:
             return
-        bbox = dict(boxstyle = 'square',
-                    ec = (1.,0.5,0.5),
-                    fc=(1.,1.,1.))
+        bbox = dict(boxstyle='square',
+                    ec=(1., 0.5, 0.5),
+                    fc=(1., 1., 1.))
         if event.inaxes == self.ax:
             t = event.xdata
             f = event.ydata
-            indt = np.argmin(np.abs(t-self.timeax))
-            indf = np.argmin(np.abs(f-self.freqax))
-            p = (self.data)[indf,indt]
+            indt = np.argmin(np.abs(t - self.timeax))
+            indf = np.argmin(np.abs(f - self.freqax))
+            p = (self.data)[indf, indt]
             try:
                 self.txt.remove()
             except:
                 pass
             text = 't={:.2f}, f={:.2f}, p={:.2f}'.format(t, f, p)
             halignment = 'left'
-            if t>((np.max(self.timeax)-np.min(self.timeax))*0.5+np.min(self.timeax)):
+            if t > ((np.max(self.timeax) - np.min(self.timeax)) * 0.5 + np.min(self.timeax)):
                 halignment = 'right'
-            self.txt = self.ax.text(t,f,text,
-                                    horizontalalignment=halignment, 
+            self.txt = self.ax.text(t, f, text,
+                                    horizontalalignment=halignment,
                                     bbox=bbox)
         else:
             try:
@@ -564,10 +568,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progresslogTextEdit.append('reset plot button pressed')
         return
 
+
 # class graph():
 #     def __init__(self):
-        
-        
 
 
 class graph():
