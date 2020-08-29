@@ -626,7 +626,7 @@
     </widget>
     <widget class="QPushButton" name="quickplotButton">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -672,6 +672,9 @@
      </item>
     </widget>
     <widget class="QCheckBox" name="hintCheckBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -905,7 +908,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Save processedl</string>
+      <string>Save processed</string>
      </property>
     </widget>
     <widget class="QPushButton" name="loadprocessedsignalButton">
