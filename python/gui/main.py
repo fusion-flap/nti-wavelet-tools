@@ -61,6 +61,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.channelSelected = []
         # data storage structures
         self.data = core.NWTDataObject()
+        self.plottedData = None
         # settings
         self.loadSuccessful = False
         # signal processing parameters
@@ -74,7 +75,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
         self.startcalculationButton.clicked.connect(self.startCalculation)
         # connect buttons - part 2 - processed data
-        self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
+        # self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
+        self.loadprocessedsignalButton.clicked.connect(self.loadProcessedTemp)
         self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
         # connect buttons - part 3 - detailed plotting
         # self.openplottinginterfaceButton.clicked.connect()
@@ -115,19 +117,44 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.canvas.draw()
         except:
             pass
-
+    def loadProcessedTemp(self):
+        from scipy.io import readsav
+        path = 'C:/Users/poloskei/Desktop/work/nti-wavelet-tools/python/gui/testdata/AUGD_35628_tor_bal_processed.sav'
+        x = readsav(path, python_dict=True)
+        self.data.transforms = x['saved_datablock']['transforms'][0]
+        self.data.modenumbers = x['saved_datablock']['modenumbers'][0]
+        print(np.shape(x['saved_datablock']['modenumbers'][0]))
+        self.data.qs = x['saved_datablock']['qs'][0]
+        self.data.freqax = x['saved_datablock']['transf_freqax'][0]
+        self.data.timeax = x['saved_datablock']['transf_timeax'][0]
+        self.progresslogTextEdit.append('finished loading processed signal')
+        self.quickplotButton.setEnabled(True)
+        self.hintCheckBox.setEnabled(True)
+    
     def doQuickPlot(self):
         ''' plot some random stuff '''
         try:
             self.figure.clf()
         except:
             pass
-        # dummy data to be plotted
-        self.data = 10 * np.random.randn(100, 100)
-        self.data[10:12, :] += 50
-        self.data[30:32, :] += 20
-        self.timeax = np.linspace(0, 1, 100)
-        self.freqax = np.linspace(0, 1000, 100)
+        # # dummy data to be plotted
+        selectedPlotOption = self.quickplottypeComboBox.currentText()
+        # print(type(selectedPlotOption), selectedPlotOption)
+        if selectedPlotOption == 'Spectrogram':  
+            self.colormap = plt.get_cmap('inferno')
+            self.plottedData = np.abs(self.data.transforms[:,:,3])**0.1
+            levels = 10
+        elif selectedPlotOption == 'Modenumber':
+            self.colormap = plt.get_cmap('rainbow')
+            self.plottedData = np.array(self.data.modenumbers)
+            levels = len(np.unique(self.data.modenumbers))
+            print(np.unique(self.data.modenumbers))
+        #     print(np.shape(self.data.modenumbers))
+        # self.data = 10 * np.random.randn(100, 100)
+        # self.data[10:12, :] += 50
+        # self.data[30:32, :] += 20
+        # self.timeax = np.linspace(0, 1, 100)
+        # self.freqax = np.linspace(0, 1000, 100)
 
         self.ax = self.figure.add_subplot(111)
         self.figure.subplots_adjust(right=0.8)
@@ -135,8 +162,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # discards the old graph
         self.ax.clear()
-        self.colormap = plt.get_cmap('inferno')
-        cm = self.ax.contourf(self.timeax, self.freqax, self.data, cmap=self.colormap, levels=10)
+        cm = self.ax.contourf(self.data.timeax, self.data.freqax, self.plottedData, cmap=self.colormap, levels = levels)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
         self.colorbar = self.figure.colorbar(cm, cax=self.cax)
@@ -196,7 +222,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     xran = self.ax.get_xlim()
                     yran = self.ax.get_ylim()
                     self.ax.clear()
-                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap=selectedCmap)
+                    self.ax.contourf(self.data.timeax, self.data.freqax, self.plottedData, cmap=selectedCmap)
                     self.ax.set_xlim(xran)
                     self.ax.set_ylim(yran)
                     self.ax.set_xlabel('Time / s')
@@ -204,16 +230,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 if event.button == 2:  # middle click -reset plot
                     self.doQuickPlot()
                 if event.button == 3:  # right click - reset colormap
-                    self.ax.contourf(self.timeax, self.freqax, self.data, cmap=self.colormap)
+                    self.ax.contourf(self.data.timeax, self.data.freqax, self.plottedData, cmap=self.colormap)
                 self.canvas.draw()
 
             elif self.ax == event.inaxes:
                 # self.progresslogTextEdit.append('contour click')
                 t = event.xdata
                 f = event.ydata
-                indt = np.argmin(np.abs(t - self.timeax))
-                indf = np.argmin(np.abs(f - self.freqax))
-                p = (self.data)[indf, indt]
+                indt = np.argmin(np.abs(t - self.data.timeax))
+                indf = np.argmin(np.abs(f - self.data.freqax))
+                p = (self.plottedData)[indf, indt]
                 self.progresslogTextEdit.append('t={:.01f}, f={:.01f}, p={:.01f}'.format(t, f, p))
             else:
                 return
@@ -231,16 +257,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if event.inaxes == self.ax:
             t = event.xdata
             f = event.ydata
-            indt = np.argmin(np.abs(t - self.timeax))
-            indf = np.argmin(np.abs(f - self.freqax))
-            p = (self.data)[indf, indt]
+            indt = np.argmin(np.abs(t - self.data.timeax))
+            indf = np.argmin(np.abs(f - self.data.freqax))
+            p = (self.plottedData)[indf, indt]
             try:
                 self.txt.remove()
             except:
                 pass
-            text = 't={:.2f}, f={:.2f}, p={:.2f}'.format(t, f, p)
+            text = 't={:.4f}, f={:.2f}, p={:.2f}'.format(t, f, p)
             halignment = 'left'
-            if t > ((np.max(self.timeax) - np.min(self.timeax)) * 0.5 + np.min(self.timeax)):
+            xran = self.ax.get_xlim()
+            if t > ((np.max(xran) - np.min(xran)) * 0.5 + np.min(xran)):
                 halignment = 'right'
             self.txt = self.ax.text(t, f, text,
                                     horizontalalignment=halignment,
@@ -482,7 +509,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             return True
         else:
             return False
-
+    
     def loadProcessedSignal(self):
         ui_logger.debug('Loading processed signal started')
         # self.loadSuccessful = False
