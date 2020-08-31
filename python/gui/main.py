@@ -330,10 +330,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         ui_logger.debug('Saving signal started')
         try:
             path = QtWidgets.QFileDialog.getSaveFileName()[0]
-            d = copy.deepcopy(self.data)
-            core.save_pynwt(d, path)
+            # core.save_pynwt(self.data, path)
+            self.data.save(path)
             self.progresslogTextEdit.append('Saved signals')
-            ui_logger.info('Saved signals to: ' + path)
+            ui_logger.info('Saved signals to: ' + path + ".pynwt")
         except Exception as e:
             self.progresslogTextEdit.append('Saving ERROR')
             ui_logger.error('Error during saving', exc_info=True)
