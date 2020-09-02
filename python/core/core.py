@@ -96,23 +96,20 @@ class NWTDataObject:
         if path[-6:] == ".pynwt":
             try:
                 f = io.open(filename, "rb")
-                loaded = pickle.load(f)
-                f.close()
-
-                self.raw_data = loaded.raw_data
-                self.transforms = loaded.transforms
-                self.smoothed_apsds = loaded.smoothed_apsds
-                self.crosstransforms = loaded.crosstransforms
-                self.smoothed_crosstransforms = loaded.smoothed_crosstransforms
-                self.coherences = loaded.coherences
-                self.transfers = loaded.transfers
-                self.modenumbers = loaded.modenumbers
-                self.qs = loaded.qs
+                self.raw_data = pickle.load(f)
+                self.transforms = pickle.load(f)
+                self.smoothed_apsds = pickle.load(f)
+                self.crosstransforms = pickle.load(f)
+                self.smoothed_crosstransforms = pickle.load(f)
+                self.coherences = pickle.load(f)
+                self.transfers = pickle.load(f)
+                self.modenumbers = pickle.load(f)
+                self.qs = pickle.load(f)
                 self.update_properties()
+                f.close()
                 return
             except Exception as e:
                 core_logger.error('Error during loading', exc_info=True)
-
         else:
             return
 
@@ -124,8 +121,15 @@ class NWTDataObject:
             # saved.raw_data = self.raw_data
             print(filename)
             f = open(filename, "wb")
-            d = self.raw_data
-            pickle.dump(d, f)
+            pickle.dump(self.raw_data, f)
+            pickle.dump(self.transforms, f)
+            pickle.dump(self.smoothed_apsds, f)
+            pickle.dump(self.crosstransforms, f)
+            pickle.dump(self.smoothed_crosstransforms, f)
+            pickle.dump(self.coherences, f)
+            pickle.dump(self.transfers, f)
+            pickle.dump(self.modenumbers, f)
+            pickle.dump(self.qs, f)
             f.close()
             return
         except Exception as e:
