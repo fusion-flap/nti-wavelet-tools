@@ -116,13 +116,201 @@ def convert_raw_sav(input_dict, skip_keys=[], create_channel_no=False, logger=de
     return flap_object
 
 
+def convert_processed_sav_og(input_dict, skip_keys=[], logger=default_logger):
+    raw_data = None
+    transforms = None
+    smoothed_apsds = None
+    crosstransforms = None
+    smoothed_crosstransforms = None
+    transfers = None
+    coherences = None
+    modenumbers = None
+    qs = None
+    # print(input_dict['saved_datablock'])
+    
+    raw_data_axes = []
+    transform_axes = []
+    cross_transform_axes = []
+    modenumber_axes = []
+    exp_id=input_dict['saved_datablock']['expname'][0].decode('utf-8') + "-" + str(input_dict['saved_datablock']['shotnumber'][0])
+    print(exp_id)
+    try:
+        time_ax = flap.Coordinate(name="Time",
+                        unit="s",
+                        mode=flap.CoordinateMode(equidistant=True),
+                        values=input_dict['saved_datablock']['time'][0],
+                        dimension_list=[1],
+                        shape=len(input_dict['saved_datablock']['time'][0])
+                        )
+        raw_data_axes.append(time_ax)
+        logger.debug('Time axis created')
+    except:
+        logger.debug('Time axis does not exist.')
+    
+    try:
+        channel_ax = flap.Coordinate(name="Channels",
+                                         unit=None,
+                                         mode=flap.CoordinateMode(equidistant=False),
+                                         values=input_dict['saved_datablock']["channels"][0].astype('U20'),
+                                         dimension_list=[0],
+                                         shape=len(input_dict['saved_datablock']["channels"][0])
+                                         )
+        raw_data_axes.append(channel_ax)
+        logger.debug('Channels axis created') 
+    except:
+        print('no channels?')
+        
+    try:
+        theta_ax = flap.Coordinate(name="Theta",
+                                   unit="rad",
+                                   mode=flap.CoordinateMode(equidistant=False),
+                                   values=input_dict['saved_datablock']["theta"][0],
+                                   dimension_list=[0],
+                                   shape=len(input_dict['saved_datablock']["theta"][0])
+                                   )
+        raw_data_axes.append(theta_ax)
+        logger.debug('Theta axis created')
+    except:
+        logger.warning('Theta axis does not exist!')
+        
+    try:
+        phi_ax = flap.Coordinate(name="Phi",
+                                   unit="rad",
+                                   mode=flap.CoordinateMode(equidistant=False),
+                                   values=input_dict['saved_datablock']["phi"][0],
+                                   dimension_list=[0],
+                                   shape=len(input_dict['saved_datablock']["phi"][0])
+                                   )
+        raw_data_axes.append(phi_ax)
+        logger.debug('Phi axis created')
+    except:
+        logger.warning('Phi axis does not exist!')
+        
+    try:
+        raw_data = flap.DataObject(
+            data_array=input_dict['saved_datablock']["data"][0],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=raw_data_axes,
+            data_shape=input_dict['saved_datablock']['data'][0].shape,
+        )
+        logger.debug('Data dataobject created')
+    except:
+        raw_data = None
+        logger.warning('Data dataobject does not exist!')
+        
+    try:
+        transf_timeax = flap.Coordinate(name="Transf_timeax",
+                                        unit="s",
+                                        mode=flap.CoordinateMode(equidistant=True),
+                                        values=input_dict['saved_datablock']["transf_timeax"][0],
+                                        dimension_list=[1],
+                                        shape=len(input_dict['saved_datablock']["transf_timeax"][0])
+                                        )
+        transform_axes.append(transf_timeax)
+        cross_transform_axes.append(transf_timeax)
+        modenumber_axes.append(transf_timeax)
+        logger.debug('Transform time axis created')
+    except:
+        logger.warning('Transform time axis does not exist!')
+   
+    try:
+        transf_freqax = flap.Coordinate(name="Transf_freqax",
+                                        unit="s",
+                                        mode=flap.CoordinateMode(equidistant=True),
+                                        values=input_dict['saved_datablock']["transf_freqax"][0],
+                                        dimension_list=[1],
+                                        shape=len(input_dict['saved_datablock']["transf_freqax"][0])
+                                        )
+        transform_axes.append(transf_freqax)
+        cross_transform_axes.append(transf_freqax)
+        modenumber_axes.append(transf_freqax)
+        logger.debug('Transform time axis created')
+    except:
+        logger.warning('Transform time axis does not exist!')
+    
+    try:
+        _temp = []
+        for i in range(len(input_dict['saved_datablock']["channels"][0])):
+            if input_dict['saved_datablock']['channels_ind'][0][i] == 1:
+                _temp.append(input_dict['saved_datablock']["channels"][0][i].decode('utf-8'))
+        # x['saved_datablock']['channels_ind'][0]
+        selectedChannels = flap.Coordinate(name="Selected_channels",
+                                        unit="s",
+                                        mode=flap.CoordinateMode(equidistant=False),
+                                        values=_temp,
+                                        dimension_list=[1],
+                                        shape=len(_temp)
+                                        )
+        transform_axes.append(selectedChannels)
+        cross_transform_axes.append(selectedChannels)
+        modenumber_axes.append(selectedChannels)
+        logger.debug('Selected channels set.') 
+    except:
+        logger.warning('Something went wrong with the selected channels')
+        
+    try:
+        transforms = flap.DataObject(
+            data_array=input_dict['saved_datablock']['transforms'][0],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=transform_axes,
+            data_shape=input_dict['saved_datablock']['transforms'][0].shape,
+        )
+        logger.debug('Transforms dataobject created')
+    except:
+        transforms = None
+        logger.warning('Transforms dataobject does not exist!')
+    
+    try:
+        coherence = flap.DataObject(
+            data_array=input_dict['saved_datablock']['coherences'][0],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=transform_axes,
+            data_shape=input_dict['saved_datablock']['coherences'][0].shape,
+        )
+        logger.debug('Transforms dataobject created')
+    except:
+        transforms = None
+        logger.warning('Transforms dataobject does not exist!')
+
+    try:
+        qs = flap.DataObject(
+            data_array=input_dict['saved_datablock']['qs'][0],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=transform_axes,
+            data_shape=input_dict['saved_datablock']['qs'][0].shape,
+        )
+        logger.debug('qs dataobject created')
+    except:
+        transforms = None
+        logger.warning('qs dataobject does not exist!')
+        
+    try:
+        modenumbers = flap.DataObject(
+            data_array=input_dict['saved_datablock']['modenumbers'][0],
+            data_unit=flap.Unit(name='modenumber', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=transform_axes,
+            data_shape=input_dict['saved_datablock']['modenumbers'][0].shape,
+        )
+        logger.debug('modenumber dataobject created')
+    except:
+        transforms = None
+        logger.warning('modenumber dataobject does not exist!')
+    
+    return raw_data, transforms, smoothed_apsds, crosstransforms, smoothed_crosstransforms, coherence, \
+        transfers, modenumbers, qs
+
 def convert_processed_sav(input_dict, skip_keys=[], logger=default_logger):
     # input_dict: a NTI wavelet tools processed sav file loaded as a python dictionary,
     # preferably loaded with the io.readsav command
 
     # skip_keys: list of strings, which keys to skip when creating coordinate axes
-
-    convert_bytes_to_str(input_dict)
+    # print(input_dict)
+    # convert_bytes_to_str(input_dict)
 
     raw_data_axes = []
     transform_axes = []
