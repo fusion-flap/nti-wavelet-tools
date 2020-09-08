@@ -75,8 +75,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
         self.startcalculationButton.clicked.connect(self.startCalculation)
         # connect buttons - part 2 - processed data
-        # self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
-        self.loadprocessedsignalButton.clicked.connect(self.loadProcessedTemp)
+        self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
+        # self.loadprocessedsignalButton.clicked.connect(self.loadProcessedTemp)
         self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
         # connect buttons - part 3 - detailed plotting
         # self.openplottinginterfaceButton.clicked.connect()
@@ -119,12 +119,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pass
     def loadProcessedTemp(self):
         from scipy.io import readsav
-        path = 'C:/Users/poloskei/Desktop/work/nti-wavelet-tools/python/gui/testdata/AUGD_35628_tor_bal_processed.sav'
+        path = 'C:/Users/pepo/Desktop/NTIWT/nti-wavelet-tools/python/gui/testdata/test_processed.sav'
         x = readsav(path, python_dict=True)
         self.data.transforms = x['saved_datablock']['transforms'][0]
-        self.data.modenumbers = x['saved_datablock']['modenumbers'][0]
+#        self.data.modenumbers = x['saved_datablock']['modenumbers'][0]
         print(np.shape(x['saved_datablock']['modenumbers'][0]))
-        self.data.qs = x['saved_datablock']['qs'][0]
+#        self.data.qs = x['saved_datablock']['qs'][0]
         self.data.freqax = x['saved_datablock']['transf_freqax'][0]
         self.data.timeax = x['saved_datablock']['transf_timeax'][0]
         self.progresslogTextEdit.append('finished loading processed signal')
@@ -142,19 +142,22 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # print(type(selectedPlotOption), selectedPlotOption)
         if selectedPlotOption == 'Spectrogram':  
             self.colormap = plt.get_cmap('inferno')
-            self.plottedData = np.abs(self.data.transforms[:,:,3])**0.1
+            print(self.data.transforms.data.shape)
+            self.plottedData = np.abs((self.data.transforms.data)[:,:,0])**0.1
+            print(np.shape(self.plottedData))
+            self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
+            self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
             levels = 10
         elif selectedPlotOption == 'Modenumber':
-            self.colormap = plt.get_cmap('rainbow')
-            self.plottedData = np.array(self.data.modenumbers)
-            levels = len(np.unique(self.data.modenumbers))
-            print(np.unique(self.data.modenumbers))
-        #     print(np.shape(self.data.modenumbers))
-        # self.data = 10 * np.random.randn(100, 100)
-        # self.data[10:12, :] += 50
-        # self.data[30:32, :] += 20
-        # self.timeax = np.linspace(0, 1, 100)
-        # self.freqax = np.linspace(0, 1000, 100)
+            self.colormap = plt.get_cmap('hsv')
+            self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
+            self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
+            self.plottedData = self.data.modenumbers.data
+            # self.plottedData = np.abs(self.data.transforms[:,:,0])**0.1
+            # levels = 10
+            levels = len(np.unique(self.data.modenumbers.data))
+            print(np.unique(self.data.modenumbers.data))
+   
 
         self.ax = self.figure.add_subplot(111)
         self.figure.subplots_adjust(right=0.8)
@@ -162,7 +165,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # discards the old graph
         self.ax.clear()
-        cm = self.ax.contourf(self.data.timeax, self.data.freqax, self.plottedData, cmap=self.colormap, levels = levels)
+        cm = self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap, levels = levels)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
         self.colorbar = self.figure.colorbar(cm, cax=self.cax)
@@ -222,7 +225,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     xran = self.ax.get_xlim()
                     yran = self.ax.get_ylim()
                     self.ax.clear()
-                    self.ax.contourf(self.data.timeax, self.data.freqax, self.plottedData, cmap=selectedCmap)
+                    self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap)
                     self.ax.set_xlim(xran)
                     self.ax.set_ylim(yran)
                     self.ax.set_xlabel('Time / s')
@@ -230,15 +233,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 if event.button == 2:  # middle click -reset plot
                     self.doQuickPlot()
                 if event.button == 3:  # right click - reset colormap
-                    self.ax.contourf(self.data.timeax, self.data.freqax, self.plottedData, cmap=self.colormap)
+                    self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap)
                 self.canvas.draw()
 
             elif self.ax == event.inaxes:
                 # self.progresslogTextEdit.append('contour click')
                 t = event.xdata
                 f = event.ydata
-                indt = np.argmin(np.abs(t - self.data.timeax))
-                indf = np.argmin(np.abs(f - self.data.freqax))
+                indt = np.argmin(np.abs(t - self.timeax))
+                indf = np.argmin(np.abs(f - self.freqax))
                 p = (self.plottedData)[indf, indt]
                 self.progresslogTextEdit.append('t={:.01f}, f={:.01f}, p={:.01f}'.format(t, f, p))
             else:
@@ -257,8 +260,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if event.inaxes == self.ax:
             t = event.xdata
             f = event.ydata
-            indt = np.argmin(np.abs(t - self.data.timeax))
-            indf = np.argmin(np.abs(f - self.data.freqax))
+            indt = np.argmin(np.abs(t - self.timeax))
+            indf = np.argmin(np.abs(f - self.freqax))
             p = (self.plottedData)[indf, indt]
             try:
                 self.txt.remove()
@@ -524,6 +527,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.progresslogTextEdit.append("Loading processed sav file...")
                 ui_logger.info("Loading sav file: " + path)
                 self.data.load_proc_sav(path)
+                # print(self.data.modenumbers.shape)
+                # print(self.data.transforms.shape)
                 self.loadSuccessful = True
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
@@ -541,6 +546,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             # self.channelnumberLabel.setText(str(0))
         self.saveprocessedsignalButton.setEnabled(self.loadSuccessful)
         self.selectchannelsButton.setEnabled(self.loadSuccessful)
+        self.quickplotButton.setEnabled(True)
+        self.hintCheckBox.setEnabled(True)
+        # print(self.data.transforms.data)
 
         return
 
@@ -568,113 +576,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progresslogTextEdit.append('reset plot button pressed')
         return
 
-
-# class graph():
-#     def __init__(self):
-
-
-class graph():
-    '''
-    Plot class that creates a plot on the specified verticalLayout widget.
-    '''
-
-    def __init__(self, verticalLayout, x_label=None, y_label=None,
-                 scale='log', showHint=False, figure=None,
-                 canvas=None, toolBar=True, sharex=None):
-        ui_logger.debug('Graph initialization started')
-        plt.rcParams.update({'font.size': 12})
-        if figure is None:
-            self.figure = plt.Figure(dpi=100)
-        else:
-            self.figure = figure
-
-        if canvas is None:
-            self.canvas = FigureCanvas(self.figure)
-        else:
-            self.canvas = canvas
-
-        self.canvas.setParent(None)
-        self.canvas.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self.canvas.updateGeometry()
-        verticalLayout.addWidget(self.canvas)
-        if toolBar:
-            self.plt_toolbar = NavigationToolbar(self.canvas, None)
-            verticalLayout.addWidget(self.plt_toolbar)
-        self.plot_ax = self.figure.add_subplot(111, sharex=sharex)
-        self.figure.subplots_adjust(left=0.15, right=0.95,
-                                    bottom=0.15, top=0.95,
-                                    hspace=0.2, wspace=0.2)
-        if showHint:
-            self.canvas.mpl_connect('motion_notify_event', self.on_plot_hover)
-            self.txt = self.plot_ax.text(0, 0, '', fontsize='x-small')
-        #        self.plot_ax.set_yscale(scale, nonpsy='clip')
-        self.plot_ax.set_yscale(scale)
-        # self.canvas.mpl_connect('button_press_event', self.on_middle_autoScale)
-
-        self.canvas.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Ignored)
-        self.background1 = None
-        self.draw_cid = self.canvas.mpl_connect('draw_event', self.grab_background)
-        self.timeSpan = None
-
-        if x_label is not None:
-            self.plot_ax.set_xlabel(x_label)
-        if y_label is not None:
-            self.plot_ax.set_ylabel(y_label)
-
-    def grab_background(self, line=None):
-        '''
-        Grab background for blitting
-        '''
-        ui_logger.debug('Grabbing background started')
-        canvas = self.figure.canvas
-        if not self.timeSpan == None:
-            self.timeSpan.set_visible(False)
-        canvas.mpl_disconnect(self.draw_cid)
-        canvas.draw_idle()
-        self.background1 = self.canvas.copy_from_bbox(self.plot_ax.bbox)
-        self.draw_cid = canvas.mpl_connect('draw_event', self.grab_background)
-
-    def blit(self, line):
-        '''
-        Method for dafe blitting
-        '''
-        ui_logger.debug('Dafe blitting started')
-        line.set_visible(True)
-        self.canvas.restore_region(self.background1)
-        self.canvas.mpl_disconnect(self.draw_cid)
-        self.plot_ax.draw_artist(line)
-        self.draw_cid = self.canvas.mpl_connect('draw_event', self.grab_background)
-        self.canvas.update()
-
-    def on_plot_hover(self, event):
-        for curve in self.plot_ax.get_lines():
-            if curve.contains(event)[0]:
-                try:
-                    float(event.xdata)
-                    float(event.ydata)
-                except:
-                    continue
-
-                self.txt.set_x(event.xdata)
-                self.txt.set_y(event.ydata)
-                self.txt.set_text(curve.get_label())
-                self.blit(self.txt)
-
-    def setConnectID(self, id):
-        self.id = id
-
-    def getConnectID(self):
-        return self.id
-
-    def showToolbar(self):
-        self.plt_toolbar.show()
-
-    def on_middle_autoScale(self, event):
-        if event.button == 2:
-            self.plot_ax.relim()
-            self.plot_ax.autoscale()
-            self.figure.tight_layout()
-            self.canvas.draw_idle()
 
 
 if __name__ == "__main__":
