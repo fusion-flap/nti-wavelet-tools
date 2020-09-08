@@ -58,7 +58,7 @@ class NWTDataObject:
             loaded_sav = readsav(path, python_dict=True)
             self.reset()
             self.raw_data, self.transforms, self.smoothed_apsds, self.crosstransforms, self.smoothed_crosstransforms, \
-            self.coherences, self.transfers, self.modenumbers, self.qs = convert_dict_to_flap.convert_processed_sav(
+            self.coherences, self.transfers, self.modenumbers, self.qs = convert_dict_to_flap.convert_processed_sav_og(
                 loaded_sav)
             self.update_properties()
         except Exception as e:
