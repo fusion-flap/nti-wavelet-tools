@@ -115,6 +115,80 @@ def convert_raw_sav(input_dict, skip_keys=[], create_channel_no=False, logger=de
 
     return flap_object
 
+def convert_raw_sav_og(input_dict, skip_keys=[], logger=default_logger):
+    raw_data = None
+    coordinates = []
+    exp_id=input_dict['expname'].decode('utf-8') + "-" + str(input_dict['shotnumber'])
+    print(exp_id)
+    
+    try:
+        time_ax = flap.Coordinate(name="Time",
+                        unit="s",
+                        mode=flap.CoordinateMode(equidistant=True),
+                        values=input_dict['timeax'],
+                        dimension_list=[1],
+                        shape=len(input_dict['timeax'])
+                        )
+        coordinates.append(time_ax)
+        logger.debug('Time axis created')
+    except:
+        logger.debug('Time axis does not exist.')
+
+    try:
+        temp = []
+        for item in input_dict['channels']:
+            temp.append(item.decode('utf-8'))
+        channel_name = flap.Coordinate(name="Channels",
+                                       unit=None,
+                                       mode=flap.CoordinateMode(equidistant=False),
+                                       values=temp,
+                                       dimension_list=[0],
+                                       shape=len(temp)
+                                       )
+        coordinates.append(channel_name)
+        logger.debug('Channels axis created')  
+    except:
+        logger.debug('Channel axis does not exist.')
+
+
+    try:
+        theta_ax = flap.Coordinate(name="Theta",
+                                   unit="rad",
+                                   mode=flap.CoordinateMode(equidistant=False),
+                                   values=input_dict["theta"],
+                                   dimension_list=[0],
+                                   shape=len(input_dict["theta"])
+                                   )
+        coordinates.append(theta_ax)
+        logger.debug('Theta axis created')
+    except:
+        logger.debug('Theta axis does not exist.')
+
+    try:
+        phi_ax = flap.Coordinate(name="Phi",
+                                 unit="rad",
+                                 mode=flap.CoordinateMode(equidistant=False),
+                                 values=input_dict["phi"],
+                                 dimension_list=[0],
+                                 shape=len(input_dict["phi"])
+                                 )
+        coordinates.append(phi_ax)
+        logger.debug('Phi axis created')
+    except:
+        logger.debug('Phi axis does not exist.')
+        
+    raw_data = flap.DataObject(
+        data_array=input_dict['data'],
+        data_unit=flap.Unit(name='voltage', unit='volt'),
+        exp_id=exp_id,
+        coordinates=coordinates,
+        data_shape=input_dict['data'].shape,
+    )
+    logger.info('Flap object created and filled')
+
+    raw_data.history = [input_dict["data_history"].decode('utf-8'), input_dict["coord_history"].decode('utf-8')]
+    return raw_data
+
 
 def convert_processed_sav_og(input_dict, skip_keys=[], logger=default_logger):
     raw_data = None

@@ -73,7 +73,7 @@ class NWTDataObject:
             return
         try:
             self.reset()
-            self.raw_data = convert_dict_to_flap.convert_raw_sav(loaded_sav, skip_keys=[])
+            self.raw_data = convert_dict_to_flap.convert_raw_sav_og(loaded_sav, skip_keys=[])
             self.logger.debug("Loaded sav file")
         except TypeError('loaded_sav is not a dictionary of a raw sav file'):
             self.logger.error('loaded_sav is not a dictionary of a raw sav file', exc_info=True)
