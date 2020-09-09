@@ -67,23 +67,21 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # signal processing parameters
         self.defaultTransformParameters()
         # connect buttons - part 1 - transform
-        self.loadsignalButton.clicked.connect(self.loadsignal)
-        self.savesignalButton.clicked.connect(self.savesignal)
-        self.selectchannelsButton.clicked.connect(self.selectchannels)
+        self.loadsignalButton.clicked.connect(self.loadSignal)
+        self.savesignalButton.clicked.connect(self.saveSignal)
+        self.selectchannelsButton.clicked.connect(self.selectChannels)
         self.stftRadioButton.toggled.connect(self.setOtherGrey)
         self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
         self.startcalculationButton.clicked.connect(self.startCalculation)
         # connect buttons - part 2 - processed data
         self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
-        # self.loadprocessedsignalButton.clicked.connect(self.loadProcessedTemp)
         self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
         # connect buttons - part 3 - detailed plotting
-        # self.openplottinginterfaceButton.clicked.connect()
+        self.openplottinginterfaceButton.clicked.connect(self.openPlotOptions)
         # connect buttons - part 4 - quick plotting
         self.quickplotButton.clicked.connect(self.doQuickPlot)
         self.hintCheckBox.clicked.connect(self.tryRemoveText)
-        self.quickplottypeComboBox.currentIndexChanged.connect(self.updateQuickPlot)
 
         # set regexp for line edit inputs
         self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
@@ -111,28 +109,118 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # if self.hintCB
         self.id2 = self.canvas.mpl_connect('motion_notify_event', self.MouseHoverInteraction)
 
+    def loadSignal(self):
+        ui_logger.debug('Loading signal started')
+        self.loadSuccessful = False
+        try:
+            path = QtWidgets.QFileDialog.getOpenFileName()[0]
+
+            if path.count('.') == 0:
+                print('file has no extension we dont know what kind of file we shoudl read and how')
+                return
+            extension = (path.split('.'))[-1]
+
+            if extension == "flapdata":
+                self.progresslogTextEdit.append('Loading flap object...')
+                ui_logger.info('Loading flap object: ' + path)
+                self.data.load_flap_raw_dump(path)
+                self.loadSuccessful = True
+            elif extension == "sav":
+                self.progresslogTextEdit.append("Loading sav file...")
+                ui_logger.info("Loading sav file: " + path)
+                self.data.load_raw_sav(path)
+                ui_logger.debug("Finished loading raw sav")
+                self.loadSuccessful = True
+            else:
+                self.progresslogTextEdit.append("Unknown data format, no data loaded")
+                ui_logger.warning("Unknown data format, no data loaded")
+
+        except Exception as e:
+            self.progresslogTextEdit.append('Loading ERROR')
+            ui_logger.error('Error during loading', exc_info=True)
+
+        if self.loadSuccessful is True:
+            self.progresslogTextEdit.append("File loaded")
+            ui_logger.info("File loaded")
+            self.updateSignalParameters()
+            # reset selected channels to empty
+            self.channelSelected = []
+            self.channelnumberLabel.setText(str(0))
+        self.savesignalButton.setEnabled(self.loadSuccessful)
+        self.selectchannelsButton.setEnabled(self.loadSuccessful)
+
+    def saveSignal(self):
+        ui_logger.debug('Saving signal started')
+        try:
+            path = QtWidgets.QFileDialog.getSaveFileName()[0]
+            # core.save_pynwt(self.data, path)
+            self.data.save(path)
+            self.progresslogTextEdit.append('Saved signals')
+            ui_logger.info('Saved signals to: ' + path + ".pynwt")
+        except Exception as e:
+            self.progresslogTextEdit.append('Saving ERROR')
+            ui_logger.error('Error during saving', exc_info=True)
+    
+    def loadProcessedSignal(self):
+        ui_logger.debug('Loading processed signal started')
+        self.loadSuccessful = False
+        try:
+            path = QtWidgets.QFileDialog.getOpenFileName()[0]
+            if path.count('.') == 0:
+                print('file has no extension we dont know what kind of file we shoudl read and how')
+                return
+            extension = (path.split('.'))[-1]
+            if extension == "pynwt":
+                self.progresslogTextEdit.append('Loading flap object...')
+                ui_logger.info('Loading flap object: ' + path)
+                self.data = load_pynwt(path)
+                self.loadSuccessful = True
+            elif extension == "sav":
+                self.progresslogTextEdit.append("Loading processed sav file...")
+                ui_logger.info("Loading sav file: " + path)
+                self.data.load_proc_sav(path)
+                self.loadSuccessful = True
+            else:
+                self.progresslogTextEdit.append("Unknown data format, no data loaded")
+                ui_logger.warning("Unknown data format, no data loaded")
+        except Exception as e:
+            self.progresslogTextEdit.append('Loading ERROR')
+            ui_logger.error('Error during processed data loading', exc_info=True)
+
+        if self.loadSuccessful is True:
+            self.progresslogTextEdit.append("Processed file loaded")
+            ui_logger.info("Processed file loaded")
+            self.updateSignalParameters()
+            # reset selected channels to empty
+            self.channelSelected = []
+        self.saveprocessedsignalButton.setEnabled(self.loadSuccessful)
+        self.selectchannelsButton.setEnabled(self.loadSuccessful)
+        self.openplottinginterfaceButton.setEnabled(self.loadSuccessful)
+        self.quickplotButton.setEnabled(True)
+        self.hintCheckBox.setEnabled(True)
+        return
+
+    def saveProcessedSignal(self):
+        ui_logger.debug('Saving processed signal started')
+        try:
+            path = QtWidgets.QFileDialog.getSaveFileName()[0]
+            self.data.save(path)
+            self.progresslogTextEdit.append('Saved signals')
+            ui_logger.info('Saved signals to: ' + path)
+        except Exception as e:
+            self.progresslogTextEdit.append('Saving ERROR')
+            ui_logger.error('Error during saving', exc_info=True)
+        return
+
     def tryRemoveText(self):
         try:
             self.txt.remove()
             self.canvas.draw()
         except:
             pass
-    def loadProcessedTemp(self):
-        from scipy.io import readsav
-        path = 'C:/Users/pepo/Desktop/NTIWT/nti-wavelet-tools/python/gui/testdata/test_processed.sav'
-        x = readsav(path, python_dict=True)
-        self.data.transforms = x['saved_datablock']['transforms'][0]
-#        self.data.modenumbers = x['saved_datablock']['modenumbers'][0]
-        print(np.shape(x['saved_datablock']['modenumbers'][0]))
-#        self.data.qs = x['saved_datablock']['qs'][0]
-        self.data.freqax = x['saved_datablock']['transf_freqax'][0]
-        self.data.timeax = x['saved_datablock']['transf_timeax'][0]
-        self.progresslogTextEdit.append('finished loading processed signal')
-        self.quickplotButton.setEnabled(True)
-        self.hintCheckBox.setEnabled(True)
-    
+
     def doQuickPlot(self):
-        ''' plot some random stuff '''
+        ''' plot some stuff '''
         try:
             self.figure.clf()
         except:
@@ -142,21 +230,22 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # print(type(selectedPlotOption), selectedPlotOption)
         if selectedPlotOption == 'Spectrogram':  
             self.colormap = plt.get_cmap('inferno')
-            print(self.data.transforms.data.shape)
+            # print(self.data.transforms.data.shape)
             self.plottedData = np.abs((self.data.transforms.data)[:,:,0])**0.1
-            print(np.shape(self.plottedData))
+            # print(np.shape(self.plottedData))
             self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
             self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
             levels = 10
+            cbarText = 'Power / a.u.'
         elif selectedPlotOption == 'Modenumber':
             self.colormap = plt.get_cmap('hsv')
             self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
             self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
             self.plottedData = self.data.modenumbers.data
-            # self.plottedData = np.abs(self.data.transforms[:,:,0])**0.1
-            # levels = 10
-            levels = len(np.unique(self.data.modenumbers.data))
-            print(np.unique(self.data.modenumbers.data))
+            levels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)-0.5
+            txtlevels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)
+            cbarText = 'Modenumber'
+            print(self.data.qs.data.shape)
    
 
         self.ax = self.figure.add_subplot(111)
@@ -169,14 +258,23 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
         self.colorbar = self.figure.colorbar(cm, cax=self.cax)
-        self.colorbar.set_label('Power / a.u.')
+        self.colorbar.set_label(cbarText)
+        if selectedPlotOption == 'Modenumber':
+            if txtlevels[0]*txtlevels[-1]<0:
+                minmax0 = np.array([txtlevels[0], 0, txtlevels[-2]])
+                minmax0_value = [txtlevels[0], 0, txtlevels[-2]]
+            else:
+                minmax0 = np.array([txtlevels[0], txtlevels[-2]])
+                minmax0_value = [txtlevels[0], txtlevels[-2]]  
+            self.colorbar.set_ticks(minmax0)
+            self.colorbar.set_ticklabels(minmax0_value)            
         # refresh canvas
         self.canvas.draw()
 
     def updateQuickPlot(self):
         selectedPlotOption = self.quickplottypeComboBox.currentText()
-        print('something else is selected for plotting, displayed stuff needs to be updated')
-        print(selectedPlotOption)
+        # print('something else is selected for plotting, displayed stuff needs to be updated')
+        # print(selectedPlotOption)
 
     def MouseClickInteraction(self, event):
         try:  # check if figure is defined or not
@@ -191,13 +289,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     ypos = event.ydata
                     lo, hi = self.colorbar.vmin, self.colorbar.vmax
                     diff = hi - lo
-                    act = lo + (hi - lo) * ypos
+                    act =  ypos #*(hi-lo)+lo
                     step = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
                     low = self.colorbar.boundaries[int((act - lo) / step)]
                     high = self.colorbar.boundaries[int((act - lo) / step) + 1]
+
                     # create new colormap where not selected values' alpha reduced to 0.1
                     ind0 = int(round(((low - lo) / diff) * self.colormap.N))
                     ind1 = int(round(((high - lo) / diff) * self.colormap.N))
+                    # print(low, high)
                     selectedCmap = (self.colormap)(np.arange(self.colormap.N))
                     selectedPlotOption = self.quickplottypeComboBox.currentText()
                     if selectedPlotOption == 'Spectrogram':
@@ -216,6 +316,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                             alpha[alpha > 1] = 1.
                             selectedCmap[ind1:self.colormap.N, -1] = alpha
                     elif selectedPlotOption == 'Modenumber':
+                        self.progresslogTextEdit.append('selected modenumber is: '+str(int((high+low)/2)))
                         selectedCmap[:, -1] = 0
                     else:
                         selectedCmap[:, -1] = 0
@@ -292,56 +393,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.transformParameters['order'] = 5
         self.transformParameters['scale'] = 0.1
 
-    def loadsignal(self):
-        ui_logger.debug('Loading signal started')
-        self.loadSuccessful = False
-        try:
-            path = QtWidgets.QFileDialog.getOpenFileName()[0]
-            if path[-9:] == ".flapdata":
-                self.progresslogTextEdit.append('Loading flap object...')
-                ui_logger.info('Loading flap object: ' + path)
-                self.data.load_flap_raw_dump(path)
-                self.loadSuccessful = True
-            elif path[-4:] == ".sav":
-                self.progresslogTextEdit.append("Loading sav file...")
-                ui_logger.info("Loading sav file: " + path)
-                self.data.load_raw_sav(path)
-                ui_logger.debug("Finished loading raw sav")
-                self.loadSuccessful = True
-            elif path[-13:] == ".procflapdata":
-                self.progresslogTextEdit.append("Trying to load processed sav, please use 'Load processed' button")
-                ui_logger.warning("Trying to load processed sav, please use 'Load processed' button")
-            else:
-                self.progresslogTextEdit.append("Unknown data format, no data loaded")
-                ui_logger.warning("Unknown data format, no data loaded")
-
-        except Exception as e:
-            self.progresslogTextEdit.append('Loading ERROR')
-            ui_logger.error('Error during loading', exc_info=True)
-
-        if self.loadSuccessful is True:
-            self.progresslogTextEdit.append("File loaded")
-            ui_logger.info("File loaded")
-            self.updateSignalParameters()
-            # reset selected channels to empty
-            self.channelSelected = []
-            self.channelnumberLabel.setText(str(0))
-        self.savesignalButton.setEnabled(self.loadSuccessful)
-        self.selectchannelsButton.setEnabled(self.loadSuccessful)
-
-    def savesignal(self):
-        ui_logger.debug('Saving signal started')
-        try:
-            path = QtWidgets.QFileDialog.getSaveFileName()[0]
-            # core.save_pynwt(self.data, path)
-            self.data.save(path)
-            self.progresslogTextEdit.append('Saved signals')
-            ui_logger.info('Saved signals to: ' + path + ".pynwt")
-        except Exception as e:
-            self.progresslogTextEdit.append('Saving ERROR')
-            ui_logger.error('Error during saving', exc_info=True)
-
-    def selectchannels(self):
+    def selectChannels(self):
         ui_logger.debug('Selecting channels started')
         # init window
         self.window = QtWidgets.QDialog()
@@ -403,12 +455,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.channelID = []
         n = self.data.raw_datapoints
         self.datapointsLabel.setText(str(n))
-        _time = self.data.raw_data.get_coordinate_object('Time')  # presumably in [s] 2b checked
-        fs = 1. / _time.step[0] / 1000  # kHz
+        timeax = self.data.raw_data.get_coordinate_object('Time').values
+        dt = (timeax[-1]-timeax[0])/n  # presumably in [s] 2b checked
+        fs = 1. / dt / 1000  # kHz
         self.samplingfrequencyLabel.setText('{:.0f}'.format(fs) + ' kHz')
         ui_logger.debug("Sample frequency extracted")
         dt = n / fs  # ms
-        self.timerangeLabel.setText('{:.0f}'.format(dt) + ' ms')
+        self.timerangeLabel.setText('{:.2f}'.format(timeax[0])+' s +'+'{:.0f}'.format(dt) + ' ms')
         _id = self.data.raw_data.get_coordinate_object('Channels').values
         for ch in _id:
             self.channelID.append(str(ch).replace("'", "").replace("b", ""))
@@ -432,48 +485,49 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
 
-    def calculate_spectogram(self):
-        data_time_ax = self.data.get_coordinate_object('Time')
+    # this part will go to FLAP    
+    # def calculate_spectogram(self):
+    #     data_time_ax = self.data.get_coordinate_object('Time')
 
-        fd = self.transformParameters['fd']
-        window = self.transformParameters['window']  # Gaussian window requires std
-        nperseg = self.transformParameters['windowlength']
-        order = self.transformParameters['order']
-        scale = self.transformParameters['scale']
-        noverlap = nperseg - self.transformParameters['step']
+    #     fd = self.transformParameters['fd']
+    #     window = self.transformParameters['window']  # Gaussian window requires std
+    #     nperseg = self.transformParameters['windowlength']
+    #     order = self.transformParameters['order']
+    #     scale = self.transformParameters['scale']
+    #     noverlap = nperseg - self.transformParameters['step']
 
-        spectogram_data = scipy.signal.spectogram(x=self.data.data, fs=1. / data_time_ax.step[0], window='hann',
-                                                  nperseg=nperseg, noverlap=noverlap
-                                                  )  # return_onesided = True, nfft = 1000, detrend = 'constant',
+    #     spectogram_data = scipy.signal.spectogram(x=self.data.data, fs=1. / data_time_ax.step[0], window='hann',
+    #                                               nperseg=nperseg, noverlap=noverlap
+    #                                               )  # return_onesided = True, nfft = 1000, detrend = 'constant',
 
-        spectogram_time_ax = flap.Coordinate(name="Time",
-                                             unit="s",
-                                             mode=flap.CoordinateMode(equidistant=True),
-                                             start=data_time_ax.start,
-                                             step=data_time_ax.step[0] * self.transformParameters['step'],
-                                             dimension_list=[1]
-                                             )
+    #     spectogram_time_ax = flap.Coordinate(name="Time",
+    #                                          unit="s",
+    #                                          mode=flap.CoordinateMode(equidistant=True),
+    #                                          start=data_time_ax.start,
+    #                                          step=data_time_ax.step[0] * self.transformParameters['step'],
+    #                                          dimension_list=[1]
+    #                                          )
 
-        spectogram_freq_ax = flap.Coordinate(name="Frequency",
-                                             unit="Hz",
-                                             mode=flap.CoordinateMode(equidistant=True),
-                                             start=0,
-                                             step=1. / data_time_ax.step[0] / 2,
-                                             dimension_list=[0]
-                                             )
+    #     spectogram_freq_ax = flap.Coordinate(name="Frequency",
+    #                                          unit="Hz",
+    #                                          mode=flap.CoordinateMode(equidistant=True),
+    #                                          start=0,
+    #                                          step=1. / data_time_ax.step[0] / 2,
+    #                                          dimension_list=[0]
+    #                                          )
 
-        spectogram = flap.DataObject(
-            data_array=spectogram_data,
-            data_unit=flap.Unit(name='Power Spectral density', unit='Watt'),
-            exp_id=self.data.exp_id,
-            coordinates=[spectogram_time_ax, spectogram_freq_ax],
-            data_shape=spectogram_data.shape,
-        )
-        logger.info('Flap object created and filled')
+    #     spectogram = flap.DataObject(
+    #         data_array=spectogram_data,
+    #         data_unit=flap.Unit(name='Power Spectral density', unit='Watt'),
+    #         exp_id=self.data.exp_id,
+    #         coordinates=[spectogram_time_ax, spectogram_freq_ax],
+    #         data_shape=spectogram_data.shape,
+    #     )
+    #     logger.info('Flap object created and filled')
 
     def startCalculation(self):
         if self.checkInputs():
-            self.progresslogTextEdit.append('Doing some mathmagic')
+            self.progresslogTextEdit.append('Doing some math in FLAP')
             for i in range(100):
                 self.transformProgressBar.setValue(i + 1)
                 self.modeProgressBar.setValue(i + 1)
@@ -512,71 +566,25 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             return True
         else:
             return False
-    
-    def loadProcessedSignal(self):
-        ui_logger.debug('Loading processed signal started')
-        # self.loadSuccessful = False
-        try:
-            path = QtWidgets.QFileDialog.getOpenFileName()[0]
-            if path[-6:] == ".pynwt":
-                self.progresslogTextEdit.append('Loading flap object...')
-                ui_logger.info('Loading flap object: ' + path)
-                self.data = load_pynwt(path)
-                self.loadSuccessful = True
-            elif path[-4:] == ".sav":
-                self.progresslogTextEdit.append("Loading processed sav file...")
-                ui_logger.info("Loading sav file: " + path)
-                self.data.load_proc_sav(path)
-                # print(self.data.modenumbers.shape)
-                # print(self.data.transforms.shape)
-                self.loadSuccessful = True
-            else:
-                self.progresslogTextEdit.append("Unknown data format, no data loaded")
-                ui_logger.warning("Unknown data format, no data loaded")
-        except Exception as e:
-            self.progresslogTextEdit.append('Loading ERROR')
-            ui_logger.error('Error during processed data loading', exc_info=True)
 
-        if self.loadSuccessful is True:
-            self.progresslogTextEdit.append("Processed file loaded")
-            ui_logger.info("Processed file loaded")
-            # self.updateSignalParameters()
-            # reset selected channels to empty
-            self.channelSelected = []
-            # self.channelnumberLabel.setText(str(0))
-        self.saveprocessedsignalButton.setEnabled(self.loadSuccessful)
-        self.selectchannelsButton.setEnabled(self.loadSuccessful)
-        self.quickplotButton.setEnabled(True)
-        self.hintCheckBox.setEnabled(True)
-        # print(self.data.transforms.data)
-
-        return
-
-    def saveProcessedSignal(self):
-        ui_logger.debug('Saving processed signal started')
-        try:
-            path = QtWidgets.QFileDialog.getSaveFileName()[0]
-            self.data.save(path)
-            self.progresslogTextEdit.append('Saved signals')
-            ui_logger.info('Saved signals to: ' + path)
-        except Exception as e:
-            self.progresslogTextEdit.append('Saving ERROR')
-            ui_logger.error('Error during saving', exc_info=True)
-        return
-
-    def updatePlotOptions(self):
+    def openPlotOptions(self):
         self.progresslogTextEdit.append('plot options button pressed')
+        # ui_logger.debug('Selecting channels started')
+        # init window
+        self.window = QtWidgets.QDialog()
+        self.window.setModal(True)  # disable main window until channels being selected
+
+        self.ui = Ui_PlotOptionsWindow()
+        # self.ui.setupUi(self.window)
+        self.window.show()
         return
 
-    # def doQuickPlot(self):
-    #     self.progresslogTextEdit.append('do plot button pressed')
-    #     return
-
-    def resetPlot(self):
-        self.progresslogTextEdit.append('reset plot button pressed')
-        return
-
-
+# class plotOptionWindow(self):
+#     def __init__(self):
+#         QtWidgets.QMainWindow.__init__(self)
+#         Ui_PlotOptionsWindow.__init__(self)
+#         self.setupUi(self)
+#         print()
 
 if __name__ == "__main__":
     ui_logger.debug('Application started')
