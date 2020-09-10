@@ -218,6 +218,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.canvas.draw()
         except:
             pass
+    def addTextToCanvas(self, additional_text=''):
+        # self.canvas.create_text(0,0,text = 'cica')
+        # self.canvas.draw()
+        return
 
     def doQuickPlot(self):
         ''' plot some stuff '''
@@ -228,6 +232,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # # dummy data to be plotted
         selectedPlotOption = self.quickplottypeComboBox.currentText()
         # print(type(selectedPlotOption), selectedPlotOption)
+        # self.addTextToCanvas()
         if selectedPlotOption == 'Spectrogram':  
             self.colormap = plt.get_cmap('inferno')
             # print(self.data.transforms.data.shape)
@@ -239,15 +244,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             cbarText = 'Power / a.u.'
         elif selectedPlotOption == 'Modenumber':
             self.colormap = plt.get_cmap('hsv')
+            # self.colormap = plt.get_cmap('terrain')
             self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
             self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
             self.plottedData = self.data.modenumbers.data
             levels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)-0.5
             txtlevels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)
             cbarText = 'Modenumber'
-            print(self.data.qs.data.shape)
+            # print(self.data.qs.data.shape)
    
-
         self.ax = self.figure.add_subplot(111)
         self.figure.subplots_adjust(right=0.8)
         self.cax = self.figure.add_axes([0.82, 0.11, 0.02, 0.77])
@@ -265,7 +270,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 minmax0_value = [txtlevels[0], 0, txtlevels[-2]]
             else:
                 minmax0 = np.array([txtlevels[0], txtlevels[-2]])
-                minmax0_value = [txtlevels[0], txtlevels[-2]]  
+                minmax0_value = [txtlevels[0], txtlevels[-2]]
             self.colorbar.set_ticks(minmax0)
             self.colorbar.set_ticklabels(minmax0_value)            
         # refresh canvas
@@ -317,9 +322,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                             selectedCmap[ind1:self.colormap.N, -1] = alpha
                     elif selectedPlotOption == 'Modenumber':
                         self.progresslogTextEdit.append('selected modenumber is: '+str(int((high+low)/2)))
-                        selectedCmap[:, -1] = 0
+                        selectedCmap[:, -1] = 0.05
                     else:
-                        selectedCmap[:, -1] = 0
+                        selectedCmap[:, -1] = 0.2
                     selectedCmap[ind0:ind1, -1] = 1.
                     selectedCmap = ListedColormap(selectedCmap)
                     # redraw contour with custom colormap with current zoom settings
@@ -571,11 +576,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progresslogTextEdit.append('plot options button pressed')
         # ui_logger.debug('Selecting channels started')
         # init window
-        self.window = QtWidgets.QDialog()
-        self.window.setModal(True)  # disable main window until channels being selected
+        self.window = QtWidgets.QMainWindow()
+        # self.window.setModal(True)  # disable main window until channels being selected
 
         self.ui = Ui_PlotOptionsWindow()
-        # self.ui.setupUi(self.window)
+        self.ui.setupUi(self.window)
         self.window.show()
         return
 
