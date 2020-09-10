@@ -34,8 +34,6 @@ class NWTDataObject:
         self.transfers = None
         self.modenumbers = None
         self.qs = None
-        self.freqax = None
-        self.timeax = None
 
         self.logger = logger
 
