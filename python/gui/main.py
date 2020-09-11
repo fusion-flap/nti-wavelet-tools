@@ -17,9 +17,9 @@ from PyQt5.QtGui import QRegExpValidator
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 # redefine NavigationToolbar with custom available buttons
-# class NavigationToolbar(NavigationToolbar):
-#     toolitems = [t for t in NavigationToolbar.toolitems if
-#                   t[0] in ('Home', 'Zoom', 'Save')]
+class NavigationToolbar(NavigationToolbar):
+    toolitems = [t for t in NavigationToolbar.toolitems if
+                  t[0] in ('Home', 'Zoom', 'Save', 'Pan')]
 import flap
 import logging
 
@@ -71,7 +71,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.savesignalButton.clicked.connect(self.saveSignal)
         self.selectchannelsButton.clicked.connect(self.selectChannels)
         self.stftRadioButton.toggled.connect(self.setOtherGrey)
-        self.quickanddirtyButton.clicked.connect(self.quickanddirtysetting)
+        self.quickanddirtyButton.clicked.connect(self.quickAndDirtySetting)
         self.domodenumbersCheckBox.clicked.connect(self.setGrey)
         self.startcalculationButton.clicked.connect(self.startCalculation)
         # connect buttons - part 2 - processed data
@@ -112,6 +112,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def loadSignal(self):
         ui_logger.debug('Loading signal started')
         self.loadSuccessful = False
+        self.data.__init__()
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
 
@@ -164,6 +165,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def loadProcessedSignal(self):
         ui_logger.debug('Loading processed signal started')
         self.loadSuccessful = False
+        self.data.__init__()
         try:
             path = QtWidgets.QFileDialog.getOpenFileName()[0]
             if path.count('.') == 0:
@@ -179,7 +181,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.progresslogTextEdit.append("Loading processed sav file...")
                 ui_logger.info("Loading sav file: " + path)
                 self.data.load_proc_sav(path)
-                self.loadSuccessful = True
+                try: #check if it indeed was a processed data...
+                    _ = self.data.transforms.get_coordinate_object('Transf_timeax').values
+                    self.loadSuccessful = True
+                except:
+                    self.progresslogTextEdit.append('Loading ERROR')
             else:
                 self.progresslogTextEdit.append("Unknown data format, no data loaded")
                 ui_logger.warning("Unknown data format, no data loaded")
@@ -193,6 +199,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.updateSignalParameters()
             # reset selected channels to empty
             self.channelSelected = []
+        try:
+            nch = self.data.transforms.data.shape[-1]
+            self.channelnumberLabel.setText(str(nch))
+        except:
+            pass
+        # self.transformsGB.setEnabled(self.loadSuccessful)
         self.saveprocessedsignalButton.setEnabled(self.loadSuccessful)
         self.selectchannelsButton.setEnabled(self.loadSuccessful)
         self.openplottinginterfaceButton.setEnabled(self.loadSuccessful)
@@ -224,20 +236,19 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         return
 
     def doQuickPlot(self):
-        ''' plot some stuff '''
+        ''' plot some '''
         try:
             self.figure.clf()
         except:
             pass
-        # # dummy data to be plotted
         selectedPlotOption = self.quickplottypeComboBox.currentText()
-        # print(type(selectedPlotOption), selectedPlotOption)
         # self.addTextToCanvas()
+        self.plotTitle = ''
         if selectedPlotOption == 'Spectrogram':  
             self.colormap = plt.get_cmap('inferno')
-            # print(self.data.transforms.data.shape)
             self.plottedData = np.abs((self.data.transforms.data)[:,:,0])**0.1
-            # print(np.shape(self.plottedData))
+            self.plotTitle = self.data.transforms.exp_id+'_'+(self.data.transforms.get_coordinate_object('Selected_channels').values)[0]
+
             self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
             self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
             levels = 10
@@ -251,7 +262,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             levels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)-0.5
             txtlevels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)
             cbarText = 'Modenumber'
-            # print(self.data.qs.data.shape)
    
         self.ax = self.figure.add_subplot(111)
         self.figure.subplots_adjust(right=0.8)
@@ -262,6 +272,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         cm = self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap, levels = levels)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
+        self.ax.set_title(self.plotTitle)
         self.colorbar = self.figure.colorbar(cm, cax=self.cax)
         self.colorbar.set_label(cbarText)
         if selectedPlotOption == 'Modenumber':
@@ -276,10 +287,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # refresh canvas
         self.canvas.draw()
 
-    def updateQuickPlot(self):
-        selectedPlotOption = self.quickplottypeComboBox.currentText()
-        # print('something else is selected for plotting, displayed stuff needs to be updated')
-        # print(selectedPlotOption)
+    # def updateQuickPlot(self):
+    #     selectedPlotOption = self.quickplottypeComboBox.currentText()
+    #     # print('something else is selected for plotting, displayed stuff needs to be updated')
+    #     # print(selectedPlotOption)
 
     def MouseClickInteraction(self, event):
         try:  # check if figure is defined or not
@@ -336,6 +347,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.ax.set_ylim(yran)
                     self.ax.set_xlabel('Time / s')
                     self.ax.set_ylabel('Frequency / kHz')
+                    self.ax.set_title(self.plotTitle)
                 if event.button == 2:  # middle click -reset plot
                     self.doQuickPlot()
                 if event.button == 3:  # right click - reset colormap
@@ -392,7 +404,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.transformParameters = {}
         self.transformParameters['type'] = 'STFT'
         self.transformParameters['step'] = 5
-        self.transformParameters['fd'] = 300  # kHz
+        self.transformParameters['fs'] = 300  # kHz
         self.transformParameters['window'] = 'gaussian'
         self.transformParameters['windowlength'] = 200  # data point
         self.transformParameters['order'] = 5
@@ -450,7 +462,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.doneButton.clicked.connect(returnSelected)
         self.window.show()
 
-    def quickanddirtysetting(self):
+    def quickAndDirtySetting(self):
         self.progresslogTextEdit.append('Quick and dirty button pressed')
         ui_logger.info('Quick and dirty button pressed')
         # update stft settings
@@ -468,8 +480,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         dt = n / fs  # ms
         self.timerangeLabel.setText('{:.2f}'.format(timeax[0])+' s +'+'{:.0f}'.format(dt) + ' ms')
         _id = self.data.raw_data.get_coordinate_object('Channels').values
-        for ch in _id:
-            self.channelID.append(str(ch).replace("'", "").replace("b", ""))
+        # for ch in _id:
+        #     self.channelID.append(str(ch).replace("'", "").replace("b", ""))
+        self.channelID = _id
         ui_logger.debug("Channel labels extracted")
 
     def setOtherGrey(self):
@@ -489,46 +502,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modelowLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modehighLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
         self.modestepLineEdit.setEnabled(self.domodenumbersCheckBox.isChecked())
-
-    # this part will go to FLAP    
-    # def calculate_spectogram(self):
-    #     data_time_ax = self.data.get_coordinate_object('Time')
-
-    #     fd = self.transformParameters['fd']
-    #     window = self.transformParameters['window']  # Gaussian window requires std
-    #     nperseg = self.transformParameters['windowlength']
-    #     order = self.transformParameters['order']
-    #     scale = self.transformParameters['scale']
-    #     noverlap = nperseg - self.transformParameters['step']
-
-    #     spectogram_data = scipy.signal.spectogram(x=self.data.data, fs=1. / data_time_ax.step[0], window='hann',
-    #                                               nperseg=nperseg, noverlap=noverlap
-    #                                               )  # return_onesided = True, nfft = 1000, detrend = 'constant',
-
-    #     spectogram_time_ax = flap.Coordinate(name="Time",
-    #                                          unit="s",
-    #                                          mode=flap.CoordinateMode(equidistant=True),
-    #                                          start=data_time_ax.start,
-    #                                          step=data_time_ax.step[0] * self.transformParameters['step'],
-    #                                          dimension_list=[1]
-    #                                          )
-
-    #     spectogram_freq_ax = flap.Coordinate(name="Frequency",
-    #                                          unit="Hz",
-    #                                          mode=flap.CoordinateMode(equidistant=True),
-    #                                          start=0,
-    #                                          step=1. / data_time_ax.step[0] / 2,
-    #                                          dimension_list=[0]
-    #                                          )
-
-    #     spectogram = flap.DataObject(
-    #         data_array=spectogram_data,
-    #         data_unit=flap.Unit(name='Power Spectral density', unit='Watt'),
-    #         exp_id=self.data.exp_id,
-    #         coordinates=[spectogram_time_ax, spectogram_freq_ax],
-    #         data_shape=spectogram_data.shape,
-    #     )
-    #     logger.info('Flap object created and filled')
 
     def startCalculation(self):
         if self.checkInputs():
@@ -577,7 +550,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # ui_logger.debug('Selecting channels started')
         # init window
         self.window = QtWidgets.QMainWindow()
-        # self.window.setModal(True)  # disable main window until channels being selected
 
         self.ui = Ui_PlotOptionsWindow()
         self.ui.setupUi(self.window)

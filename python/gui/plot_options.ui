@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1298</width>
-    <height>642</height>
+    <height>855</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>541</width>
-      <height>591</height>
+      <height>801</height>
      </rect>
     </property>
     <property name="title">
@@ -29,10 +29,10 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>560</y>
-       <width>75</width>
-       <height>23</height>
+       <x>360</x>
+       <y>710</y>
+       <width>171</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="text">
@@ -46,7 +46,7 @@
       <x>560</x>
       <y>10</y>
       <width>721</width>
-      <height>591</height>
+      <height>801</height>
      </rect>
     </property>
     <property name="title">
@@ -58,7 +58,7 @@
        <x>10</x>
        <y>20</y>
        <width>701</width>
-       <height>561</height>
+       <height>771</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="quickPlotLayout"/>
