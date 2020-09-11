@@ -34,6 +34,8 @@ class NWTDataObject:
         self.transfers = None
         self.modenumbers = None
         self.qs = None
+        
+        self.transform_parameters = {}
 
         self.logger = logger
 
@@ -56,8 +58,8 @@ class NWTDataObject:
             loaded_sav = readsav(path, python_dict=True)
             self.reset()
             self.raw_data, self.transforms, self.smoothed_apsds, self.crosstransforms, self.smoothed_crosstransforms, \
-            self.coherences, self.transfers, self.modenumbers, self.qs = convert_dict_to_flap.convert_processed_sav_og(
-                loaded_sav)
+            self.coherences, self.transfers, self.modenumbers, self.qs, self.transform_parameters \
+                = convert_dict_to_flap.convert_processed_sav_og(loaded_sav)
             self.update_properties()
         except Exception as e:
             self.logger.error("Exception occurred during processed sav loading:", exc_info=True)
@@ -71,7 +73,7 @@ class NWTDataObject:
             return
         try:
             self.reset()
-            self.raw_data = convert_dict_to_flap.convert_raw_sav_og(loaded_sav, skip_keys=[])
+            self.raw_data = convert_dict_to_flap.convert_raw_sav_og(loaded_sav)
             self.logger.debug("Loaded sav file")
         except TypeError('loaded_sav is not a dictionary of a raw sav file'):
             self.logger.error('loaded_sav is not a dictionary of a raw sav file', exc_info=True)
