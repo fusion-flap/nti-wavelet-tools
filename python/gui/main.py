@@ -6,6 +6,7 @@ Created on Sat Jul 27 12:22:10 2019
 """
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from matplotlib import gridspec
 import sys
 import scipy
 import numpy as np
@@ -32,9 +33,11 @@ import core
 qtCreatorFile = "gui_layout.ui"
 qtChannelsFile = "channel_selection.ui"
 qtPlotOptionsFile = "plot_options.ui"
+qtPlotHelpFile = "plot_help.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 Ui_ChannelsWindow, _ = uic.loadUiType(qtChannelsFile)
 Ui_PlotOptionsWindow, _ = uic.loadUiType(qtPlotOptionsFile)
+Ui_PlotHelpWindow, _ = uic.loadUiType(qtPlotHelpFile)
 
 # This command does not overwrite loggers, only needed at initialization
 logging.basicConfig(filename='log.log',
@@ -82,6 +85,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # connect buttons - part 4 - quick plotting
         self.quickplotButton.clicked.connect(self.doQuickPlot)
         self.hintCheckBox.clicked.connect(self.tryRemoveText)
+        self.plothelpButton.clicked.connect(self.openPlotHelp)
+        # connect menu
+        # self.actionReset.triggered.connect(self.__init__)
 
         # set regexp for line edit inputs
         self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
@@ -182,7 +188,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 ui_logger.info("Loading sav file: " + path)
                 self.data.load_proc_sav(path)
                 try: #check if it indeed was a processed data...
-                    _ = self.data.transforms.get_coordinate_object('Transf_timeax').values
+                    _ = self.data.transforms.get_coordinate_object('Transf_timeax').valuess
                     self.loadSuccessful = True
                 except:
                     self.progresslogTextEdit.append('Loading ERROR')
@@ -192,6 +198,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             self.progresslogTextEdit.append('Loading ERROR')
             ui_logger.error('Error during processed data loading', exc_info=True)
+            self.loadSuccessful = False
+            
 
         if self.loadSuccessful is True:
             self.progresslogTextEdit.append("Processed file loaded")
@@ -210,6 +218,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.openplottinginterfaceButton.setEnabled(self.loadSuccessful)
         self.quickplotButton.setEnabled(True)
         self.hintCheckBox.setEnabled(True)
+        self.transfDetailsCheckBox.setEnabled(True)
         return
 
     def saveProcessedSignal(self):
@@ -254,7 +263,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             levels = 10
             cbarText = 'Power / a.u.'
         elif selectedPlotOption == 'Modenumber':
-            self.colormap = plt.get_cmap('hsv')
+            self.colormap = self.modenumberColormap()
             # self.colormap = plt.get_cmap('terrain')
             self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
             self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
@@ -262,10 +271,25 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             levels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)-0.5
             txtlevels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)
             cbarText = 'Modenumber'
-   
-        self.ax = self.figure.add_subplot(111)
-        self.figure.subplots_adjust(right=0.8)
-        self.cax = self.figure.add_axes([0.82, 0.11, 0.02, 0.77])
+        if self.transfDetailsCheckBox.isChecked():
+            # print('here')
+            gs = gridspec.GridSpec(2, 1, height_ratios=[5,1]) 
+            self.ax = self.figure.add_subplot(gs[0])
+            self.cax = self.figure.add_axes([0.82, 0.31, 0.02, 0.57])
+            self.textax = self.figure.add_subplot(gs[1])
+            self.textax.axis('off')
+            line1 = 'Neque porro quisquam'+'\n'
+            line2 = 'est qui dolorem ipsum'+'\n'
+            line3 = 'quia dolor sit amet,'+'\n'
+            line4 = 'consectetur, adipisci velit...'
+            self.textax.text(0,0,line1+line2+line3+line3+line4, fontsize = 5)
+            self.textax.text(0.33,0,line1+line2+line3+line3+line4, fontsize = 5)
+            self.textax.text(0.66,0,line1+line2+line3+line3+line4, fontsize = 5)
+            self.figure.subplots_adjust(right=0.8)
+        else:
+            self.ax = self.figure.add_subplot(111)
+            self.figure.subplots_adjust(right=0.8)
+            self.cax = self.figure.add_axes([0.82, 0.125, 0.02, 0.755])
 
         # discards the old graph
         self.ax.clear()
@@ -313,7 +337,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     # create new colormap where not selected values' alpha reduced to 0.1
                     ind0 = int(round(((low - lo) / diff) * self.colormap.N))
                     ind1 = int(round(((high - lo) / diff) * self.colormap.N))
-                    # print(low, high)
                     selectedCmap = (self.colormap)(np.arange(self.colormap.N))
                     selectedPlotOption = self.quickplottypeComboBox.currentText()
                     if selectedPlotOption == 'Spectrogram':
@@ -555,7 +578,25 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.setupUi(self.window)
         self.window.show()
         return
+    
+    def openPlotHelp(self):
+        self.window = QtWidgets.QDialog()
 
+        self.ui = Ui_PlotHelpWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()      
+        
+        #      self.window.setModal(True)  # disable main window until channels being selected
+
+        # self.ui = Ui_ChannelsWindow()
+        # self.ui.setupUi(self.window)
+    def modenumberColormap(self):
+        cmap = plt.get_cmap('hsv')
+        _ = cmap(np.arange(cmap.N))
+        _ = _[0:int(cmap.N/1.2),:] #cut top part (not making it cyclical)
+        cmap = ListedColormap(_)
+        return cmap
+    
 # class plotOptionWindow(self):
 #     def __init__(self):
 #         QtWidgets.QMainWindow.__init__(self)
