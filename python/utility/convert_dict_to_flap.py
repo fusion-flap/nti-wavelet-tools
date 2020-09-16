@@ -100,19 +100,20 @@ def convert_raw_sav(input_dict, skip_keys=[], create_channel_no=False, logger=de
 
     return flap_object
 
+
 def convert_raw_sav_og(input_dict, logger=default_logger):
     raw_data = None
     coordinates = []
-    exp_id=input_dict['expname'].decode('utf-8') + "-" + str(input_dict['shotnumber'])
-    
+    exp_id = input_dict['expname'].decode('utf-8') + "-" + str(input_dict['shotnumber'])
+
     try:
         time_ax = flap.Coordinate(name="Time",
-                        unit="s",
-                        mode=flap.CoordinateMode(equidistant=False),
-                        values=input_dict['timeax'],
-                        dimension_list=[1],
-                        shape=len(input_dict['timeax'])
-                        )
+                                  unit="s",
+                                  mode=flap.CoordinateMode(equidistant=False),
+                                  values=input_dict['timeax'],
+                                  dimension_list=[1],
+                                  shape=len(input_dict['timeax'])
+                                  )
         coordinates.append(time_ax)
         logger.debug('Time axis created')
     except:
@@ -130,10 +131,9 @@ def convert_raw_sav_og(input_dict, logger=default_logger):
                                        shape=len(temp)
                                        )
         coordinates.append(channel_name)
-        logger.debug('Channels axis created')  
+        logger.debug('Channels axis created')
     except:
         logger.debug('Channel axis does not exist.')
-
 
     try:
         theta_ax = flap.Coordinate(name="Theta",
@@ -160,8 +160,8 @@ def convert_raw_sav_og(input_dict, logger=default_logger):
         logger.debug('Phi axis created')
     except:
         logger.debug('Phi axis does not exist.')
-    
-    if coordinates != []: 
+
+    if coordinates != []:
         raw_data = flap.DataObject(
             data_array=input_dict['data'],
             data_unit=flap.Unit(name='unit', unit='a.u.'),
@@ -172,6 +172,7 @@ def convert_raw_sav_og(input_dict, logger=default_logger):
         logger.info('Flap object created and filled')
         raw_data.history = [input_dict["data_history"].decode('utf-8'), input_dict["coord_history"].decode('utf-8')]
     return raw_data
+
 
 def transform_parameters_empty():
     dy = {}
@@ -202,41 +203,46 @@ def transform_parameters_empty():
     dy['mode_max'] = None
     return dy
 
+
 def convert_processed_sav_og(input_dict, logger=default_logger):
     raw_data = None
     transforms = None
-    smoothed_apsds = None #not used yet, not implemented
-    crosstransforms = None #not used yet, not implemented
-    smoothed_crosstransforms = None #not used yet, not implemented
-    transfers = None #not used yet, not implemented
+    smoothed_apsds = None  # not used yet, not implemented
+    crosstransforms = None  # not used yet, not implemented
+    smoothed_crosstransforms = None  # not used yet, not implemented
+    transfers = None  # not used yet, not implemented
     coherences = None
     modenumbers = None
     qs = None
     transform_parameters = transform_parameters_empty()
-    try: #presumably this will need some renaming, and making it consistent with the GUI layout naming
+    try:  # presumably this will need some renaming, and making it consistent with the GUI layout naming
         transform_parameters['transf_selection'] = input_dict['saved_datablock']['proc_transf_selection'][0]
         transform_parameters['transf_cwt_selection'] = input_dict['saved_datablock']['proc_transf_cwt_selection'][0]
-        transform_parameters['transf_cwt_family'] = input_dict['saved_datablock']['proc_transf_cwt_family'][0].decode('utf-8')
+        transform_parameters['transf_cwt_family'] = input_dict['saved_datablock']['proc_transf_cwt_family'][0].decode(
+            'utf-8')
         transform_parameters['transf_cwt_order'] = input_dict['saved_datablock']['proc_transf_cwt_order'][0]
         transform_parameters['transf_cwt_dscale'] = input_dict['saved_datablock']['proc_transf_cwt_dscale'][0]
         transform_parameters['transf_stft_selection'] = input_dict['saved_datablock']['proc_transf_cwt_dscale'][0]
-        
-        transform_parameters['transf_stft_window'] = input_dict['saved_datablock']['proc_transf_stft_window'][0].decode('utf-8')
+
+        transform_parameters['transf_stft_window'] = input_dict['saved_datablock']['proc_transf_stft_window'][0].decode(
+            'utf-8')
         transform_parameters['transf_stft_length'] = input_dict['saved_datablock']['proc_transf_stft_length'][0]
         transform_parameters['transf_stft_fres'] = input_dict['saved_datablock']['proc_transf_stft_fres'][0]
         transform_parameters['transf_stft_step'] = input_dict['saved_datablock']['proc_transf_stft_step'][0]
         transform_parameters['transf_freq_min'] = input_dict['saved_datablock']['proc_transf_freq_min'][0]
         transform_parameters['transf_freq_max'] = input_dict['saved_datablock']['proc_transf_freq_max'][0]
-        transform_parameters['transf_freq_resdatapoints'] = input_dict['saved_datablock']['proc_transf_freq_resdatapoints'][0]
+        transform_parameters['transf_freq_resdatapoints'] = \
+        input_dict['saved_datablock']['proc_transf_freq_resdatapoints'][0]
 
         transform_parameters['crosstr_selection'] = input_dict['saved_datablock']['proc_crosstr_selection'][0]
-        transform_parameters['crosstr_correction_selection'] = input_dict['saved_datablock']['proc_crosstr_correction_selection'][0]
-        
+        transform_parameters['crosstr_correction_selection'] = \
+        input_dict['saved_datablock']['proc_crosstr_correction_selection'][0]
+
         transform_parameters['coh_selection'] = input_dict['saved_datablock']['proc_coh_selection'][0]
         transform_parameters['coh_avg'] = input_dict['saved_datablock']['proc_coh_avg'][0]
-        
+
         transform_parameters['transfer_selection'] = input_dict['saved_datablock']['proc_transfer_selection'][0]
-        
+
         transform_parameters['mode_selection'] = input_dict['saved_datablock']['proc_mode_selection'][0]
         transform_parameters['mode_type'] = input_dict['saved_datablock']['proc_mode_type'][0].decode('utf-8')
         transform_parameters['mode_filter'] = input_dict['saved_datablock']['proc_transf_cwt_dscale'][0]
@@ -245,38 +251,40 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         transform_parameters['mode_min'] = input_dict['saved_datablock']['proc_mode_min'][0]
         transform_parameters['mode_max'] = input_dict['saved_datablock']['proc_mode_max'][0]
     except:
-        pass        
+        pass
 
     raw_data_axes = []
     transform_axes = []
     cross_transform_axes = []
     modenumber_axes = []
-    exp_id=input_dict['saved_datablock']['expname'][0].decode('utf-8') + "-" + str(input_dict['saved_datablock']['shotnumber'][0])
+    exp_id = input_dict['saved_datablock']['expname'][0].decode('utf-8') + "-" + str(
+        input_dict['saved_datablock']['shotnumber'][0])
     ####### raw data load #######
     try:
         time_ax = flap.Coordinate(name="Time",
-                        unit="s",
-                        mode=flap.CoordinateMode(equidistant=False),
-                        values=input_dict['saved_datablock']['time'][0],
-                        dimension_list=[1],
-                        shape=len(input_dict['saved_datablock']['time'][0])
-                        )
+                                  unit="s",
+                                  mode=flap.CoordinateMode(equidistant=False),
+                                  values=input_dict['saved_datablock']['time'][0],
+                                  dimension_list=[1],
+                                  shape=len(input_dict['saved_datablock']['time'][0])
+                                  )
         raw_data_axes.append(time_ax)
         logger.debug('Time axis created')
     except:
         logger.debug('Time axis does not exist.')
     try:
         channel_ax = flap.Coordinate(name="Channels",
-                                         unit=None,
-                                         mode=flap.CoordinateMode(equidistant=False),
-                                         values=input_dict['saved_datablock']["channels"][0].astype('U20'), #max 20 long string!
-                                         dimension_list=[0],
-                                         shape=len(input_dict['saved_datablock']["channels"][0])
-                                         )
+                                     unit=None,
+                                     mode=flap.CoordinateMode(equidistant=False),
+                                     values=input_dict['saved_datablock']["channels"][0].astype('U20'),
+                                     # max 20 long string!
+                                     dimension_list=[0],
+                                     shape=len(input_dict['saved_datablock']["channels"][0])
+                                     )
         raw_data_axes.append(channel_ax)
-        logger.debug('Channels axis created') 
+        logger.debug('Channels axis created')
     except:
-        logger.debug('Channels do not exist.')    
+        logger.debug('Channels do not exist.')
     try:
         theta_ax = flap.Coordinate(name="Theta",
                                    unit="rad",
@@ -289,20 +297,20 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         logger.debug('Theta axis created')
     except:
         logger.warning('Theta axis does not exist!')
-        
+
     try:
         phi_ax = flap.Coordinate(name="Phi",
-                                   unit="rad",
-                                   mode=flap.CoordinateMode(equidistant=False),
-                                   values=input_dict['saved_datablock']["phi"][0],
-                                   dimension_list=[0],
-                                   shape=len(input_dict['saved_datablock']["phi"][0])
-                                   )
+                                 unit="rad",
+                                 mode=flap.CoordinateMode(equidistant=False),
+                                 values=input_dict['saved_datablock']["phi"][0],
+                                 dimension_list=[0],
+                                 shape=len(input_dict['saved_datablock']["phi"][0])
+                                 )
         raw_data_axes.append(phi_ax)
         logger.debug('Phi axis created')
     except:
         logger.warning('Phi axis does not exist!')
-        
+
     try:
         raw_data = flap.DataObject(
             data_array=input_dict['saved_datablock']["data"][0],
@@ -315,7 +323,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
     except:
         logger.warning('Data dataobject does not exist!')
     ########################   
-    
+
     try:
         transf_timeax = flap.Coordinate(name="Transf_timeax",
                                         unit="s",
@@ -330,7 +338,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         logger.debug('Transform time axis created')
     except:
         logger.warning('Transform time axis does not exist!')
-   
+
     try:
         transf_freqax = flap.Coordinate(name="Transf_freqax",
                                         unit="kHz",
@@ -345,26 +353,26 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         logger.debug('Transform time axis created')
     except:
         logger.warning('Transform time axis does not exist!')
-    
+
     try:
         _temp = []
         for i in range(len(input_dict['saved_datablock']["channels"][0])):
             if input_dict['saved_datablock']['channels_ind'][0][i] == 1:
                 _temp.append(input_dict['saved_datablock']["channels"][0][i].decode('utf-8'))
         selectedChannels = flap.Coordinate(name="Selected_channels",
-                                        unit=None,
-                                        mode=flap.CoordinateMode(equidistant=False),
-                                        values=_temp,
-                                        dimension_list=[1],
-                                        shape=len(_temp)
-                                        )
+                                           unit=None,
+                                           mode=flap.CoordinateMode(equidistant=False),
+                                           values=_temp,
+                                           dimension_list=[1],
+                                           shape=len(_temp)
+                                           )
         transform_axes.append(selectedChannels)
         cross_transform_axes.append(selectedChannels)
         modenumber_axes.append(selectedChannels)
-        logger.debug('Selected channels set.') 
+        logger.debug('Selected channels set.')
     except:
         logger.warning('Something went wrong with the selected channels')
-        
+
     try:
         transforms = flap.DataObject(
             data_array=input_dict['saved_datablock']['transforms'][0],
@@ -376,7 +384,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         logger.debug('Transforms dataobject created')
     except:
         logger.warning('Transforms dataobject does not exist!')
-    
+
     try:
         coherences = flap.DataObject(
             data_array=input_dict['saved_datablock']['coherences'][0],
@@ -400,7 +408,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         logger.debug('qs dataobject created')
     except:
         logger.warning('qs dataobject does not exist!')
-        
+
     try:
         modenumbers = flap.DataObject(
             data_array=input_dict['saved_datablock']['modenumbers'][0],
@@ -415,7 +423,8 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
     ###### load transform parameters #####
 
     return raw_data, transforms, smoothed_apsds, crosstransforms, smoothed_crosstransforms, coherences, \
-        transfers, modenumbers, qs, transform_parameters
+           transfers, modenumbers, qs, transform_parameters
+
 
 def convert_processed_sav(input_dict, skip_keys=[], logger=default_logger):
     # input_dict: a NTI wavelet tools processed sav file loaded as a python dictionary,
@@ -550,7 +559,7 @@ def convert_processed_sav(input_dict, skip_keys=[], logger=default_logger):
     if type(input_dict["channelpairs"][0]) == np.ndarray:
         tmp_list = []
         for i in input_dict["channelpairs"]:
-            tmp_list.append("("+str(i[0])[2:-1] + ", " + str(i[1])[2:-1]+")")
+            tmp_list.append("(" + str(i[0])[2:-1] + ", " + str(i[1])[2:-1] + ")")
         input_dict["channelpairs"] = tmp_list
         logger.debug("channelpairs converted to str list")
 
@@ -694,4 +703,4 @@ def convert_processed_sav(input_dict, skip_keys=[], logger=default_logger):
         logger.warning('qs dataobject does not exist!')
 
     return raw_data, transforms, smoothed_apsds, crosstransforms, smoothed_crosstransforms, coherences, \
-        transfers, modenumbers, qs
+           transfers, modenumbers, qs
