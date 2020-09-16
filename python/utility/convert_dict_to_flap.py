@@ -14,20 +14,6 @@ default_logger = logging.getLogger('convert_dict_to_flap')
 default_logger.setLevel(logging.DEBUG)
 
 
-def convert_bytes_to_str(changing_dict, logger=default_logger):
-    logger.info("Converting bytes to strings")
-    for key in changing_dict:
-        if type(changing_dict[key]) == bytes:
-            changing_dict[key] = str(changing_dict[key])[2:-1]
-        elif type(changing_dict[key]) == np.ndarray and type(changing_dict[key][0]) == bytes:
-            tmp_list = []
-            for i in changing_dict[key]:
-                tmp_list.append(str(i)[2:-1])
-            changing_dict[key] = tmp_list
-    logger.debug("Bytes conversion finished")
-    return
-
-
 def convert_raw_sav(input_dict, skip_keys=[], create_channel_no=False, logger=default_logger):
     # input_dict: a NTI wavelet tools sav file loaded as a python dictionary,
     # preferably loaded with the io.readsav command
@@ -37,7 +23,6 @@ def convert_raw_sav(input_dict, skip_keys=[], create_channel_no=False, logger=de
 
     # and returns a flap.DataObject
     logger.info('convert_raw started')
-    convert_bytes_to_str(input_dict)
 
     if type(input_dict) is not dict:
         raise TypeError('loaded_sav is not a dictionary')
@@ -438,7 +423,6 @@ def convert_processed_sav(input_dict, skip_keys=[], logger=default_logger):
 
     # skip_keys: list of strings, which keys to skip when creating coordinate axes
     # print(input_dict)
-    # convert_bytes_to_str(input_dict)
 
     raw_data_axes = []
     transform_axes = []
