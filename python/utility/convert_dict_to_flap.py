@@ -101,19 +101,30 @@ def convert_raw_sav(input_dict, skip_keys=[], create_channel_no=False, logger=de
     return flap_object
 
 
-def convert_raw_sav_og(input_dict, logger=default_logger):
+def convert_raw_sav_og(input_dict, logger=default_logger, equidistant_time=False):
     raw_data = None
     coordinates = []
     exp_id = input_dict['expname'].decode('utf-8') + "-" + str(input_dict['shotnumber'])
 
     try:
-        time_ax = flap.Coordinate(name="Time",
-                                  unit="s",
-                                  mode=flap.CoordinateMode(equidistant=False),
-                                  values=input_dict['timeax'],
-                                  dimension_list=[1],
-                                  shape=len(input_dict['timeax'])
-                                  )
+        if equidistant_time:
+            time_ax = flap.Coordinate(name="Time",
+                                      unit="s",
+                                      mode=flap.CoordinateMode(equidistant=True),
+                                      start=input_dict["timeax"][0],
+                                      step=(input_dict["timeax"][-1] - input_dict["timeax"][0]) /
+                                           len(input_dict["timeax"]),
+                                      dimension_list=[1],
+                                      shape=len(input_dict['timeax'])
+                                      )
+        else:
+            time_ax = flap.Coordinate(name="Time",
+                                      unit="s",
+                                      mode=flap.CoordinateMode(equidistant=False),
+                                      values=input_dict['timeax'],
+                                      dimension_list=[1],
+                                      shape=len(input_dict['timeax'])
+                                      )
         coordinates.append(time_ax)
         logger.debug('Time axis created')
     except:
@@ -232,11 +243,11 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         transform_parameters['transf_freq_min'] = input_dict['saved_datablock']['proc_transf_freq_min'][0]
         transform_parameters['transf_freq_max'] = input_dict['saved_datablock']['proc_transf_freq_max'][0]
         transform_parameters['transf_freq_resdatapoints'] = \
-        input_dict['saved_datablock']['proc_transf_freq_resdatapoints'][0]
+            input_dict['saved_datablock']['proc_transf_freq_resdatapoints'][0]
 
         transform_parameters['crosstr_selection'] = input_dict['saved_datablock']['proc_crosstr_selection'][0]
         transform_parameters['crosstr_correction_selection'] = \
-        input_dict['saved_datablock']['proc_crosstr_correction_selection'][0]
+            input_dict['saved_datablock']['proc_crosstr_correction_selection'][0]
 
         transform_parameters['coh_selection'] = input_dict['saved_datablock']['proc_coh_selection'][0]
         transform_parameters['coh_avg'] = input_dict['saved_datablock']['proc_coh_avg'][0]
