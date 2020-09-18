@@ -14,7 +14,7 @@ default_logger = logging.getLogger('convert_dict_to_flap')
 default_logger.setLevel(logging.DEBUG)
 
 
-def convert_raw_sav_og(input_dict, logger=default_logger, equidistant_time=False):
+def convert_raw_sav(input_dict, logger=default_logger, equidistant_time=False):
     # input_dict: a NTI wavelet tools sav file loaded as a python dictionary,
     # preferably loaded with the io.readsav command
     raw_data = None
