@@ -43,7 +43,7 @@ def convert_raw_sav(input_dict, logger=default_logger, equidistant_time=False):
         coordinates.append(time_ax)
         logger.debug('Time axis created')
     except:
-        logger.debug('Time axis does not exist.')
+        logger.error('Time axis does not exist.', exc_info=True)
 
     try:
         temp = []
@@ -59,7 +59,7 @@ def convert_raw_sav(input_dict, logger=default_logger, equidistant_time=False):
         coordinates.append(channel_name)
         logger.debug('Channels axis created')
     except:
-        logger.debug('Channel axis does not exist.')
+        logger.error('Channel axis does not exist.', exc_info=True)
 
     try:
         theta_ax = flap.Coordinate(name="Theta",
@@ -72,7 +72,7 @@ def convert_raw_sav(input_dict, logger=default_logger, equidistant_time=False):
         coordinates.append(theta_ax)
         logger.debug('Theta axis created')
     except:
-        logger.debug('Theta axis does not exist.')
+        logger.warning('Theta axis does not exist.', exc_info=True)
 
     try:
         phi_ax = flap.Coordinate(name="Phi",
@@ -85,7 +85,7 @@ def convert_raw_sav(input_dict, logger=default_logger, equidistant_time=False):
         coordinates.append(phi_ax)
         logger.debug('Phi axis created')
     except:
-        logger.debug('Phi axis does not exist.')
+        logger.warning('Phi axis does not exist.', exc_info=True)
 
     if coordinates != []:
         raw_data = flap.DataObject(
