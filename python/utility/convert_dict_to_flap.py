@@ -177,6 +177,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         transform_parameters['mode_min'] = input_dict['saved_datablock']['proc_mode_min'][0]
         transform_parameters['mode_max'] = input_dict['saved_datablock']['proc_mode_max'][0]
     except:
+        logger.warning('Filling up transport parameters interrupted', exc_info=True)
         pass
 
     raw_data_axes = []
@@ -197,7 +198,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         raw_data_axes.append(time_ax)
         logger.debug('Time axis created')
     except:
-        logger.debug('Time axis does not exist.')
+        logger.error('Time axis does not exist.', exc_info=True)
     try:
         channel_ax = flap.Coordinate(name="Channels",
                                      unit=None,
@@ -208,7 +209,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
                                      shape=len(input_dict['saved_datablock']["channels"][0])
                                      )
         raw_data_axes.append(channel_ax)
-        logger.debug('Channels axis created')
+        logger.error('Channels axis created', exc_info=True)
     except:
         logger.debug('Channels do not exist.')
     try:
@@ -222,7 +223,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         raw_data_axes.append(theta_ax)
         logger.debug('Theta axis created')
     except:
-        logger.warning('Theta axis does not exist!')
+        logger.warning('Theta axis does not exist!', exc_info=True)
 
     try:
         phi_ax = flap.Coordinate(name="Phi",
@@ -235,7 +236,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         raw_data_axes.append(phi_ax)
         logger.debug('Phi axis created')
     except:
-        logger.warning('Phi axis does not exist!')
+        logger.warning('Phi axis does not exist!', exc_info=True)
 
     try:
         raw_data = flap.DataObject(
@@ -247,7 +248,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         )
         logger.debug('Data dataobject created')
     except:
-        logger.warning('Data dataobject does not exist!')
+        logger.warning('Data dataobject does not exist!', exc_info=True)
     ########################   
 
     try:
@@ -263,7 +264,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         modenumber_axes.append(transf_timeax)
         logger.debug('Transform time axis created')
     except:
-        logger.warning('Transform time axis does not exist!')
+        logger.warning('Transform time axis does not exist!', exc_info=True)
 
     try:
         transf_freqax = flap.Coordinate(name="Transf_freqax",
@@ -278,7 +279,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         modenumber_axes.append(transf_freqax)
         logger.debug('Transform time axis created')
     except:
-        logger.warning('Transform time axis does not exist!')
+        logger.warning('Transform time axis does not exist!', exc_info=True)
 
     try:
         _temp = []
@@ -297,7 +298,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         modenumber_axes.append(selectedChannels)
         logger.debug('Selected channels set.')
     except:
-        logger.warning('Something went wrong with the selected channels')
+        logger.error('Something went wrong with the selected channels', exc_info=True)
 
     try:
         transforms = flap.DataObject(
@@ -309,7 +310,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         )
         logger.debug('Transforms dataobject created')
     except:
-        logger.warning('Transforms dataobject does not exist!')
+        logger.warning('Transforms dataobject does not exist!', exc_info=True)
 
     try:
         coherences = flap.DataObject(
@@ -321,7 +322,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         )
         logger.debug('Transforms dataobject created')
     except:
-        logger.warning('Transforms dataobject does not exist!')
+        logger.warning('Transforms dataobject does not exist!', exc_info=True)
 
     try:
         qs = flap.DataObject(
@@ -333,7 +334,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         )
         logger.debug('qs dataobject created')
     except:
-        logger.warning('qs dataobject does not exist!')
+        logger.warning('qs dataobject does not exist!', exc_info=True)
 
     try:
         modenumbers = flap.DataObject(
@@ -345,7 +346,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         )
         logger.debug('modenumber dataobject created')
     except:
-        logger.warning('modenumber dataobject does not exist!')
+        logger.warning('modenumber dataobject does not exist!', exc_info=True)
     ###### load transform parameters #####
 
     return raw_data, transforms, smoothed_apsds, crosstransforms, smoothed_crosstransforms, coherences, \
