@@ -188,7 +188,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 ui_logger.info("Loading sav file: " + path)
                 self.data.load_proc_sav(path)
                 try: #check if it indeed was a processed data...
-                    _ = self.data.transforms.get_coordinate_object('Transf_timeax').valuess
+                    _ = self.data.transforms.get_coordinate_object('Transf_timeax').values
                     self.loadSuccessful = True
                 except:
                     self.progresslogTextEdit.append('Loading ERROR')
