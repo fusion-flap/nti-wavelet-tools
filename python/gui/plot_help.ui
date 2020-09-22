@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>624</width>
-    <height>300</height>
+    <width>532</width>
+    <height>281</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,19 +56,6 @@
    </property>
    <property name="text">
     <string>- button : click on figure / click on colorbar</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>170</y>
-     <width>221</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>- Interaction options with plots</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_5">
@@ -126,7 +113,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Interaction options with plots for modenumbers:</string>
+    <string>Show hint on plot:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_9">
@@ -134,12 +121,98 @@
     <rect>
      <x>10</x>
      <y>150</y>
-     <width>221</width>
+     <width>291</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>- Interaction options with plots</string>
+    <string>- Prints the closest point's coordinates in hovering</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>361</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Show transform parameters: currently disabled</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_11">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>331</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>- After selecting it, press quick plot to update visual</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>210</y>
+     <width>381</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>- Prints transform parameters in the plot window (for saving purposes)</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_13">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>250</y>
+     <width>331</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>- Prints the clicked location's coordinates in the middle progress log </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>230</y>
+     <width>361</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Any click on contourplot:</string>
    </property>
   </widget>
  </widget>

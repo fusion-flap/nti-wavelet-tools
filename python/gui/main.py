@@ -47,6 +47,7 @@ logging.basicConfig(filename='log.log',
                     level=logging.INFO)
 ui_logger = logging.getLogger('ui_logger')
 ui_logger.setLevel(logging.DEBUG)
+nxticks = 6
 
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -68,7 +69,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # settings
         self.loadSuccessful = False
         # signal processing parameters
-        self.defaultTransformParameters()
+        # self.defaultTransformParameters()
         # connect buttons - part 1 - transform
         self.loadsignalButton.clicked.connect(self.loadSignal)
         self.savesignalButton.clicked.connect(self.saveSignal)
@@ -81,7 +82,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.loadprocessedsignalButton.clicked.connect(self.loadProcessedSignal)
         self.saveprocessedsignalButton.clicked.connect(self.saveProcessedSignal)
         # connect buttons - part 3 - detailed plotting
-        self.openplottinginterfaceButton.clicked.connect(self.openPlotOptions)
+        # self.openplottinginterfaceButton.clicked.connect(self.openPlotOptions)
         # connect buttons - part 4 - quick plotting
         self.quickplotButton.clicked.connect(self.doQuickPlot)
         self.hintCheckBox.clicked.connect(self.tryRemoveText)
@@ -100,6 +101,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.modelowLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.modelowLineEdit))
         self.modehighLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.modehighLineEdit))
         self.modestepLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.modestepLineEdit))
+        # temporarily disabling coherence
+        self.quickplottypeComboBox.removeItem(2)
 
         # setup canvas and toolbar
         self.figure = plt.Figure(dpi=100)
@@ -218,7 +221,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.openplottinginterfaceButton.setEnabled(self.loadSuccessful)
         self.quickplotButton.setEnabled(True)
         self.hintCheckBox.setEnabled(True)
-        self.transfDetailsCheckBox.setEnabled(True)
+        # self.transfDetailsCheckBox.setEnabled(True)
         return
 
     def saveProcessedSignal(self):
@@ -239,13 +242,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.canvas.draw()
         except:
             pass
-    def addTextToCanvas(self, additional_text=''):
-        # self.canvas.create_text(0,0,text = 'cica')
-        # self.canvas.draw()
-        return
+    # def addTextToCanvas(self, additional_text=''):
+    #     # self.canvas.create_text(0,0,text = 'something')
+    #     # self.canvas.draw()
+    #     return
 
     def doQuickPlot(self):
-        ''' plot some '''
+        ''' Default plotting '''
         try:
             self.figure.clf()
         except:
@@ -290,9 +293,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.ax = self.figure.add_subplot(111)
             self.figure.subplots_adjust(right=0.8)
             self.cax = self.figure.add_axes([0.82, 0.125, 0.02, 0.755])
-
+    
         # discards the old graph
         self.ax.clear()
+        self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
         cm = self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap, levels = levels)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
@@ -365,6 +369,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     xran = self.ax.get_xlim()
                     yran = self.ax.get_ylim()
                     self.ax.clear()
+                    self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
                     self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap)
                     self.ax.set_xlim(xran)
                     self.ax.set_ylim(yran)
@@ -423,15 +428,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 pass
         self.canvas.draw()
 
-    def defaultTransformParameters(self):
-        self.transformParameters = {}
-        self.transformParameters['type'] = 'STFT'
-        self.transformParameters['step'] = 5
-        self.transformParameters['fs'] = 300  # kHz
-        self.transformParameters['window'] = 'gaussian'
-        self.transformParameters['windowlength'] = 200  # data point
-        self.transformParameters['order'] = 5
-        self.transformParameters['scale'] = 0.1
+    # def defaultTransformParameters(self):
+    #     self.transformParameters = {}
+    #     self.transformParameters['type'] = 'STFT'
+    #     self.transformParameters['step'] = 5
+    #     self.transformParameters['fs'] = 300  # kHz
+    #     self.transformParameters['window'] = 'gaussian'
+    #     self.transformParameters['windowlength'] = 200  # data point
+    #     self.transformParameters['order'] = 5
+    #     self.transformParameters['scale'] = 0.1
 
     def selectChannels(self):
         ui_logger.debug('Selecting channels started')
