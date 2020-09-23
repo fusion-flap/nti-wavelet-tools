@@ -127,10 +127,15 @@ def transform_parameters_empty():
     dy['mode_steps'] = None
     dy['mode_min'] = None
     dy['mode_max'] = None
+
     return dy
 
 
 def convert_processed_sav_og(input_dict, logger=default_logger):
+    # input_dict: a NTI wavelet tools processed sav file loaded as a python dictionary,
+    # preferably loaded with the io.readsav command
+
+    logger.debug("Creating blank objects")
     raw_data = None
     transforms = None
     smoothed_apsds = None  # not used yet, not implemented
@@ -141,7 +146,9 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
     modenumbers = None
     qs = None
     transform_parameters = transform_parameters_empty()
+
     try:  # presumably this will need some renaming, and making it consistent with the GUI layout naming
+        logger.debug("Filling up transform parameters")
         transform_parameters['transf_selection'] = input_dict['saved_datablock']['proc_transf_selection'][0]
         transform_parameters['transf_cwt_selection'] = input_dict['saved_datablock']['proc_transf_cwt_selection'][0]
         transform_parameters['transf_cwt_family'] = input_dict['saved_datablock']['proc_transf_cwt_family'][0].decode(
@@ -176,6 +183,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         transform_parameters['mode_steps'] = input_dict['saved_datablock']['proc_mode_steps'][0]
         transform_parameters['mode_min'] = input_dict['saved_datablock']['proc_mode_min'][0]
         transform_parameters['mode_max'] = input_dict['saved_datablock']['proc_mode_max'][0]
+        logger.debug("Succesfully filled up transform parameters!")
     except:
         logger.warning('Filling up transport parameters interrupted', exc_info=True)
         pass
@@ -238,18 +246,7 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
     except:
         logger.warning('Phi axis does not exist!', exc_info=True)
 
-    try:
-        raw_data = flap.DataObject(
-            data_array=input_dict['saved_datablock']["data"][0],
-            data_unit=flap.Unit(name='unit', unit='a.u.'),
-            exp_id=exp_id,
-            coordinates=raw_data_axes,
-            data_shape=input_dict['saved_datablock']['data'][0].shape,
-        )
-        logger.debug('Data dataobject created')
-    except:
-        logger.warning('Data dataobject does not exist!', exc_info=True)
-    ########################   
+    ########################
 
     try:
         transf_timeax = flap.Coordinate(name="Transf_timeax",
@@ -267,19 +264,34 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         logger.warning('Transform time axis does not exist!', exc_info=True)
 
     try:
+        transf_scaleax = flap.Coordinate(name="Transf_scaleax",
+                                         unit="kHz",
+                                         mode=flap.CoordinateMode(equidistant=False),
+                                         values=input_dict['saved_datablock']["transf_scaleax"][0],
+                                         dimension_list=[0],
+                                         shape=len(input_dict['saved_datablock']["transf_scaleax"][0])
+                                         )
+        transform_axes.append(transf_scaleax)
+        cross_transform_axes.append(transf_scaleax)
+        modenumber_axes.append(transf_scaleax)
+        logger.debug('Transform scale axis created')
+    except:
+        logger.warning('Transform scale axis does not exist!', exc_info=True)
+
+    try:
         transf_freqax = flap.Coordinate(name="Transf_freqax",
                                         unit="kHz",
-                                        mode=flap.CoordinateMode(equidistant=True),
+                                        mode=flap.CoordinateMode(equidistant=False),
                                         values=input_dict['saved_datablock']["transf_freqax"][0],
-                                        dimension_list=[1],
+                                        dimension_list=[0],
                                         shape=len(input_dict['saved_datablock']["transf_freqax"][0])
                                         )
         transform_axes.append(transf_freqax)
         cross_transform_axes.append(transf_freqax)
         modenumber_axes.append(transf_freqax)
-        logger.debug('Transform time axis created')
+        logger.debug('Transform frequency axis created')
     except:
-        logger.warning('Transform time axis does not exist!', exc_info=True)
+        logger.warning('Transform frequency axis does not exist!', exc_info=True)
 
     try:
         _temp = []
@@ -290,16 +302,43 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
                                            unit=None,
                                            mode=flap.CoordinateMode(equidistant=False),
                                            values=_temp,
-                                           dimension_list=[1],
+                                           dimension_list=[2],
                                            shape=len(_temp)
                                            )
         transform_axes.append(selectedChannels)
-        cross_transform_axes.append(selectedChannels)
         modenumber_axes.append(selectedChannels)
         logger.debug('Selected channels set.')
     except:
         logger.error('Something went wrong with the selected channels', exc_info=True)
 
+    try:
+        selected_channelpairs_data = list(compress(input_dict['saved_datablock']["channelpairs"][0],
+                                                   input_dict['saved_datablock']["channelpairs_ind"][0]))
+        selected_channelpairs = flap.Coordinate(name="Selected channel pairs",
+                                                unit=None,
+                                                mode=flap.CoordinateMode(equidistant=False),
+                                                values=selected_channelpairs_data,
+                                                dimension_list=[2],
+                                                shape=len(selected_channelpairs_data)
+                                                )
+        cross_transform_axes.append(selected_channelpairs)
+        logger.debug('selected channel pairs axis created')
+
+    except:
+        logger.warning('selected channel pairs axis does not exist!')
+
+    # creating and filling transform dataobjects
+    try:
+        raw_data = flap.DataObject(
+            data_array=input_dict['saved_datablock']["data"][0],
+            data_unit=flap.Unit(name='unit', unit='a.u.'),
+            exp_id=exp_id,
+            coordinates=raw_data_axes,
+            data_shape=input_dict['saved_datablock']['data'][0].shape,
+        )
+        logger.debug('Data dataobject created')
+    except:
+        logger.warning('Data dataobject does not exist!', exc_info=True)
     try:
         transforms = flap.DataObject(
             data_array=input_dict['saved_datablock']['transforms'][0],
@@ -313,11 +352,58 @@ def convert_processed_sav_og(input_dict, logger=default_logger):
         logger.warning('Transforms dataobject does not exist!', exc_info=True)
 
     try:
+        smoothed_apsds = flap.DataObject(
+            data_array=input_dict['smoothed_apsds'],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=transform_axes,
+            data_shape=input_dict['smoothed_apsds'].shape,
+        )
+        logger.debug('smoothed_apsds dataobject created')
+    except:
+        logger.warning('smoothed_apsds dataobject does not exist!', exc_info=True)
+    try:
+        crosstransforms = flap.DataObject(
+            data_array=input_dict['saved_datablock']['crosstransforms'][0],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=cross_transform_axes,
+            data_shape=input_dict['saved_datablock']['crosstransforms'][0].shape,
+        )
+        logger.debug('crosstransforms dataobject created')
+    except:
+        logger.warning('crosstransforms dataobject does not exist!', exc_info=True)
+
+    try:
+        smoothed_crosstransforms = flap.DataObject(
+            data_array=input_dict['saved_datablock']['smoothed_crosstransforms'][0],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=cross_transform_axes,
+            data_shape=input_dict['saved_datablock']['smoothed_crosstransforms'][0].shape,
+        )
+        logger.debug('smoothed_crosstransforms dataobject created')
+    except:
+        logger.warning('smoothed_crosstransforms dataobject does not exist!', exc_info=True)
+
+    try:
+        transfers = flap.DataObject(
+            data_array=input_dict['saved_datablock']['transfers'][0],
+            data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
+            exp_id=exp_id,
+            coordinates=cross_transform_axes,
+            data_shape=input_dict['saved_datablock']['transfers'][0].shape,
+        )
+        logger.debug('transfers dataobject created')
+    except:
+        logger.warning('transfers dataobject does not exist!', exc_info=True)
+
+    try:
         coherences = flap.DataObject(
             data_array=input_dict['saved_datablock']['coherences'][0],
             data_unit=flap.Unit(name='coherence', unit=' '),
             exp_id=exp_id,
-            coordinates=transform_axes,
+            coordinates=cross_transform_axes,
             data_shape=input_dict['saved_datablock']['coherences'][0].shape,
         )
         logger.debug('Transforms dataobject created')
