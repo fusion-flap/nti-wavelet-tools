@@ -59,7 +59,7 @@ class NWTDataObject:
             self.reset()
             self.raw_data, self.transforms, self.smoothed_apsds, self.crosstransforms, self.smoothed_crosstransforms, \
             self.coherences, self.transfers, self.modenumbers, self.qs, self.transform_parameters \
-                = convert_dict_to_flap.convert_processed_sav_og(loaded_sav)
+                = convert_dict_to_flap.convert_processed_sav(loaded_sav)
             self.update_properties()
         except Exception as e:
             self.logger.error("Exception occurred during processed sav loading:", exc_info=True)

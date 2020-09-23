@@ -131,7 +131,7 @@ def transform_parameters_empty():
     return dy
 
 
-def convert_processed_sav_og(input_dict, logger=default_logger):
+def convert_processed_sav(input_dict, logger=default_logger):
     # input_dict: a NTI wavelet tools processed sav file loaded as a python dictionary,
     # preferably loaded with the io.readsav command
 
