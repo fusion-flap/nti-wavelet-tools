@@ -192,6 +192,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
     transform_axes = []
     cross_transform_axes = []
     modenumber_axes = []
+    time_and_freq_axes = []
     exp_id = input_dict['saved_datablock']['expname'][0].decode('utf-8') + "-" + str(
         input_dict['saved_datablock']['shotnumber'][0])
     ####### raw data load #######
@@ -259,6 +260,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
         transform_axes.append(transf_timeax)
         cross_transform_axes.append(transf_timeax)
         modenumber_axes.append(transf_timeax)
+        time_and_freq_axes.append(transf_timeax)
         logger.debug('Transform time axis created')
     except:
         logger.warning('Transform time axis does not exist!', exc_info=True)
@@ -289,6 +291,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
         transform_axes.append(transf_freqax)
         cross_transform_axes.append(transf_freqax)
         modenumber_axes.append(transf_freqax)
+        time_and_freq_axes.append(transf_freqax)
         logger.debug('Transform frequency axis created')
     except:
         logger.warning('Transform frequency axis does not exist!', exc_info=True)
@@ -312,7 +315,11 @@ def convert_processed_sav(input_dict, logger=default_logger):
         logger.error('Something went wrong with the selected channels', exc_info=True)
 
     try:
-        selected_channelpairs_data = list(compress(input_dict['saved_datablock']["channelpairs"][0],
+        channelpairs = []
+        for i in input_dict['saved_datablock']["channelpairs"][0]:
+            channelpairs.append(i[0].decode('utf-8') + ", " + i[1].decode('utf-8'))
+        input_dict['saved_datablock']["channelpairs"][0] = channelpairs
+        selected_channelpairs_data = list(compress(channelpairs,
                                                    input_dict['saved_datablock']["channelpairs_ind"][0]))
         selected_channelpairs = flap.Coordinate(name="Selected channel pairs",
                                                 unit=None,
@@ -322,7 +329,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
                                                 shape=len(selected_channelpairs_data)
                                                 )
         cross_transform_axes.append(selected_channelpairs)
-        logger.debug('selected channel pairs axis created')
+        logger.debug('selected channel pairs axis created', exc_info=True)
 
     except:
         logger.warning('selected channel pairs axis does not exist!')
@@ -415,7 +422,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['qs'][0],
             data_unit=flap.Unit(name='unit', unit='a. u.'),
             exp_id=exp_id,
-            coordinates=transform_axes,
+            coordinates=time_and_freq_axes,
             data_shape=input_dict['saved_datablock']['qs'][0].shape,
         )
         logger.debug('qs dataobject created')
@@ -427,7 +434,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['modenumbers'][0],
             data_unit=flap.Unit(name='modenumber', unit='a. u.'),
             exp_id=exp_id,
-            coordinates=transform_axes,
+            coordinates=time_and_freq_axes,
             data_shape=input_dict['saved_datablock']['modenumbers'][0].shape,
         )
         logger.debug('modenumber dataobject created')
