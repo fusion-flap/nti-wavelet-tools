@@ -995,14 +995,25 @@
    </property>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Menu</string>
+     <string>File</string>
     </property>
-    <addaction name="actionHelp"/>
-    <addaction name="actionPreferemces"/>
-    <addaction name="actionReset"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuPreferences">
+    <property name="title">
+     <string>Preferences</string>
+    </property>
+    <addaction name="actionReset_2"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp_2">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionNTIWT_git"/>
+   </widget>
    <addaction name="menuHelp"/>
+   <addaction name="menuPreferences"/>
+   <addaction name="menuHelp_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionHelp">
@@ -1028,6 +1039,21 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionFile">
+   <property name="text">
+    <string>File</string>
+   </property>
+  </action>
+  <action name="actionReset_2">
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </action>
+  <action name="actionNTIWT_git">
+   <property name="text">
+    <string>Link to PyWaveletTools git</string>
    </property>
   </action>
  </widget>
