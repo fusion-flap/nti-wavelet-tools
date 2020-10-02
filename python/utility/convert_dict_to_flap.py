@@ -92,7 +92,7 @@ def convert_raw_sav(input_dict, logger=default_logger, equidistant_time=False):
             data_array=input_dict['data'],
             data_unit=flap.Unit(name='unit', unit='a.u.'),
             exp_id=exp_id,
-            info = "raw data",
+            data_title="raw data",
             coordinates=coordinates,
             data_shape=input_dict['data'].shape,
         )
@@ -341,7 +341,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']["data"][0],
             data_unit=flap.Unit(name='unit', unit='a.u.'),
             exp_id=exp_id,
-            info="raw data",
+            data_title="raw data",
             coordinates=raw_data_axes,
             data_shape=input_dict['saved_datablock']['data'][0].shape,
         )
@@ -353,7 +353,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['transforms'][0],
             data_unit=flap.Unit(name='unit', unit='a. u.'),
             exp_id=exp_id,
-            info="transforms",
+            data_title="transforms",
             coordinates=transform_axes,
             data_shape=input_dict['saved_datablock']['transforms'][0].shape,
         )
@@ -366,7 +366,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['smoothed_apsds'],
             data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
             exp_id=exp_id,
-            info="smoothed apsds",
+            data_title="smoothed apsds",
             coordinates=transform_axes,
             data_shape=input_dict['smoothed_apsds'].shape,
         )
@@ -378,7 +378,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['crosstransforms'][0],
             data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
             exp_id=exp_id,
-            info="crosstransforms",
+            data_title="crosstransforms",
             coordinates=cross_transform_axes,
             data_shape=input_dict['saved_datablock']['crosstransforms'][0].shape,
         )
@@ -391,7 +391,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['smoothed_crosstransforms'][0],
             data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
             exp_id=exp_id,
-            info="smoothed crosstransforms",
+            data_title="smoothed crosstransforms",
             coordinates=cross_transform_axes,
             data_shape=input_dict['saved_datablock']['smoothed_crosstransforms'][0].shape,
         )
@@ -404,7 +404,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['transfers'][0],
             data_unit=flap.Unit(name='arbitrary unit', unit='a. u.'),
             exp_id=exp_id,
-            info="transfers",
+            data_title="transfers",
             coordinates=cross_transform_axes,
             data_shape=input_dict['saved_datablock']['transfers'][0].shape,
         )
@@ -417,7 +417,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['coherences'][0],
             data_unit=flap.Unit(name='coherence', unit=' '),
             exp_id=exp_id,
-            info="coherences",
+            data_title="coherences",
             coordinates=cross_transform_axes,
             data_shape=input_dict['saved_datablock']['coherences'][0].shape,
         )
@@ -430,7 +430,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['qs'][0],
             data_unit=flap.Unit(name='unit', unit='a. u.'),
             exp_id=exp_id,
-            info="qs",
+            data_title="qs",
             coordinates=time_and_freq_axes,
             data_shape=input_dict['saved_datablock']['qs'][0].shape,
         )
@@ -443,7 +443,7 @@ def convert_processed_sav(input_dict, logger=default_logger):
             data_array=input_dict['saved_datablock']['modenumbers'][0],
             data_unit=flap.Unit(name='modenumber', unit='a. u.'),
             exp_id=exp_id,
-            info="modenumbers",
+            data_title="modenumbers",
             coordinates=time_and_freq_axes,
             data_shape=input_dict['saved_datablock']['modenumbers'][0].shape,
         )
