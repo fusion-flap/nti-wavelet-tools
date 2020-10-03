@@ -7,6 +7,9 @@ Created on Sat Jul 27 12:22:10 2019
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib import gridspec
+import matplotlib
+mpl_version = matplotlib.__version__
+relative_mpl_canvas = ('3.2' in mpl_version[0:3]) #check matplotlib version, as it affects mpl functionality
 import sys
 import scipy
 import numpy as np
@@ -333,7 +336,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     ypos = event.ydata
                     lo, hi = self.colorbar.vmin, self.colorbar.vmax
                     diff = hi - lo
-                    act =  ypos #*(hi-lo)+lo
+                    if relative_mpl_canvas:
+                        act =  ypos
+                    else:
+                        act =  ypos *(hi-lo)+lo   
                     step = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
                     low = self.colorbar.boundaries[int((act - lo) / step)]
                     high = self.colorbar.boundaries[int((act - lo) / step) + 1]
