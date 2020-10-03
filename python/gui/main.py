@@ -91,7 +91,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.hintCheckBox.clicked.connect(self.tryRemoveText)
         self.plothelpButton.clicked.connect(self.openPlotHelp)
         # connect menu
-        # self.actionReset.triggered.connect(self.__init__)
+        self.actionExit.triggered.connect(self.selfexit)
+        self.actionNTIWT_git.triggered.connect(self.helpGit)
+        self.actionResett.triggered.connect(self.resetGUI)
 
         # set regexp for line edit inputs
         self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
@@ -120,7 +122,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.id1 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
         # if self.hintCB
         self.id2 = self.canvas.mpl_connect('motion_notify_event', self.MouseHoverInteraction)
-
+    def resetGUI(self):
+        return
+    def helpGit(self):
+        import webbrowser
+        return webbrowser.open('https://github.com/fusion-flap/nti-wavelet-tools/wiki')
+    def selfexit(self):
+        self.close()
     def loadSignal(self):
         ui_logger.debug('Loading signal started')
         self.loadSuccessful = False
