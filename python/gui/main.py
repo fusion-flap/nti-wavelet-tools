@@ -93,7 +93,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # connect menu
         self.actionExit.triggered.connect(self.selfexit)
         self.actionNTIWT_git.triggered.connect(self.helpGit)
-        self.actionResett.triggered.connect(self.resetGUI)
+        self.actionResett.triggered.connect(self.setupGUIDefault)
 
         # set regexp for line edit inputs
         self.samplingfreqLineEdit.setValidator(QRegExpValidator(reg_ex_number, self.samplingfreqLineEdit))
@@ -122,13 +122,42 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.id1 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
         # if self.hintCB
         self.id2 = self.canvas.mpl_connect('motion_notify_event', self.MouseHoverInteraction)
-    def resetGUI(self):
+    def resetLabels(self):
+        self.datapointsLabel.setText('0')
+        self.samplingfrequencyLabel.setText('0 kHz')
+        self.timerangeLabel.setText('0 ms')
+        self.channelnumberLabel.setText('0')
+    
+    def resetButtons(self):
+        self.savesignalButton.setEnabled(False)
+        self.selectchannelsButton.setEnabled(False)  
+        # self.startcalculationButton.setEnabled(False)
+        self.saveprocessedsignalButton.setEnabled(False)
+        self.openplottinginterfaceButton.setEnabled(False)
+        self.quickplotButton.setEnabled(False)
+   
+    def resetData(self):
+        self.CB = []
+        self.channelSelected = []
+        self.data = core.NWTDataObject()
+        self.plottedData = None
+        self.loadSuccessful = False    
+        
+    def setupGUIDefault(self):
+        self.resetLabels()
+        self.resetButtons()
+        self.resetData()
+        self.calcgroupBox.setEnabled(False)
+        # self.modenumbercalcGB.setEnabled(False)
         return
+    
     def helpGit(self):
         import webbrowser
         return webbrowser.open('https://github.com/fusion-flap/nti-wavelet-tools/wiki')
+    
     def selfexit(self):
         self.close()
+    
     def loadSignal(self):
         ui_logger.debug('Loading signal started')
         self.loadSuccessful = False
@@ -483,7 +512,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.progresslogTextEdit.append('----====----')
             self.channelnumberLabel.setText(str(j))
             if j > 0:
-                self.calcgroupBox.setEnabled(self.loadSuccessful)
+                self.calcgroupBox.setEnabled(True)
             else:
                 self.calcgroupBox.setEnabled(False)
             self.window.close()
