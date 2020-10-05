@@ -11,9 +11,7 @@ import matplotlib
 mpl_version = matplotlib.__version__
 relative_mpl_canvas = ('3.2' in mpl_version[0:3]) #check matplotlib version, as it affects mpl functionality
 import sys
-import scipy
 import numpy as np
-import copy
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QRegExp
@@ -24,11 +22,9 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 class NavigationToolbar(NavigationToolbar):
     toolitems = [t for t in NavigationToolbar.toolitems if
                   t[0] in ('Home', 'Zoom', 'Save', 'Pan')]
-import flap
 import logging
 
 sys.path.append(r"..\utility")
-import convert_dict_to_flap
 sys.path.append(r"..\core")
 import core
 
