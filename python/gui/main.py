@@ -13,7 +13,7 @@ relative_mpl_canvas = ('3.2' in mpl_version[0:3]) #check matplotlib version, as 
 import sys
 import numpy as np
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtTest
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -220,11 +220,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if extension == "pynwt":
                 self.progresslogTextEdit.append('Loading flap object...')
                 ui_logger.info('Loading flap object: ' + path)
+                QtTest.QTest.qWait(10)
                 self.data = load_pynwt(path)
                 self.loadSuccessful = True
             elif extension == "sav":
                 self.progresslogTextEdit.append("Loading processed sav file...")
                 ui_logger.info("Loading sav file: " + path)
+                QtTest.QTest.qWait(10)
                 self.data.load_proc_sav(path)
                 try: #check if it indeed was a processed data...
                     _ = self.data.transforms.get_coordinate_object('Transf_timeax').values
