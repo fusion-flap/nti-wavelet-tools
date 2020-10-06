@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>logo.png</normaloff>logo.png</iconset>
+    <normaloff>logo_circ_bold.png</normaloff>logo_circ_bold.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="calcgroupBox">
@@ -1059,7 +1059,7 @@
   </action>
   <action name="actionNTIWT_git">
    <property name="text">
-    <string>Link to NTIWaveletTools git</string>
+    <string>Link to PyWaveletTools git</string>
    </property>
   </action>
  </widget>
