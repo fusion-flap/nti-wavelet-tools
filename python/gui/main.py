@@ -9,12 +9,12 @@ from matplotlib.colors import ListedColormap
 from matplotlib import gridspec
 import matplotlib
 mpl_version = matplotlib.__version__
-relative_mpl_canvas = ('3.2' in mpl_version[0:3]) #check matplotlib version, as it affects mpl functionality
+relative_mpl_canvas = not ('3.2' in mpl_version[0:3]) #check matplotlib version, as it affects mpl functionality
 import sys
 import numpy as np
 
 from PyQt5 import QtWidgets, uic, QtTest
-from PyQt5.QtCore import QRegExp
+from PyQt5.QtCore import QRegExp, QTimer
 from PyQt5.QtGui import QRegExpValidator
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -108,6 +108,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # setup canvas and toolbar
         self.figure = plt.Figure(dpi=100)
         self.canvas = FigureCanvas(self.figure)
+        
         image = plt.imread('logo.png')
         self.ax = self.figure.add_subplot(111)
         self.ax.imshow(image)
@@ -115,45 +116,57 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.quickPlotLayout.addWidget(self.canvas)
         self.quickPlotLayout.addWidget(self.toolbar)
-        self.id1 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
-        # if self.hintCB
-        self.id2 = self.canvas.mpl_connect('motion_notify_event', self.MouseHoverInteraction)
+
     def resetLabels(self):
         self.datapointsLabel.setText('0')
         self.samplingfrequencyLabel.setText('0 kHz')
         self.timerangeLabel.setText('0 ms')
         self.channelnumberLabel.setText('0')
-    
+
     def resetButtons(self):
         self.savesignalButton.setEnabled(False)
-        self.selectchannelsButton.setEnabled(False)  
+        self.selectchannelsButton.setEnabled(False)
         # self.startcalculationButton.setEnabled(False)
         self.saveprocessedsignalButton.setEnabled(False)
         self.openplottinginterfaceButton.setEnabled(False)
         self.quickplotButton.setEnabled(False)
-   
+
     def resetData(self):
         self.CB = []
         self.channelSelected = []
         self.data = core.NWTDataObject()
         self.plottedData = None
-        self.loadSuccessful = False    
+        self.loadSuccessful = False
         
+    def resetQuickPlot(self):
+        self.ax.clear()
+        self.cax.clear()
+        self.ax.axis('off')
+        self.cax.axis('off')
+        image = plt.imread('logo.png')
+        self.ax.imshow(image)
+        self.canvas.draw()
+        self.canvas.mpl_disconnect(self.id1)
+        self.canvas.mpl_disconnect(self.id2)
+
     def setupGUIDefault(self):
         self.resetLabels()
         self.resetButtons()
         self.resetData()
         self.calcgroupBox.setEnabled(False)
-        # self.modenumbercalcGB.setEnabled(False)
+        try:
+            self.resetQuickPlot()
+        except:
+            pass #maybe plotting was not used yet
         return
-    
+
     def helpGit(self):
         import webbrowser
         return webbrowser.open('https://github.com/fusion-flap/nti-wavelet-tools/wiki')
-    
+
     def selfexit(self):
         self.close()
-    
+
     def loadSignal(self):
         ui_logger.debug('Loading signal started')
         self.loadSuccessful = False
@@ -206,7 +219,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             self.progresslogTextEdit.append('Saving ERROR')
             ui_logger.error('Error during saving', exc_info=True)
-    
+
     def loadProcessedSignal(self):
         ui_logger.debug('Loading processed signal started')
         self.loadSuccessful = False
@@ -240,7 +253,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.progresslogTextEdit.append('Loading ERROR')
             ui_logger.error('Error during processed data loading', exc_info=True)
             self.loadSuccessful = False
-            
+
 
         if self.loadSuccessful is True:
             self.progresslogTextEdit.append("Processed file loaded")
@@ -287,6 +300,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def doQuickPlot(self):
         ''' Default plotting '''
+        self.id1 = self.canvas.mpl_connect('button_press_event', self.MouseClickInteraction)
+        self.id2 = self.canvas.mpl_connect('motion_notify_event', self.MouseHoverInteraction)
         try:
             self.figure.clf()
         except:
@@ -294,27 +309,27 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         selectedPlotOption = self.quickplottypeComboBox.currentText()
         # self.addTextToCanvas()
         self.plotTitle = ''
-        if selectedPlotOption == 'Spectrogram':  
+        if selectedPlotOption == 'Spectrogram':
             self.colormap = plt.get_cmap('inferno')
             self.plottedData = np.abs((self.data.transforms.data)[:,:,0])**0.1
             self.plotTitle = self.data.transforms.exp_id+'_'+(self.data.transforms.get_coordinate_object('Selected_channels').values)[0]
-
             self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
             self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
-            levels = 10
-            cbarText = 'Power / a.u.'
+            n = 20
+            self.colormap = plt.get_cmap('inferno',n)
+            self.levels = np.linspace(np.min(self.plottedData), np.max(self.plottedData), n+1)
+            cbarText = r'Energy$^{0.1}$ / a.u.'
         elif selectedPlotOption == 'Modenumber':
-            self.colormap = self.modenumberColormap()
-            # self.colormap = plt.get_cmap('terrain')
             self.timeax = self.data.transforms.get_coordinate_object('Transf_timeax').values
             self.freqax = self.data.transforms.get_coordinate_object('Transf_freqax').values
             self.plottedData = self.data.modenumbers.data
-            levels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)-0.5
+            self.levels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)-0.5
+            self.colormap = self.modenumberColormap(len(self.levels)-1)
             txtlevels = np.arange(np.unique(self.plottedData)[0],np.unique(self.plottedData)[-1]+2,dtype=int)
             cbarText = 'Modenumber'
         if self.transfDetailsCheckBox.isChecked():
             # print('here')
-            gs = gridspec.GridSpec(2, 1, height_ratios=[5,1]) 
+            gs = gridspec.GridSpec(2, 1, height_ratios=[5,1])
             self.ax = self.figure.add_subplot(gs[0])
             self.cax = self.figure.add_axes([0.82, 0.31, 0.02, 0.57])
             self.textax = self.figure.add_subplot(gs[1])
@@ -331,11 +346,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.ax = self.figure.add_subplot(111)
             self.figure.subplots_adjust(right=0.8)
             self.cax = self.figure.add_axes([0.82, 0.125, 0.02, 0.755])
-    
+
         # discards the old graph
         self.ax.clear()
         self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
-        cm = self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap, levels = levels)
+        cm = self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap, levels = self.levels)
         self.ax.set_xlabel('Time / s')
         self.ax.set_ylabel('Frequency / kHz')
         self.ax.set_title(self.plotTitle)
@@ -349,7 +364,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 minmax0 = np.array([txtlevels[0], txtlevels[-2]])
                 minmax0_value = [txtlevels[0], txtlevels[-2]]
             self.colorbar.set_ticks(minmax0)
-            self.colorbar.set_ticklabels(minmax0_value)            
+            self.colorbar.set_ticklabels(minmax0_value)
         # refresh canvas
         self.canvas.draw()
 
@@ -357,82 +372,133 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     #     selectedPlotOption = self.quickplottypeComboBox.currentText()
     #     # print('something else is selected for plotting, displayed stuff needs to be updated')
     #     # print(selectedPlotOption)
-
+    
     def MouseClickInteraction(self, event):
         try:  # check if figure is defined or not
             self.cax == event.inaxes
         except:
             return
+        selectedPlotOption = self.quickplottypeComboBox.currentText()
+        if self.cax == event.inaxes: #colorbar clicked
+            if event.button == 1:
+                ypos = event.ydata
+                lo, hi = self.colorbar.vmin, self.colorbar.vmax
+                if relative_mpl_canvas is True:
+                    act =  ypos *(hi-lo)+lo
+                else:
+                    act =  ypos
+                # self.progresslogTextEdit.append('number of colorbar elements: '+str(self.colormap.N) + ' bound: '+str(len(self.colorbar.boundaries)))
+                binwidth = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
+                indLow = np.argmin(np.abs(self.colorbar.boundaries - ypos))
+                #get indeces of boundaries
+                if (self.colorbar.boundaries[indLow] - ypos) < 0:
+                    indHigh = indLow + 1
+                else:
+                    indHigh = indLow
+                    indLow = indHigh - 1
+                # print(indLow, indHigh)
+                selectedCmap = (self.colormap)(np.arange(self.colormap.N))
+                selectedCmap[:, -1] = 0.02
+                if selectedPlotOption == 'Modenumber':
+                    lo = self.colorbar.boundaries[indLow]
+                    hi = self.colorbar.boundaries[indHigh]
+                    self.progresslogTextEdit.append('Selected modenumber: '+str(int((lo+hi)/2)))
+                    selectedCmap[indLow, -1] = 1.
+                elif selectedPlotOption == 'Spectrogram':
+                    selectedCmap[indLow:self.colormap.N, -1] = 1.
+                selectedCmap = ListedColormap(selectedCmap)
+                # redraw contour with custom colormap with current zoom settings
+                xran = self.ax.get_xlim()
+                yran = self.ax.get_ylim()
+                self.ax.clear()
+                self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
+                self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap, levels = self.levels)
+                self.ax.set_xlim(xran)
+                self.ax.set_ylim(yran)
+                self.ax.set_xlabel('Time / s')
+                self.ax.set_ylabel('Frequency / kHz')
+                self.ax.set_title(self.plotTitle)
+            if event.button == 2:  # middle click -reset plot
+                self.doQuickPlot()
+            if event.button == 3:  # right click - reset colormap
+                self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap)
+            self.canvas.draw()
+        elif self.ax == event.inaxes: #colorplot clicked
+            t = event.xdata
+            f = event.ydata
+            indt = np.argmin(np.abs(t - self.timeax))
+            indf = np.argmin(np.abs(f - self.freqax))
+            p = (self.plottedData)[indf, indt]
+            self.progresslogTextEdit.append('t={:.02f}, f={:.02f}, p={:.01f}'.format(t, f, p))
 
-        if not (self.toolbar._active):  # if no button is activated
-            if self.cax == event.inaxes:  # clicking on the colorbar axis
-                if event.button == 1:  # left click
-                    # get current clicked colorbar value
-                    ypos = event.ydata
-                    lo, hi = self.colorbar.vmin, self.colorbar.vmax
-                    diff = hi - lo
-                    if relative_mpl_canvas:
-                        act =  ypos
-                    else:
-                        act =  ypos *(hi-lo)+lo   
-                    step = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
-                    low = self.colorbar.boundaries[int((act - lo) / step)]
-                    high = self.colorbar.boundaries[int((act - lo) / step) + 1]
+    # def MouseClickInteraction_(self, event):
+    #     try:  # check if figure is defined or not
+    #         self.cax == event.inaxes
+    #     except:
+    #         return
 
-                    # create new colormap where not selected values' alpha reduced to 0.1
-                    ind0 = int(round(((low - lo) / diff) * self.colormap.N))
-                    ind1 = int(round(((high - lo) / diff) * self.colormap.N))
-                    selectedCmap = (self.colormap)(np.arange(self.colormap.N))
-                    selectedPlotOption = self.quickplottypeComboBox.currentText()
-                    if selectedPlotOption == 'Spectrogram':
-                        p = 0.25  # decay length of opacity
-                        if ind0 != 0:
-                            m = 1. / (self.colormap.N * p)
-                            b = 1. - m * ind0
-                            alpha = m * np.arange(ind0) + b
-                            alpha[alpha <= 0] = 0.
-                            selectedCmap[0:ind0, -1] = alpha
-                        if ind1 != self.colormap.N:
-                            m = -1. / (self.colormap.N * p)
-                            b = 1. - m * (ind1 + self.colormap.N * p)
-                            alpha = m * np.arange(ind1, self.colormap.N) + b
-                            alpha[alpha <= 0] = 0.
-                            alpha[alpha > 1] = 1.
-                            selectedCmap[ind1:self.colormap.N, -1] = alpha
-                    elif selectedPlotOption == 'Modenumber':
-                        self.progresslogTextEdit.append('selected modenumber is: '+str(int((high+low)/2)))
-                        selectedCmap[:, -1] = 0.05
-                    else:
-                        selectedCmap[:, -1] = 0.2
-                    selectedCmap[ind0:ind1, -1] = 1.
-                    selectedCmap = ListedColormap(selectedCmap)
-                    # redraw contour with custom colormap with current zoom settings
-                    xran = self.ax.get_xlim()
-                    yran = self.ax.get_ylim()
-                    self.ax.clear()
-                    self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
-                    self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap)
-                    self.ax.set_xlim(xran)
-                    self.ax.set_ylim(yran)
-                    self.ax.set_xlabel('Time / s')
-                    self.ax.set_ylabel('Frequency / kHz')
-                    self.ax.set_title(self.plotTitle)
-                if event.button == 2:  # middle click -reset plot
-                    self.doQuickPlot()
-                if event.button == 3:  # right click - reset colormap
-                    self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap)
-                self.canvas.draw()
+    #     if not (self.toolbar._active):  # if no button is activated
+    #         if self.cax == event.inaxes:  # clicking on the colorbar axis
+    #             if event.button == 1:  # left click
+    #                 # get current clicked colorbar value
+    #                 ypos = event.ydata
+    #                 lo, hi = self.colorbar.vmin, self.colorbar.vmax
+    #                 diff = hi - lo
+    #                 if relative_mpl_canvas is True:
+    #                     act =  ypos
+    #                 else:
+    #                     act =  ypos *(hi-lo)+lo
+    #                 step = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
+    #                 low = self.colorbar.boundaries[int((act - lo) / step)]
+    #                 high = self.colorbar.boundaries[int((act - lo) / step) + 1]
 
-            elif self.ax == event.inaxes:
-                # self.progresslogTextEdit.append('contour click')
-                t = event.xdata
-                f = event.ydata
-                indt = np.argmin(np.abs(t - self.timeax))
-                indf = np.argmin(np.abs(f - self.freqax))
-                p = (self.plottedData)[indf, indt]
-                self.progresslogTextEdit.append('t={:.01f}, f={:.01f}, p={:.01f}'.format(t, f, p))
-            else:
-                return
+    #                 # create new colormap where not selected values' alpha reduced to 0.1
+    #                 ind0 = int(round(((low - lo) / diff) * self.colormap.N))
+    #                 ind1 = int(round(((high - lo) / diff) * self.colormap.N))
+    #                 selectedCmap = (self.colormap)(np.arange(self.colormap.N))
+    #                 selectedPlotOption = self.quickplottypeComboBox.currentText()
+    #                 if selectedPlotOption == 'Spectrogram':
+    #                     p = 0.25  # decay length of opacity
+    #                     if ind0 != 0:
+    #                         m = 1. / (self.colormap.N * p)
+    #                         b = 1. - m * ind0
+    #                         alpha = m * np.arange(ind0) + b
+    #                         alpha[alpha <= 0] = 0.
+    #                         selectedCmap[0:ind0, -1] = alpha
+    #                     if ind1 != self.colormap.N:
+    #                         m = -1. / (self.colormap.N * p)
+    #                         b = 1. - m * (ind1 + self.colormap.N * p)
+    #                         alpha = m * np.arange(ind1, self.colormap.N) + b
+    #                         alpha[alpha <= 0] = 0.
+    #                         alpha[alpha > 1] = 1.
+    #                         selectedCmap[ind1:self.colormap.N, -1] = alpha
+    #                 elif selectedPlotOption == 'Modenumber':
+    #                     self.progresslogTextEdit.append('selected modenumber is: '+str(int((high+low)/2)))
+    #                     selectedCmap[:, -1] = 0.0#5
+    #                 else:
+    #                     selectedCmap[:, -1] = 0.2
+    #                 selectedCmap[ind0:ind1, -1] = 1.
+    #                 selectedCmap = ListedColormap(selectedCmap)
+    #                 # redraw contour with custom colormap with current zoom settings
+    #                 xran = self.ax.get_xlim()
+    #                 yran = self.ax.get_ylim()
+    #                 self.ax.clear()
+    #                 self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
+    #                 self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap)
+    #                 # self.ax.imshow(self.plottedData, cmap = self.selectedCmap,extent = [np.min(self.timeax),np.max(self.timeax),np.min(self.freqax),np.max(self.freqax)])
+    #                 self.ax.set_xlim(xran)
+    #                 self.ax.set_ylim(yran)
+    #                 self.ax.set_xlabel('Time / s')
+    #                 self.ax.set_ylabel('Frequency / kHz')
+    #                 self.ax.set_title(self.plotTitle)
+    #             if event.button == 2:  # middle click -reset plot
+    #                 self.doQuickPlot()
+    #             if event.button == 3:  # right click - reset colormap
+    #                 self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap)
+    #             self.canvas.draw()
+
+
+    #             return
 
     def MouseHoverInteraction(self, event):
         if not self.hintCheckBox.isChecked():
@@ -624,25 +690,25 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.setupUi(self.window)
         self.window.show()
         return
-    
+
     def openPlotHelp(self):
         self.window = QtWidgets.QDialog()
 
         self.ui = Ui_PlotHelpWindow()
         self.ui.setupUi(self.window)
-        self.window.show()      
-        
+        self.window.show()
+
         #      self.window.setModal(True)  # disable main window until channels being selected
 
         # self.ui = Ui_ChannelsWindow()
         # self.ui.setupUi(self.window)
-    def modenumberColormap(self):
-        cmap = plt.get_cmap('hsv')
-        _ = cmap(np.arange(cmap.N))
-        _ = _[0:int(cmap.N/1.2),:] #cut top part (not making it cyclical)
+    def modenumberColormap(self,N):
+        cmap = plt.get_cmap('hsv',int(N*1.2))
+        _ = cmap(np.arange(int(cmap.N*1.2)))
+        _ = _[0:N,:] #cut top part (not making it cyclical)
         cmap = ListedColormap(_)
         return cmap
-    
+
 # class plotOptionWindow(self):
 #     def __init__(self):
 #         QtWidgets.QMainWindow.__init__(self)
@@ -655,4 +721,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()
     window.show()
+    timer = QTimer()
+    timer.timeout.connect(lambda: None)
+    timer.start(100)
     sys.exit(app.exec_())
