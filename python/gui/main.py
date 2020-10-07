@@ -109,7 +109,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.figure = plt.Figure(dpi=100)
         self.canvas = FigureCanvas(self.figure)
         
-        image = plt.imread('logo.png')
+        image = plt.imread('logo.jpg')
         self.ax = self.figure.add_subplot(111)
         self.ax.imshow(image)
         self.ax.axis('off')
@@ -143,7 +143,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cax.clear()
         self.ax.axis('off')
         self.cax.axis('off')
-        image = plt.imread('logo.png')
+        image = plt.imread('logo.jpg')
         self.ax.imshow(image)
         self.canvas.draw()
         self.canvas.mpl_disconnect(self.id1)
