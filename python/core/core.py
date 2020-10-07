@@ -111,10 +111,12 @@ class NWTDataObject:
             except Exception as e:
                 core_logger.error('Error during loading', exc_info=True)
         else:
+
             return
 
     def save(self, path):
-        path = path + ".pynwt"
+        if path[-6:] != ".pynwt":
+            path = path + ".pynwt"
         try:
             f = open(path, "wb")
             pickle.dump(self.raw_data, f)
