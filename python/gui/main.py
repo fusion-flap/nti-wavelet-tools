@@ -388,10 +388,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     act =  ypos
                 # self.progresslogTextEdit.append('number of colorbar elements: '+str(self.colormap.N) + ' bound: '+str(len(self.colorbar.boundaries)))
-                binwidth = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
+                # binwidth = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
                 indLow = np.argmin(np.abs(self.colorbar.boundaries - ypos))
                 #get indeces of boundaries
-                if (self.colorbar.boundaries[indLow] - ypos) < 0:
+                if (self.colorbar.boundaries[indLow] - act) < 0:
                     indHigh = indLow + 1
                 else:
                     indHigh = indLow
@@ -412,7 +412,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 yran = self.ax.get_ylim()
                 self.ax.clear()
                 self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
-                self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap, levels = self.levels)
+                self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap, levels=self.levels)
                 self.ax.set_xlim(xran)
                 self.ax.set_ylim(yran)
                 self.ax.set_xlabel('Time / s')
@@ -421,7 +421,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if event.button == 2:  # middle click -reset plot
                 self.doQuickPlot()
             if event.button == 3:  # right click - reset colormap
-                self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap)
+                self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap, levels=self.levels)
             self.canvas.draw()
         elif self.ax == event.inaxes: #colorplot clicked
             t = event.xdata
