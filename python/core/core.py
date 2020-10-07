@@ -95,7 +95,7 @@ class NWTDataObject:
     def load(self, path):
         if path[-6:] == ".pynwt":
             try:
-                f = io.open(filename, "rb")
+                f = io.open(path, "rb")
                 self.raw_data = pickle.load(f)
                 self.transforms = pickle.load(f)
                 self.smoothed_apsds = pickle.load(f)
@@ -116,11 +116,7 @@ class NWTDataObject:
     def save(self, path):
         path = path + ".pynwt"
         try:
-            filename = (path.split('/'))[-1]
-            # saved = NWTDataObject()
-            # saved.raw_data = self.raw_data
-            print(filename)
-            f = open(filename, "wb")
+            f = open(path, "wb")
             pickle.dump(self.raw_data, f)
             pickle.dump(self.transforms, f)
             pickle.dump(self.smoothed_apsds, f)
@@ -134,34 +130,3 @@ class NWTDataObject:
             return
         except Exception as e:
             core_logger.error('Error during loading', exc_info=True)
-
-
-
-def load_pynwt(path):
-    # use HDF5 eventually
-    loaded = NWTDataObject()
-    if path[-6:] == ".pynwt":
-        try:
-            f = io.open(filename, "rb")
-            loaded = pickle.load(f)
-            f.close()
-        except Exception as e:
-            core_logger.error('Error during loading', exc_info=True)
-    return loaded
-
-
-def save_pynwt(dataobject, path):
-    core_logger.debug('Saving processed signal started')
-    try:
-        filename = (path.split('/'))[-1] + '.pynwt'
-        try:
-            f = io.open(filename, "wb")
-            pickle.dump(dataobject, f)
-            f.close()
-        except Exception:
-            raise ValueError("Cannot close file " + filename)
-        flap.save(self, filename=filename)
-        core_logger.info('Saved signals to: ' + filename)
-    except Exception as e:
-        core_logger.error('Error during saving', exc_info=True)
-    return
