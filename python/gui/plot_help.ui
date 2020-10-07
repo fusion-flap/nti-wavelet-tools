@@ -26,10 +26,11 @@
     <font>
      <weight>75</weight>
      <bold>true</bold>
+     <underline>true</underline>
     </font>
    </property>
    <property name="text">
-    <string>Interaction options with plots for spectrograms: (if no tool selected)</string>
+    <string>Interaction options with plots for spectrograms:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -68,7 +69,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>- left click: print current position / select power range</string>
+    <string>- left click: print current position / select lower power limit</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_6">
@@ -110,6 +111,7 @@
     <font>
      <weight>75</weight>
      <bold>true</bold>
+     <underline>true</underline>
     </font>
    </property>
    <property name="text">
@@ -126,7 +128,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>- Prints the closest point's coordinates in hovering</string>
+    <string>- Prints the closest point's coordinates in hoovering</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_10">
@@ -148,7 +150,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Show transform parameters: currently disabled</string>
+    <string>Show transform parameters on plot: currently disabled</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_11">
@@ -209,6 +211,7 @@
     <font>
      <weight>75</weight>
      <bold>true</bold>
+     <underline>true</underline>
     </font>
    </property>
    <property name="text">

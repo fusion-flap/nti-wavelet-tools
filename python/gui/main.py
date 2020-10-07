@@ -143,6 +143,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cax.clear()
         self.ax.axis('off')
         self.cax.axis('off')
+        # d = 0.1
+        # self.figure.subplots_adjust(left=d, bottom=d, right=1-d, top=1-d)
         image = plt.imread('logo.jpg')
         self.ax.imshow(image)
         self.canvas.draw()
@@ -387,9 +389,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     act =  ypos *(hi-lo)+lo
                 else:
                     act =  ypos
-                # self.progresslogTextEdit.append('number of colorbar elements: '+str(self.colormap.N) + ' bound: '+str(len(self.colorbar.boundaries)))
-                # binwidth = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
-                indLow = np.argmin(np.abs(self.colorbar.boundaries - ypos))
+                indLow = np.argmin(np.abs(self.colorbar.boundaries - act))
                 #get indeces of boundaries
                 if (self.colorbar.boundaries[indLow] - act) < 0:
                     indHigh = indLow + 1
@@ -430,75 +430,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             indf = np.argmin(np.abs(f - self.freqax))
             p = (self.plottedData)[indf, indt]
             self.progresslogTextEdit.append('t={:.02f}, f={:.02f}, p={:.01f}'.format(t, f, p))
-
-    # def MouseClickInteraction_(self, event):
-    #     try:  # check if figure is defined or not
-    #         self.cax == event.inaxes
-    #     except:
-    #         return
-
-    #     if not (self.toolbar._active):  # if no button is activated
-    #         if self.cax == event.inaxes:  # clicking on the colorbar axis
-    #             if event.button == 1:  # left click
-    #                 # get current clicked colorbar value
-    #                 ypos = event.ydata
-    #                 lo, hi = self.colorbar.vmin, self.colorbar.vmax
-    #                 diff = hi - lo
-    #                 if relative_mpl_canvas is True:
-    #                     act =  ypos
-    #                 else:
-    #                     act =  ypos *(hi-lo)+lo
-    #                 step = self.colorbar.boundaries[1] - self.colorbar.boundaries[0]
-    #                 low = self.colorbar.boundaries[int((act - lo) / step)]
-    #                 high = self.colorbar.boundaries[int((act - lo) / step) + 1]
-
-    #                 # create new colormap where not selected values' alpha reduced to 0.1
-    #                 ind0 = int(round(((low - lo) / diff) * self.colormap.N))
-    #                 ind1 = int(round(((high - lo) / diff) * self.colormap.N))
-    #                 selectedCmap = (self.colormap)(np.arange(self.colormap.N))
-    #                 selectedPlotOption = self.quickplottypeComboBox.currentText()
-    #                 if selectedPlotOption == 'Spectrogram':
-    #                     p = 0.25  # decay length of opacity
-    #                     if ind0 != 0:
-    #                         m = 1. / (self.colormap.N * p)
-    #                         b = 1. - m * ind0
-    #                         alpha = m * np.arange(ind0) + b
-    #                         alpha[alpha <= 0] = 0.
-    #                         selectedCmap[0:ind0, -1] = alpha
-    #                     if ind1 != self.colormap.N:
-    #                         m = -1. / (self.colormap.N * p)
-    #                         b = 1. - m * (ind1 + self.colormap.N * p)
-    #                         alpha = m * np.arange(ind1, self.colormap.N) + b
-    #                         alpha[alpha <= 0] = 0.
-    #                         alpha[alpha > 1] = 1.
-    #                         selectedCmap[ind1:self.colormap.N, -1] = alpha
-    #                 elif selectedPlotOption == 'Modenumber':
-    #                     self.progresslogTextEdit.append('selected modenumber is: '+str(int((high+low)/2)))
-    #                     selectedCmap[:, -1] = 0.0#5
-    #                 else:
-    #                     selectedCmap[:, -1] = 0.2
-    #                 selectedCmap[ind0:ind1, -1] = 1.
-    #                 selectedCmap = ListedColormap(selectedCmap)
-    #                 # redraw contour with custom colormap with current zoom settings
-    #                 xran = self.ax.get_xlim()
-    #                 yran = self.ax.get_ylim()
-    #                 self.ax.clear()
-    #                 self.ax.xaxis.set_major_locator(plt.MaxNLocator(nxticks))
-    #                 self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=selectedCmap)
-    #                 # self.ax.imshow(self.plottedData, cmap = self.selectedCmap,extent = [np.min(self.timeax),np.max(self.timeax),np.min(self.freqax),np.max(self.freqax)])
-    #                 self.ax.set_xlim(xran)
-    #                 self.ax.set_ylim(yran)
-    #                 self.ax.set_xlabel('Time / s')
-    #                 self.ax.set_ylabel('Frequency / kHz')
-    #                 self.ax.set_title(self.plotTitle)
-    #             if event.button == 2:  # middle click -reset plot
-    #                 self.doQuickPlot()
-    #             if event.button == 3:  # right click - reset colormap
-    #                 self.ax.contourf(self.timeax, self.freqax, self.plottedData, cmap=self.colormap)
-    #             self.canvas.draw()
-
-
-    #             return
 
     def MouseHoverInteraction(self, event):
         if not self.hintCheckBox.isChecked():
