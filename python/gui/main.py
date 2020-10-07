@@ -109,7 +109,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.figure = plt.Figure(dpi=100)
         self.canvas = FigureCanvas(self.figure)
         
-        image = plt.imread('logo.jpg')
+        image = plt.imread('logo_circ_thin.png')
         self.ax = self.figure.add_subplot(111)
         self.ax.imshow(image)
         self.ax.axis('off')
