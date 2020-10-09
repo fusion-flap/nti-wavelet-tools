@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1118</width>
+    <height>656</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>NTIWaveletTools</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>logo_circ_bold.png</normaloff>logo_circ_bold.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="calcgroupBox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>511</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Continuous-Time-Frequency Transform</string>
+    </property>
+    <widget class="QGroupBox" name="transformsGB">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>491</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Transform</string>
+     </property>
+     <widget class="QLineEdit" name="stftlengthLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>110</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>300</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="stftwindowText">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Window type:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="stftwindowsizeText">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Window length:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="quickanddirtyButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>181</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Quicky and dirty settings</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="stftwindowtypeComboBox">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>90</y>
+        <width>71</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="currentText">
+       <string>gaussian</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>gaussian</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>box</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QRadioButton" name="stftRadioButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>82</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>STFT</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="cwtRadioButton">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>70</y>
+        <width>82</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Wavelet</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cwtwindowtypeComboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>90</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>gaussian</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>box</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="cwtwindowText">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>90</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Window type:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="cwtorderLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>110</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="cwtorderText">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>110</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Order:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="cwtscaleresLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>130</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>0.1</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="cwtscaleText">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>130</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Scale res.:</string>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="transformProgressBar">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>150</y>
+        <width>226</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="stftresolutionLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>130</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>1000</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="stftfreqresText">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Freq res.:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="samplingfreqLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>20</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>200</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="transformstepText">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Step:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="samplingfreqText">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Downsampling frequency [kHz]</string>
+      </property>
+      <property name="toolTipDuration">
+       <number>2</number>
+      </property>
+      <property name="text">
+       <string>Sampl. freq:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="stepLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>40</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="modenumbercalcGB">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>210</y>
+       <width>491</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Modenumber calculation</string>
+     </property>
+     <widget class="QLineEdit" name="averageLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>20</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="modelowLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>40</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>-5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="moderangeText">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>40</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Modenumber range:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="modehighLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>40</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="modestepText">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>60</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Step:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="modestepLineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>60</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly</set>
+      </property>
+      <property name="text">
+       <string>1</string>
+      </property>
+      <property name="maxLength">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="domodenumbersCheckBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>211</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Should I do mode number calculation?</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="toroidalCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Toroidal</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="poloidalCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Poloidal</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="doaverageCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>20</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Averaging:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="startcalculationButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>310</y>
+       <width>181</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Start calculation</string>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="modeProgressBar">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>310</y>
+       <width>231</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="plottingBox">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>10</y>
+      <width>571</width>
+      <height>591</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Quick plotting</string>
+    </property>
+    <widget class="QWidget" name="verticalLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>541</width>
+       <height>531</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="quickPlotLayout"/>
+    </widget>
+    <widget class="QPushButton" name="quickplotButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>100</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Quick plot</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="quickplottypeComboBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>101</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="currentText">
+      <string>Spectrogram</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>Spectrogram</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Modenumber</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Coherence</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QCheckBox" name="hintCheckBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>20</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show hint on plot</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="transfDetailsCheckBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>20</y>
+       <width>161</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show transform parameters</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="plothelpButton">
+     <property name="geometry">
+      <rect>
+       <x>500</x>
+       <y>20</y>
+       <width>51</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Help</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="loadGB">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>241</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Load signal</string>
+    </property>
+    <widget class="QPushButton" name="loadsignalButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load signal</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="savesignalButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>20</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save signal</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="datapointText">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Number of data point:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="samplingfreqText_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Sampling frequency:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="datapointsLabel">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>60</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="samplingfrequencyLabel">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>80</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0 kHz</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="timerangeText">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Timerange:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="timerangeLabel">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>100</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0 ms</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="progressGB">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>10</y>
+      <width>261</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Progress-log</string>
+    </property>
+    <widget class="QTextEdit" name="progresslogTextEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>251</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="selectchannelsButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>160</y>
+      <width>181</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select channels</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="selectedchannelsText">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>160</y>
+      <width>151</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Number of selected channels:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="channelnumberLabel">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>160</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="loadprocessedGB">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>550</y>
+      <width>241</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Processed signal</string>
+    </property>
+    <widget class="QPushButton" name="saveprocessedsignalButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>100</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save processed</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loadprocessedsignalButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>100</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load processed</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="plottinginterfaceGB">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>550</y>
+      <width>261</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Open detailed plotting interface</string>
+    </property>
+    <widget class="QPushButton" name="openplottinginterfaceButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Open plot interface</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1118</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuPreferences">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>Preferences</string>
+    </property>
+    <addaction name="actionResett"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionNTIWT_git"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuPreferences"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionPreferemces">
+   <property name="text">
+    <string>Preferemces</string>
+   </property>
+  </action>
+  <action name="actionDefault_settings">
+   <property name="text">
+    <string>Default settings</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionFile">
+   <property name="text">
+    <string>File</string>
+   </property>
+  </action>
+  <action name="actionResett">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </action>
+  <action name="actionNTIWT_git">
+   <property name="text">
+    <string>Link to NTIWaveletTools git</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
