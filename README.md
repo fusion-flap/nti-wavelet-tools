@@ -24,5 +24,12 @@ git checkout user-experience
 you can list all available branches with:
 git branch -a
 
+#updating
+To keep your copy up to date, it is recommended to update your repository frequently, using:
+git pull
+
+Updates are less frequent on the development branch (one per a few months), and rarest on the master branch.
+They are more frequent on other, task-focused branches, some can have several commits per hour.
+
 #GUI
 For using the GUI, run python/gui/main.py
