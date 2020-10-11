@@ -10,6 +10,6 @@ git clone https://github.com/fusion-flap/nti-wavelet-tools.git
 
 swich between branches (different versions) with:
 git checkout ...
-for example: git checkout python-new-GUI
+for example: git checkout development
 
 For using the GUI, run python/gui/main.py
