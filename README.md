@@ -8,8 +8,21 @@ https://github.com/fusion-flap/flap
 Clone the repository:
 git clone https://github.com/fusion-flap/nti-wavelet-tools.git
 
+#branches
 swich between branches (different versions) with:
 git checkout ...
-for example: git checkout development
+for example: git checkout <branch name>
 
+In default, you start on the master branch, which is our latest released version.
+
+If you wish to use the latest stable version, with new, unreleased features, use:
+git checkout development
+
+If you wish to see changes related to user experience, use the branch:
+git checkout user-experience
+
+you can list all available branches with:
+git branch -a
+
+#GUI
 For using the GUI, run python/gui/main.py
