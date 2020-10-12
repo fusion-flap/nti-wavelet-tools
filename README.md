@@ -1,3 +1,5 @@
+![NTIWT logo](documentation/logos/logo_long.png)
+
 # nti-wavelet-tools
 NTI Wavelet Tools is a data processing toolbox. Current development language is IDL (Interactive Data Language), but some features are only available for IDL 8.5 or later and Python 2.6. Old SVN repository and issue management site: https://deep.reak.bme.hu/projects/wavelet
 
@@ -25,5 +27,10 @@ git pull
 Updates are less frequent on the development branch (one per a few months), and rarest on the master branch.
 They are more frequent on other, task-focused branches, some can have several commits per hour.
 
+<<<<<<< HEAD
 # GUI
 For using the GUI, run python/gui/main.py
+=======
+#GUI
+For using the GUI, run python/gui/main.py
+>>>>>>> 783ac4b31139ae8e8a3ec0ed244bdf6c11d26196
