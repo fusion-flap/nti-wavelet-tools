@@ -27,10 +27,5 @@ git pull
 Updates are less frequent on the development branch (one per a few months), and rarest on the master branch.
 They are more frequent on other, task-focused branches, some can have several commits per hour.
 
-<<<<<<< HEAD
 # GUI
 For using the GUI, run python/gui/main.py
-=======
-#GUI
-For using the GUI, run python/gui/main.py
->>>>>>> 783ac4b31139ae8e8a3ec0ed244bdf6c11d26196
