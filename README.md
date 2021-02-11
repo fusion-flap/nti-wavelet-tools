@@ -95,7 +95,7 @@ P. Gábor et al., Low frequency sawtooth precursor in ASDEX Upgrade. Proceedings
 
 V. Igochine et al., The role of stochastization in fast MHD phenomena on ASDEX Upgrade, Proceedings of the 22nd IAEA Fusion Energy Conference (2008) Paper: EX/P9-10, https://www.researchgate.net/publication/251197333_Stochastization_as_a_possible_explanation_for_some_fast_MHD_phenomena_in_ASDEX_Upgrade
 
-Belonohy, E et al., Systematic Density Fluctuation Study on W7-AS, Proceedings of the 34th EPS Conference on Plasma Physics (2007) Paper: P2.046, 
+Belonohy, E et al., Density and Magnetic Fluctuation Studies on the W7-AS Stellarator, Proceedings of the 34th EPS Conference on Plasma Physics (2007) Paper: P2.046, http://epsppd.epfl.ch/Warsaw/pdf/P2_046.pdf
 
 G. Pokol, G. Por, The Advanced Loose Parts Monitoring System (ALPS) and wavelet analysis, INTERNATIONAL JOURNAL OF NUCLEAR ENERGY SCIENCE AND TECHNOLOGY 2 : 3 pp. 241-252. , 12 p. (2006), https://www.researchgate.net/publication/229039197_The_Advanced_Loose_Parts_Monitoring_System_ALPS_and_wavelet_analysis
 
