@@ -48,7 +48,10 @@ def convert_raw_sav(input_dict, logger=default_logger, equidistant_time=False):
     try:
         temp = []
         for item in input_dict['channels']:
-            temp.append(item.decode('utf-8'))
+            if type(item) == str:
+                temp.append(type)
+            else:
+                temp.append(item.decode('utf-8'))
         channel_name = flap.Coordinate(name="Channels",
                                        unit=None,
                                        mode=flap.CoordinateMode(equidistant=False),
