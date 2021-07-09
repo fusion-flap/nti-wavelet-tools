@@ -69,15 +69,15 @@ G., Pokol et al., Statistical analysis of experimentally observed transient MHD 
 
 
 ### Mode number
-Kocsis, G et al., Reliability study of pellet ELM pace making, 42nd EPS Conference on Plasma Physics (2015) Paper: P4.171 , 4 p.
+Kocsis, G et al., Reliability study of pellet ELM pace making, 42nd EPS Conference on Plasma Physics (2015) Paper: P4.171 , 4 p. http://ocs.ciemat.es/EPS2015PAP/pdf/P4.171.pdf
 
-Szepesi, T et al., Pellet-induced MHD activity in H-mode plasmas at ASDEX Upgrade, 40th EPS Conference on Plasma Physics (2013) Paper: P5.154
+Szepesi, T et al., Pellet-induced MHD activity in H-mode plasmas at ASDEX Upgrade, 40th EPS Conference on Plasma Physics (2013) Paper: P5.154 http://ocs.ciemat.es/EPS2013PAP/pdf/P5.154.pdf
 
-Pokol, G et al., Experimental study and simulation of W7-AS transient MHD modes, AIP CONFERENCE PROCEEDINGS 993 : 1 pp. 215-218. , 4 p. (2008)
+Pokol, G et al., Experimental study and simulation of W7-AS transient MHD modes, AIP CONFERENCE PROCEEDINGS 993 : 1 pp. 215-218. , 4 p. (2008) http://dx.doi.org/10.1063/1.2909112
 
-Horváth, L. et al., (2015). Reducing systematic errors in time-frequency resolved mode number analysis. Plasma Physics and Controlled Fusion, 57(12), 125005. doi:10.1088/0741-3335/57/12/125005
+Horváth, L. et al., (2015). Reducing systematic errors in time-frequency resolved mode number analysis. Plasma Physics and Controlled Fusion, 57(12), 125005. doi:10.1088/0741-3335/57/12/125005 https://arxiv.org/pdf/1506.04864.pdf
 
-G. I. Pokol, et al. A wavelet based method for detecting transient plasma waves and determining their spatial structure. European Physical Society (EPS) (2010) Paper: P5.129
+G. I. Pokol, et al. A wavelet based method for detecting transient plasma waves and determining their spatial structure. European Physical Society (EPS) (2010) Paper: P5.129 http://ocs.ciemat.es/EPS2010PAP/pdf/P5.129.pdf
 
 
 ### Further related publications:
