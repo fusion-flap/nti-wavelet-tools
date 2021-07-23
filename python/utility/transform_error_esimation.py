@@ -79,3 +79,22 @@ def distribution_region_fit_recursive_helper(data, fit_method, logger, params=[]
         for i in data:  # we reduce the dimensions w
             tmp_params.append(distribution_region_fit_recursive_helper(np.abs(i), fit_method=fit_method, logger=logger))
         return tmp_params
+
+
+def rice_amp_to_mean(a, sigma, logger=default_logger):
+    # a: amplitude parameter of Rice distribution (value or array-like)
+    # sigma: sigma parameter of rice distribution
+    # returns: the mean value(s) of Rice distribution(s) based on the given parameters
+    if a<0:
+        logger.error("Rice distribution amplitude is never negative.", exc_info=True)
+    x_temp = -a*a/2/sigma**2
+    return sigma*np.sqrt(np.pi/2)*np.exp(x_temp/2)*((1-x_temp)*scipy.special.iv(0,-x_temp/2)-x_temp*scipy.special.iv(1,-x_temp/2))
+
+# helper variables for rice_mean_to_amp (the interpolation set) (sigma-independent)
+amps = 2**np.linspace(start=-5,stop=5.7,num=200)
+means_to_amp_interp = scipy.interpolate.interp1d(amp_to_mean(amps,1),amps*amps/2,fill_value="extrapolate")
+
+def rice_mean_to_amp(m, sigma):
+    # m: mean of Rice distribution (value or array like)
+    # returns: the amplitude value(s) of Rice distribution(s) based on the given parameters
+    return np.sqrt(np.clip(means_to_amp_interp(m / sigma), 0, None) * 2 * sigma ** 2)  # sigma dependence added here
