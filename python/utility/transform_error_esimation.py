@@ -19,11 +19,16 @@ def distribution_region_fit(transform, time_start=None, time_end=None, freq_star
     # user should select a region where only white noise or stationary signal is present
 
     """ INPUT:
-            transform: flap.Dataobject, containing a Time and a Frequency coordinate object
-            f1,f2,t1,t2: boundaries of the region where the Rice fit should be made
-                         (in the final unit, (for eg s and Hz))
-                         for getting back inexes, use flap's index_from_coordinate() function
-            fit_method = The method used for fitting. The default is a Rice distribution
+            transform:
+                flap.Dataobject, containing a Time and a Frequency coordinate object (for eg. sets of STFTs)
+            time_start,time_end,freq_start,freq_end:
+                boundaries of the region where the Rice fit should be made
+                (in the final unit, (for eg s and Hz))
+                for getting back inexes, use flap's index_from_coordinate() function
+            fit_method: The method used for fitting. The default is a Rice distribution
+        Output:
+            A list containing the fit parameters returned by fit_method, in the shape of the dataobject
+            (one set for every time-freq axis pair, eg. one set for every STFT)
     """
 
     if transform.data is None:
@@ -36,6 +41,7 @@ def distribution_region_fit(transform, time_start=None, time_end=None, freq_star
     if len(f_axis) > 1:
         logger.error("Second (frequency) coordinate changes along several dimensions", exc_info=True)
 
+    # Slicing the dataobject based on given fit boundaries
     # if a region parameter is None, the boundary should extend as much as it can
     if freq_start is None and freq_end is None and time_start is None and time_end is None:
         sliced = transform
@@ -51,7 +57,7 @@ def distribution_region_fit(transform, time_start=None, time_end=None, freq_star
                                                coords[1]: flap.Intervals(freq_start, freq_end)})
         logger.debug('Both axes sliced')
 
-
+    # putting the time and freq axes to the end (for the recursion)
     temp_data = np.swapaxes(sliced.data, t_axis[0], -1).swapaxes(f_axis[0], -2)
     logger.debug('Data array flattening, distribution fitting...')
     # This is where the actual fit happens
