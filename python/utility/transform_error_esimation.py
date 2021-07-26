@@ -81,6 +81,11 @@ def distribution_region_fit_recursive_helper(data, fit_method, logger, params=[]
             tmp_params.append(distribution_region_fit_recursive_helper(np.abs(i), fit_method=fit_method, logger=logger))
         return tmp_params
 
+def rice_get_error_bars(shape,loc,scale):
+    # scale is the sigma deviation of the 2D Gauss-distribution
+    # returns the two ends of the error bar based on the appropriate percentile (+- 0.341)
+    # so that when the distribution is approx. Gaussian, the error bars are +- sigma
+    return scipy.stats.rice.ppf(0.5+0.341,shape,loc,scale), scipy.stats.rice.ppf(0.5-0.341,shape,loc,scale)
 
 def rice_amp_to_mean(a, sigma, logger=default_logger):
     # a: amplitude parameter of Rice distribution (value or array-like)
