@@ -2,6 +2,7 @@ import numpy as np
 import scipy
 import logging
 import flap
+import copy
 
 # This command does not overwrite loggers, only needed at initialization
 logging.basicConfig(filename='log.log',
@@ -131,7 +132,8 @@ def get_ridge(stft, f_search_start=None, search_r=30, time_start=None, time_end=
         ridgei[i] = np.argmax(np.abs(stft.data[int(i_min):int(i_max), i])) + ridgei[i - 1] - search_r
         if ridgei[i] < global_max / 5:
             ridgei[i] = np.argmax(np.abs(stft.data[:, i]))
-        ridgef[i] = stft.get_coordinate_object(coords[1]).start + stft.get_coordinate_object(coords[1]).step[0] * ridgei[i]
+        ridgef[i] = stft.get_coordinate_object(coords[1]).start + stft.get_coordinate_object(coords[1]).step[0] * \
+                    ridgei[i]
         ridge_amp[i] = stft.data[int(ridgei[i]), i]
 
     freq_ax = flap.Coordinate(name="Ridge Frequency",
@@ -151,6 +153,54 @@ def get_ridge(stft, f_search_start=None, search_r=30, time_start=None, time_end=
     ridge_obj.add_coordinate_object(freq_ax)
     ridge_obj.get_coordinate_object(coords[0]).dimension_list = [0]
     return ridge_obj
+
+
+def refine_ridge(stft, ridge, search_r=None):
+    # refine a previous ridge calculation (discards amplitude data, so it can be None)
+    ridge_f_old = ridge.get_coordinate_object("Ridge Frequency").values
+
+    tmin = ridge.get_coordinate_object("Time").start
+    tmax = tmin + ridge.get_coordinate_object("Time").step[0] * len(ridge_f_old)
+    stft = stft.slice_data(slicing={"Time": flap.Intervals(tmin, tmax)})
+    new_t_ax = stft.get_coordinate_object("Time")
+    tstep = new_t_ax.step[0]
+    fstep = stft.get_coordinate_object("Frequency").step[0]
+
+    if search_r == None:
+        search_r = int(np.diff(np.unique(ridge_f_old)).min()/fstep)
+    else:
+        search_r = int(search_r/fstep)
+    print(search_r)
+    ridge_t = np.linspace(start=tmin, stop=tmax, num=int((tmax - tmin)/ tstep))
+    ridge_t_old = np.linspace(start=tmin, stop=tmax, num= len(ridge_f_old))
+    ridge_f = np.interp(ridge_t, ridge_t_old, ridge_f_old)
+    print(ridge_f.shape)
+    ridge_a = np.zeros(ridge_t.size)
+    for i in range(ridge_t.size):
+        ridge_a[i] = abs(stft.data[int(stft.index_from_coordinate("Frequency", ridge_f[i])), i])
+
+    new_f_values = np.empty(len(ridge_t))
+    for i in range(ridge_t.size):
+        ridge_fi = stft.index_from_coordinate("Frequency", ridge_f[i])
+        new_fi = np.argmax(abs(stft.data[int(ridge_fi - search_r):int(ridge_fi + search_r), i]))+ridge_fi - search_r
+        ridge_a[i] = abs(stft.data[int(new_fi), i])
+        new_f_values[i] = fstep * new_fi
+
+    ridge_f = flap.Coordinate(name="Ridge Frequency",
+                              unit="Hz",
+                              mode=flap.CoordinateMode(equidistant=False),
+                              values=new_f_values,
+                              dimension_list=[0],
+                              shape=len(new_f_values)
+                              )
+    ridge_return=copy.deepcopy(ridge)
+    ridge_return.del_coordinate("Time")
+    ridge_return.del_coordinate("Ridge Frequency")
+    ridge_return.add_coordinate_object(ridge_f)
+    ridge_return.add_coordinate_object(new_t_ax)
+    ridge_return.data = ridge_a
+
+    return ridge_return
 
 
 def rice_get_error_bars(shape, loc, scale):
