@@ -120,7 +120,6 @@ def get_ridge(stft, f_search_start=None, search_r=30, time_start=None, time_end=
     ridgef = np.zeros(stft.data.shape[t_dim])
     ridge_amp = np.zeros(stft.data.shape[t_dim], dtype=complex)
     global_max = np.max(np.abs(stft.data))
-    print(global_max)
 
     # search_area = np.abs(stft[f_search_start - include_r:f_search_start + include_r])
     ridgei[0] = np.argmax(np.abs(stft.data[:, 0]))
@@ -131,7 +130,6 @@ def get_ridge(stft, f_search_start=None, search_r=30, time_start=None, time_end=
         i_max = min(ridgei[i - 1] + search_r, stft.data.shape[0])
         ridgei[i] = np.argmax(np.abs(stft.data[int(i_min):int(i_max), i])) + ridgei[i - 1] - search_r
         if ridgei[i] < global_max / 5:
-            print(i)
             ridgei[i] = np.argmax(np.abs(stft.data[:, i]))
         ridgef[i] = stft.get_coordinate_object(coords[1]).start + stft.get_coordinate_object(coords[1]).step[0] * ridgei[i]
         ridge_amp[i] = stft.data[int(ridgei[i]), i]
