@@ -214,8 +214,12 @@ def rice_amp_to_mean(a, sigma, logger=default_logger):
     # a: amplitude parameter of Rice distribution (value or array-like)
     # sigma: sigma parameter of rice distribution
     # returns: the mean value(s) of Rice distribution(s) based on the given parameters
-    if a.any() < 0:
-        logger.error("Rice distribution amplitude is never negative.", exc_info=True)
+    if type(a) != int and type(a) != float:
+        if a.any() < 0:
+            logger.error("Rice distribution amplitude is never negative.", exc_info=True)
+    else:
+        if a < 0:
+            logger.error("Rice distribution amplitude is never negative.", exc_info=True)
     x_temp = -a * a / 2 / sigma ** 2
     return sigma * np.sqrt(np.pi / 2) * np.exp(x_temp / 2) * (
             (1 - x_temp) * scipy.special.iv(0, -x_temp / 2) - x_temp * scipy.special.iv(1, -x_temp / 2))
