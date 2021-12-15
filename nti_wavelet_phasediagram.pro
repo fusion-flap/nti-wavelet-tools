@@ -7,8 +7,8 @@
 ; for processed data from NTI Wavelet Tools GUI
 ;
 ; CALLING SEQUENCE:
-; pg_phasediagram, cphases, chpos, timeax, freqax, time, freq [,shot] [,channels] [,filters] [,/print]$
-;    [,filterparam1] [,filterparam2] [,cpows=cpows] [,cohs=cohs] [,cphaserr=cphaserr]
+; pg_phasediagram, saved_datablock, time, freq [,mode_direction]  [,filters] [,/print]$
+;    [,filterparam1] [,filterparam2]
 ;
 ; INPUTS:
 ;   saved_datablock: Processed data structure from NTI Wavelet Tools GUI
@@ -50,10 +50,13 @@ cphases=atan(imaginary(*saved_datablock.crosstransforms),float(*saved_datablock.
 if mode_direction EQ 'toroidal' then chpos=*saved_datablock.phi*!radeg 
 if mode_direction EQ 'poloidal' then chpos=*saved_datablock.theta*!radeg
 if NOT(isa(chpos)) then message, 'nti_wavelet_phasediagram called with misprinted mode_direction!'
+chpos=chpos[where(*saved_datablock.CHANNELS_ind)]
+channels=*saved_datablock.channels
+channels=channels[where(*saved_datablock.CHANNELS_ind)]
 
 ; Call pg_phasediagram.pro
 pg_phasediagram, cphases, chpos, *saved_datablock.transf_timeax, *saved_datablock.transf_freqax, $
-  time, frequency, shot=saved_datablock.shotnumber, channels=*saved_datablock.channels, $
+  time, frequency, shot=saved_datablock.shotnumber, channels=channels, $
   filters=filters, filterparam1=filterparam1, filterparam2=filterparam2, print=print
 
 end
